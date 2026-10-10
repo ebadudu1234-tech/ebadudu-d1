@@ -58,6 +58,11 @@ function setupHoverVideos(root) {
   });
 }
 const tagsHtml = (tags) => `<ul class="tags">${tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
+// tags come from each description's category line; VIDEO is never written by hand,
+// every work with a film gets it
+PROJECTS.forEach((p) => {
+  if (mediaOf(p).some((m) => m.type === 'video') && !p.tags.includes('VIDEO')) p.tags.push('VIDEO');
+});
 
 function mediaHtml(m, { hero = false, alt = '' } = {}) {
   if (m.type === 'video') {
@@ -428,32 +433,66 @@ function renderProject(root) {
   const lastText = paras.length > 1 ? paras[paras.length - 1] : '';
   const notes = paras.slice(1, -1);
 
-  // lead row (image + first paragraph), tail row (last paragraph + image), justified pairs in between
+  // The Figma composition: image | text, then image + image, then text | image, and so on.
+  // Every paragraph sits beside an image; rows without text may leave empty space around
+  // their pictures. How much, and where, is drawn from the work's own seed, so each work
+  // gets its own rhythm (the same one on every visit).
+  const rand = seeded(p.slug);
+  const between = (a, b) => a + (b - a) * rand();
+  const pct = (v) => `${v.toFixed(1)}%`;
   const lead = rest.shift();
   const tail = rest.length > 1 && lastText ? rest.pop() : null;
   let rows = '';
-  if (lead) rows += `<div class="p-row p-lead">${fig(lead)}${text(firstText)}</div>`;
+  let side = 'left';  // which side the next image-with-text row puts its picture
+  const withText = (m, t) => {
+    // the picture takes 50–60% (left) or 40–50% (right, as in Figma); the text column stays 457/1392
+    const w = side === 'left' ? between(50, 60) : between(40, 50);
+    const html = side === 'left'
+      ? `<div class="p-row p-with" style="--w:${pct(w)}">${fig(m)}${text(t)}</div>`
+      : `<div class="p-row p-with" style="--w:${pct(w)}">${text(t)}${fig(m)}</div>`;
+    side = side === 'left' ? 'right' : 'left';
+    return html;
+  };
+  // a row of images with no text: a pair of equal heights, or one picture, set full width
+  // or narrower and pushed to one side, the rest left as empty space
+  const place = (items) => {
+    const r = items.reduce((s, m) => s + m.w / m.h, 0);
+    const full = items.length === 2 ? rand() < 0.55 : r > 2 && rand() < 0.6;
+    const w = full ? 100 : items.length === 2 ? between(64, 84) : between(r < 1 ? 34 : 48, r < 1 ? 46 : 70);
+    // (a full row of tall pictures is held to the screen height, so it can still sit left or right)
+    const align = (full ? ['left', 'right'] : ['left', 'right', 'inset'])[Math.floor(rand() * (full ? 2 : 3))];
+    const x = align === 'inset' ? between(8, 100 - w) : 0;
+    const air = !full && rand() < 0.35 ? ' p-air' : '';
+    const box = items.length === 2
+      ? `<div class="p-duo" style="--sr:${r.toFixed(4)}">${items.map(fig).join('')}</div>`
+      : fig(items[0]);
+    return `<div class="p-row p-place${air}" style="--w:${pct(w)};--x:${pct(x)};justify-content:${align === 'right' ? 'flex-end' : 'flex-start'}">${box}</div>`;
+  };
+
+  if (lead) rows += withText(lead, firstText);
   // hero-only projects (a single film or image): the paragraphs share one row
-  else rows += `<div class="p-row p-lead">${paras.map(text).join('')}</div>`;
+  else rows += `<div class="p-row p-with">${paras.map(text).join('')}</div>`;
   if (seq.length) {
     rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
       seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
   }
-  const gallery = [];
-  for (let i = 0; i < rest.length; i += 2) {
-    const pair = rest.slice(i, i + 2);
-    gallery.push(pair.length === 2
-      ? `<div class="p-row p-pair">${pair.map(fig).join('')}</div>`
-      : `<div class="p-row p-single">${fig(pair[0])}</div>`);
-  }
-  // middle paragraphs: one after the first gallery row, then one every two rows
+  // the middle paragraphs are spread evenly through the gallery, each beside one of its images
   const pending = lead ? [...notes] : [];
-  gallery.forEach((row, i) => {
-    rows += row;
-    if (pending.length && i % 2 === 0) rows += `<div class="p-row p-note">${text(pending.shift())}</div>`;
+  const noteAt = new Map();
+  const loose = [];  // paragraphs that found no image of their own (very small galleries)
+  pending.forEach((t, k) => {
+    const at = Math.min(rest.length - 1, Math.round((k + 1) * rest.length / (pending.length + 1)));
+    if (at >= 0 && !noteAt.has(at)) noteAt.set(at, t); else loose.push(t);
   });
-  pending.forEach((n) => { rows += `<div class="p-row p-note">${text(n)}</div>`; });
-  if (tail) rows += `<div class="p-row p-tail">${text(lastText)}${fig(tail)}</div>`;
+  for (let i = 0; i < rest.length;) {
+    if (noteAt.has(i)) { rows += withText(rest[i], noteAt.get(i)); i += 1; continue; }
+    const pair = i + 1 < rest.length && !noteAt.has(i + 1) && rand() < 0.62;
+    rows += place(rest.slice(i, i + (pair ? 2 : 1)));
+    i += pair ? 2 : 1;
+  }
+  // they sit on their own, in the text column
+  loose.forEach((n) => { rows += `<div class="p-row p-note">${text(n)}</div>`; });
+  if (tail) { side = 'right'; rows += withText(tail, lastText); }
   else if (lastText && lead) rows += `<div class="p-row p-note">${text(lastText)}</div>`;
   const next = PROJECTS[(PROJECTS.indexOf(p) + 1) % PROJECTS.length];
   root.innerHTML = `
@@ -466,6 +505,18 @@ function renderProject(root) {
   const heroVideo = root.querySelector('.p-hero video');
   if (heroVideo) loopFrom(heroVideo, p.start);
   root.querySelectorAll('.p-seq, figure.swap').forEach((el) => playSequence(el));
+}
+
+/* A steady random number source for a string: the same work always gets the same numbers */
+function seeded(str) {
+  let h = 2166136261;
+  for (const c of str) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  return () => {
+    h = (h + 0x6d2b79f5) | 0;
+    let t = Math.imul(h ^ (h >>> 15), 1 | h);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 /* The sequence frame: images cross-fade in turn, starting from the first (the sketch)
