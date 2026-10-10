@@ -88,6 +88,10 @@ $manifest = @(
   @{ slug = 'yiwugo'; dir = 'Yiwugo'; order = @('*') }
   @{ slug = 'nuclear-tide'; dir = 'Zhangyu'; order = @('*') }
   # the final renders replace the older renders (123, 图层 14, 图层 16); the floor plan stays
+  # cover: street view A; the before/after elevation (drawing), then the two entrances, then the street views
+  @{ slug = 'old-street'; dir = 'old street\final renders'; order = @(
+      '03_street_view_a', '07_north_elevation_before_after', '01_east_entrance', '02_west_entrance',
+      '04_street_view_b', '05_street_view_c', '06_street_view_d') }
   @{ slug = 'restaurant'; dir = 'restaurant and cafe\final renders'; also = @('restaurant and cafe\work')
      skip = @('123.png', '图层 14.png', '图层 16.png'); order = @(
       '03_art_installation',

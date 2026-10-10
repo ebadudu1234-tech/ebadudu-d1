@@ -184,6 +184,8 @@
     | Typography | TYPOGRAPHY |
     | poster | POSTER |
     | information design | INFORMATION |
+    | Streetscape renewal | STREETSCAPE |
+    | environmental design | ENVIRONMENTAL |
 
   - **每个作品的标签**（"+ VIDEO" 为自动添加）：
 
@@ -207,10 +209,12 @@
     | Ungreen Shop (UGS) | 2024 | Branding, motion graphics, packaging | BRAND / MOTION / PACKAGING |
     | Yiwugo | 2024 | Branding, wayfinding system, front-end design | BRAND / WAYFINDING / WEB |
     | Nuclear Tide Evolutionaries | 2024 | Interactive device design | INTERACTIVE / DEVICE |
+    | Old Walls, New Life: Chayang Old Street Renewal | 2023 | Streetscape renewal, environmental design | STREETSCAPE / ENVIRONMENTAL |
     | Modern Rhythm, Day and Night Change: Restaurant Design | 2023 | Interior design, team project | INTERIOR |
 
-  - **使用次数**：VIDEO 7 · BRAND 6 · EDITORIAL 5 · PACKAGING 4 · MOTION 4 · SPACE 2 · WEB 2 · 3D 2 · ZINE 2 · INTERACTIVE 2 · 其余各 1（PRODUCT、EXHIBITION、EVENT、MERCH、UI、NEWSPAPER、TYPOGRAPHY、POSTER、INFORMATION、GAME、WAYFINDING、DEVICE、INTERIOR）。
+  - **使用次数**：VIDEO 7 · BRAND 6 · EDITORIAL 5 · PACKAGING 4 · MOTION 4 · SPACE 2 · WEB 2 · 3D 2 · ZINE 2 · INTERACTIVE 2 · 其余各 1（PRODUCT、EXHIBITION、EVENT、MERCH、UI、NEWSPAPER、TYPOGRAPHY、POSTER、INFORMATION、GAME、WAYFINDING、DEVICE、STREETSCAPE、ENVIRONMENTAL、INTERIOR）。
   - **加新作品时**：在描述第二行写类别，按上表转换成标签，写进两个 `data.js` 的 `tags`，再在这张表里加一行。
+- **Old Walls, New Life: Chayang Old Street Renewal（2023，本科毕业设计）**：图片用 `MY WORK/old street/final renders`（压缩版在 `final renders/press`），PDF 不用。顺序：街景 A（封面）→ 北立面改造前后对比（单独大图，`big: [1]`）→ 东入口 + 西入口（并列，`pairs: [[2, 3]]`）→ 街景 B、C、D。文字照搬描述原文。
 - **Modular Typefaces（2025）**：根据上课做的笔记做的分类系统海报，一共 4 张，每张海报上包含笔记的基础信息。封面完整显示（`fit: 'contain'`），文字是根据你在对话里的说明写的（`discription.txt` 还是空的）。
 - **图集的排列顺序：草图 → 场景图 → 小物件 → 周边**（封面大图仍在最前面）。顺序写在 `tools/build-assets.ps1` 的 `order` 里，改完重新运行这个脚本。
 
@@ -269,7 +273,7 @@
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
 - [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
-- 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Restaurant。
+- 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Old Street、Restaurant。
 - [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
 - [x] 作品说明文字和作品名已全部换成我写的文本描述。
@@ -309,3 +313,4 @@
 | `50511cf` | Code For Fun：展会大墙往上移到集装箱展台图前面（D1、D2）；展台图再缩小 30%（D1，新增 `size` 设置） |
 | `c60c31f` | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |
 | `02a3d70` | 准备把 D1 上线到 zihewang.site：新增 `tools/make-deploy.ps1`，生成上传文件夹 deploy-D1（拖拽到 Netlify） |
+| （本次） | 新增 2023 作品 Old Walls, New Life: Chayang Old Street Renewal（STREETSCAPE / ENVIRONMENTAL，D1、D2）；标签文档加入两个新标签 |

@@ -183,6 +183,7 @@ $items = @(
   @('allodox',              'cut',  "$W\Allodox\ALLODOX-3_Page_24.jpg",                      1025, 1792, 285, 302, 40, 1),
   @('ungreen-shop',         'cut',  "$W\Ungreeen Shop\ungreen-3_Page_12.jpg",                1195, 178, 250, 150, 34, 1),
   @('yiwugo',               'cut',  "$W\Yiwugo\press\YIWUGO-3_Page_05.jpg",                   420, 425, 240, 255, 40, 1),
+  @('old-street',           'rect', "$W\old street\final renders\press\03_street_view_a.jpg", 180, 100, 560, 900, 0, 0),
   @('restaurant',           'rect', "$W\restaurant and cafe\work\press\图层 14.jpg",           150, 380, 1300, 630, 0, 0),
   @('nuclear-tide',         'cut',  "$W\Zhangyu\zhangyu-3_Page_17.jpg",                      2820, 300, 640, 1450, 42, 3)
 )
