@@ -533,26 +533,99 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .p-next a:hover { transform: translateX(8px); }
 .p-missing { padding-top: 40vh; text-align: center; color: var(--muted); }
 
-/* ============ About Me (set like a project page) ============ */
-/* lead: the headline takes the image's place (795/1392), the text the 457 column */
-.a-lead { justify-content: space-between; }
-.a-headline {
-  flex: 0 0 57.11%;
+/* ============ About Me ============
+   Ways taken from the reference survey (prolilab/references), in D1's own type and colours:
+   the title with cut-out toys around it you can pick up (Jackie Hu), the story in big type
+   that lights up word by word (Ning Huang) with small pictures inside the sentences
+   (YanXin Zhang), numbered mono labels (Bohdan), the closing line on its own, a CV-like
+   info table (Emi Takahashi) */
+.about { padding: 0 var(--gutter) 140px; }
+.ab-mono {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* first screen: the title sits on the bottom edge, the toys are scattered above it */
+.ab-hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: clamp(40px, 5.3vw, 80px);
+}
+.ab-corner { position: absolute; top: 130px; left: 0; }
+.ab-hint { position: absolute; right: 0; bottom: clamp(40px, 5.3vw, 80px); }
+.ab-title {
+  position: relative;
+  z-index: 2;
+  max-width: 11ch;
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(44px, 4.76vw, 72px);
-  line-height: 1.2;
+  font-size: clamp(64px, 11.1vw, 168px);
+  line-height: .9;
+  pointer-events: none;
 }
-/* text | text: one column on each edge, the right one a step lower */
-.a-pair { justify-content: space-between; }
-.a-pair > .p-text + .p-text { margin-top: clamp(40px, 7.9vw, 120px); }
-.a-closing {
-  max-width: 75%;
-  margin: clamp(60px, 7.9vw, 120px) 0 0;
+.ab-name { position: relative; z-index: 2; margin: 18px 0 0; font-size: 18px; color: var(--muted); }
+.ab-toys { position: absolute; inset: 0; --k: clamp(.55px, .066vw, 1px); }
+.ab-toy {
+  position: absolute;
+  width: calc(var(--s) * var(--k));
+  translate: -50% -50%;
+  rotate: var(--rot);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .12));
+  transition: rotate .6s var(--ease-spring), scale .4s var(--ease-spring);
+}
+.ab-toy:hover { scale: 1.06; }
+.ab-toy.is-held { cursor: grabbing; z-index: 5; scale: 1.12; transition: scale .3s var(--ease-spring); }
+/* the story: label | big text; words wait in light grey and turn black as you read down */
+.ab-chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: var(--gap, 32px);
+  padding: clamp(60px, 7.9vw, 120px) 0;
+  border-top: 1px solid var(--line);
+}
+.ab-label { padding-top: .6em; }
+.ab-text {
+  margin: 0;
+  font-size: clamp(24px, 3.17vw, 48px);
+  line-height: 1.25;
+  color: var(--soft);
+}
+.ab-w { transition: color .35s ease; }
+.ab-w.is-lit { color: var(--ink); }
+/* a small picture inside the sentence pops in when its place is reached */
+.ab-pic {
+  display: inline-block;
+  height: 1.05em;
+  margin: 0 .08em;
+  vertical-align: -.2em;
+  opacity: 0;
+  scale: .4;
+  rotate: -12deg;
+  transition: opacity .3s ease, scale .6s var(--ease-spring), rotate .6s var(--ease-spring);
+}
+.ab-pic.is-lit { opacity: 1; scale: 1; rotate: 0deg; }
+.ab-pic img { height: 100%; width: auto; max-width: none; }
+.ab-pic.is-photo img { aspect-ratio: 4 / 3; object-fit: cover; }
+/* the closing line on its own, then the shelves */
+.ab-end { padding-top: clamp(60px, 7.9vw, 120px); border-top: 1px solid var(--line); }
+.ab-closing {
+  max-width: 14ch;
+  margin: 24px 0 0;
   font-family: var(--font-display);
-  font-size: clamp(26px, 4.23vw, 64px);
-  line-height: 1.2;
+  font-size: clamp(40px, 6.35vw, 96px);
+  line-height: 1.05;
 }
 /* shelves: each work's small object stands on a line; the lines run edge to edge */
 .shelf {
@@ -579,7 +652,24 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 }
 /* touched, a toy hops */
 .shelf a:hover img, .shelf a:focus-visible img { transform: translateY(-10px) rotate(-5deg); }
-.a-contact { padding: clamp(80px, 9vw, 140px) 0 0; }
+/* info table */
+.ab-info { margin-top: clamp(80px, 9vw, 140px); }
+.ab-info dl { margin: 0; }
+.ab-info dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: var(--gap, 32px);
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.ab-info dl > div:last-child { border-bottom: 1px solid var(--line); }
+.ab-info dt { padding-top: 4px; }
+.ab-info dd { margin: 0; font-size: 18px; line-height: 1.45; }
+.ab-mail { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease-out); }
+.ab-mail:hover { background-size: 100% 1px; }
+@media (prefers-reduced-motion: reduce) {
+  .ab-w, .ab-pic { transition: none; }
+}
 
 /* ============ Work appears (Apple-style) ============
    1. the frame wipes open from the bottom
@@ -687,8 +777,9 @@ figure.work-in { background: none; }
   /* pairs stack on a phone: two side by side would each be only ~160px wide */
   .p-duo { flex-direction: column; }
   .p-duo > figure { flex: none; width: 100%; }
-  .a-headline, .a-closing { flex: none; max-width: none; }
-  .a-pair > .p-text + .p-text { margin-top: 0; }
+  .ab-corner { top: 90px; }
+  .ab-chapter, .ab-info dl > div { grid-template-columns: 1fr; gap: 10px; }
+  .ab-label { padding-top: 0; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }
 }

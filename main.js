@@ -588,6 +588,112 @@ function renderProject(root) {
   root.querySelectorAll('.p-seq:not(.p-big), figure.swap').forEach((el) => playSequence(el));
 }
 
+/* ---------- About Me ---------- */
+function setupAbout(root) {
+  // small pictures sitting inside the sentences
+  root.querySelectorAll('[data-pic]').forEach((s) => {
+    s.innerHTML = `<img src="assets/${s.dataset.pic}" alt="" loading="lazy" decoding="async">`;
+  });
+
+  // the story lights up word by word as you read down; the pictures pop in at their place
+  const texts = [...root.querySelectorAll('[data-reveal-words]')];
+  texts.forEach((p) => {
+    [...p.childNodes].forEach((n) => {
+      if (n.nodeType !== Node.TEXT_NODE) return;
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach((w) => {
+        if (!w) return;
+        if (/^\s+$/.test(w)) { frag.append(w); return; }
+        const s = document.createElement('span');
+        s.className = 'ab-w';
+        s.textContent = w;
+        frag.append(s);
+      });
+      n.replaceWith(frag);
+    });
+    p.__bits = [...p.querySelectorAll('.ab-w, .ab-pic')];
+  });
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let queued = false;
+  const light = () => {
+    queued = false;
+    texts.forEach((p) => {
+      const r = p.getBoundingClientRect();
+      // 0 when the paragraph's top reaches the lower part of the screen, 1 when its end passes the middle
+      const t = still ? 1 : Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.3)));
+      const n = Math.round(t * p.__bits.length);
+      p.__bits.forEach((b, i) => b.classList.toggle('is-lit', i < n));
+    });
+  };
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(light); } }, { passive: true });
+  addEventListener('resize', light);
+  light();
+
+  // the toys around the title: picked up, carried, put down anywhere
+  const toys = root.querySelector('#ab-toys');
+  if (toys) {
+    const rand = seeded('toy-energy');
+    const kept = ['550-cafe', 'switchback', 'planting-pen', 'sonar', 'leviairab', 'after-dada', 'game-zine', 'code-for-fun', 'allodox', 'ungreen-shop', 'yiwugo', 'nuclear-tide'];
+    // places around the upper part and the right side, clear of the title on the bottom left
+    const spots = [[10, 24], [27, 15], [46, 22], [64, 13], [84, 22], [92, 44], [74, 38], [56, 44], [36, 40], [86, 66], [68, 62], [18, 42]];
+    toys.innerHTML = kept.filter(bySlug).map((slug, i) => {
+      const [x, y] = spots[i % spots.length];
+      const size = Math.round(90 + rand() * 60);
+      const rot = Math.round((rand() - 0.5) * 30);
+      return `<img class="ab-toy" src="assets/trinkets/${slug}.png" alt="" draggable="false" style="left:${x}%;top:${y}%;--s:${size};--rot:${rot}deg">`;
+    }).join('');
+    toys.addEventListener('pointerdown', (e) => {
+      const toy = e.target.closest('.ab-toy');
+      if (!toy) return;
+      e.preventDefault();
+      toy.setPointerCapture(e.pointerId);
+      const box = toys.getBoundingClientRect();
+      const rest = toy.style.getPropertyValue('--rot');
+      let lastX = e.clientX;
+      toy.classList.add('is-held');
+      toys.append(toy);  // the one in hand goes on top
+      const move = (ev) => {
+        // it tilts with the hand's speed, like something carried
+        const tilt = Math.max(-25, Math.min(25, (ev.clientX - lastX) * 1.5));
+        lastX = ev.clientX;
+        toy.style.left = `${((ev.clientX - box.left) / box.width) * 100}%`;
+        toy.style.top = `${((ev.clientY - box.top) / box.height) * 100}%`;
+        toy.style.setProperty('--rot', `${tilt}deg`);
+      };
+      // listened for on the window, so a fast hand that slips off the toy still carries it
+      const drop = () => {
+        toy.classList.remove('is-held');
+        toy.style.setProperty('--rot', rest);  // springs back to how it was standing
+        removeEventListener('pointermove', move);
+        removeEventListener('pointerup', drop);
+        removeEventListener('pointercancel', drop);
+      };
+      addEventListener('pointermove', move);
+      addEventListener('pointerup', drop);
+      addEventListener('pointercancel', drop);
+    });
+  }
+
+  // one small object from every work on the shelves, each leading to its work
+  const shelf = root.querySelector('#shelf');
+  if (shelf) {
+    shelf.innerHTML = PROJECTS.map((p, i) => `
+      <li class="reveal" style="--d:${(i % 8) * 0.04}s"><a href="${projectUrl(p)}" title="${esc(p.title)}">
+        <img src="assets/trinkets/${p.slug}.png" alt="${esc(p.title)}" loading="lazy" decoding="async"></a></li>`).join('');
+  }
+
+  // the info table: how much work, and which disciplines (from the tags)
+  const years = PROJECTS.map((p) => p.year);
+  const count = root.querySelector('#ab-count');
+  if (count) count.textContent = `${PROJECTS.length} works, ${Math.min(...years)}–${Math.max(...years)}`;
+  const tagsEl = root.querySelector('#ab-tags');
+  if (tagsEl) {
+    const n = {};
+    PROJECTS.forEach((p) => p.tags.forEach((t) => { if (t !== 'VIDEO') n[t] = (n[t] || 0) + 1; }));
+    tagsEl.innerHTML = tagsHtml(Object.keys(n).sort((a, b) => n[b] - n[a]));
+  }
+}
+
 /* A steady random number source for a string: the same work always gets the same numbers */
 function seeded(str) {
   let h = 2166136261;
@@ -698,13 +804,8 @@ if (workList) {
 }
 const project = document.getElementById('project');
 if (project) renderProject(project);
-// About Me: one small object from every work on the shelves, each leading to its work
-const shelf = document.getElementById('shelf');
-if (shelf) {
-  shelf.innerHTML = PROJECTS.map((p, i) => `
-    <li class="reveal" style="--d:${(i % 8) * 0.04}s"><a href="${projectUrl(p)}" title="${esc(p.title)}">
-      <img src="assets/trinkets/${p.slug}.png" alt="${esc(p.title)}" loading="lazy" decoding="async"></a></li>`).join('');
-}
+const about = document.getElementById('about');
+if (about) setupAbout(about);
 
 // the begin animation plays once per visit (click or any key skips it); coming back
 // from WORK or a project, or a direct link to #contact, goes straight to the page
