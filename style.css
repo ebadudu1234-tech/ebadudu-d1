@@ -580,49 +580,60 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   will-change: transform;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .12));
 }
-/* each paragraph: label | the key sentence large, the rest small and narrow on the right */
-.ab-chapter, .ab-end {
+/* screen 2: what I want from design, large; the facts behind it, small, in three topics */
+/* 32px from the line above to the first words (and the same before the closing screen) */
+.ab-core {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
-  gap: var(--gap, 32px);
-  padding: clamp(60px, 7.9vw, 120px) 0;
+  gap: clamp(20px, 2.1vw, 32px);
+  padding: 32px 0 clamp(40px, 5.3vw, 80px);
   border-top: 1px solid var(--line);
 }
-.ab-label { padding-top: .9em; }
-.ab-copy { display: grid; gap: clamp(20px, 2.1vw, 32px); }
 .ab-big {
-  max-width: 15em;
+  max-width: 21em;
   margin: 0;
-  font-size: clamp(28px, 3.97vw, 60px);
+  font-size: clamp(28px, 3.7vw, 56px);
   line-height: 1.15;
 }
-.ab-small {
-  justify-self: end;
-  width: min(100%, 457px);
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.45;
-  color: var(--muted);
+.ab-big-2 { color: var(--muted); }
+.ab-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap, 32px);
+  margin-top: clamp(16px, 2.6vw, 40px);
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
+.ab-facts .ab-mono { margin-bottom: 10px; }
+.ab-small { margin: 0; font-size: 16px; line-height: 1.5; color: var(--muted); }
+/* screen 3: the promise beside the facts about me (the Figma 795 | 457 split) */
+.ab-end {
+  display: grid;
+  grid-template-columns: minmax(0, 795fr) minmax(0, 457fr);
+  align-items: end;
+  gap: clamp(32px, 9.2vw, 140px);
+  padding: 32px 0 0;
+  border-top: 1px solid var(--line);
+}
+.ab-lead { max-width: 30em; margin-bottom: 18px; }
 .ab-closing {
-  max-width: 14ch;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(44px, 6.35vw, 96px);
+  font-size: clamp(44px, 5.3vw, 80px);
   line-height: 1.05;
 }
 /* info table */
-.ab-info dl { margin: 0; }
-.ab-info dl > div {
+.ab-info { margin: 0; }
+.ab-info > div {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
-  gap: var(--gap, 32px);
-  padding: 16px 0;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 16px;
+  padding: 12px 0;
   border-top: 1px solid var(--line);
 }
-.ab-info dl > div:last-child { border-bottom: 1px solid var(--line); }
+.ab-info > div:last-child { border-bottom: 1px solid var(--line); }
 .ab-info dt { padding-top: 4px; }
-.ab-info dd { margin: 0; font-size: 18px; line-height: 1.45; }
+.ab-info dd { margin: 0; font-size: 16px; line-height: 1.45; }
+.ab-info .tags { gap: 6px 8px; }
 .ab-mail { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease-out); }
 .ab-mail:hover { background-size: 100% 1px; }
 
@@ -733,9 +744,10 @@ figure.work-in { background: none; }
   .p-duo { flex-direction: column; }
   .p-duo > figure { flex: none; width: 100%; }
   .ab-corner { top: 90px; }
-  .ab-chapter, .ab-end, .ab-info dl > div { grid-template-columns: 1fr; gap: 10px; }
-  .ab-small { justify-self: start; }
-  .ab-label { padding-top: 0; }
+  /* a shorter first screen and less tail, so the page stays near three screens */
+  .ab-hero { min-height: 72svh; }
+  .about { padding-bottom: 60px; }
+  .ab-facts, .ab-end { grid-template-columns: 1fr; gap: 24px; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }
 }
