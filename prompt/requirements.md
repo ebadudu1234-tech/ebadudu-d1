@@ -155,7 +155,63 @@
   - **单张图**：宽图（宽高比 ≥ 1.7）左右顶满；其他单张图**居中**，只允许少量：只有一段图片数量是单数时才会多出一张，位置按作品名固定生成；不会连续出现两张单图。
   - 文字段落正好落在一张图前面会被让给前一张图，避免留下落单的图。
   - 太高的图限制在屏幕高度以内；手机上全部变成一列。
-- **标签系统**：标签来自每个作品描述的第二行（"|" 前面的类别），例如 "Brand identity, space, packaging, web" → BRAND / SPACE / PACKAGING / WEB；zine、newspaper 也作为标签。**VIDEO 不手写，有视频的作品自动加上**。WORK 页的筛选按钮按出现次数排序。
+- **标签系统**（D1、D2 共用）：
+  - **来源**：标签来自每个作品描述的**第二行（"|" 前面的类别）**，一个类别词 = 一个标签，全部大写。"team project"、课程名、"My role" 这类说明不算标签。
+  - **VIDEO 不手写**：作品里有视频，main.js 自动加上 VIDEO。
+  - **ALL**：D1 WORK 页筛选按钮的第一个，默认选中。其余按钮按使用次数从多到少排。
+  - **显示**：D1 首页卡片、WORK 列表、作品页都显示；D2 WORK 卡片里只在鼠标碰到时出现（毛玻璃、无描边），D2 作品页顶部显示年份 + 标签。
+  - **类别词 → 标签**：
+
+    | 描述里的词 | 标签 |
+    |---|---|
+    | Brand identity / Branding / brand | BRAND |
+    | Event identity | EVENT |
+    | space | SPACE |
+    | packaging / Package design | PACKAGING |
+    | web / front-end design | WEB |
+    | UI | UI |
+    | Product design | PRODUCT |
+    | Editorial design | EDITORIAL |
+    | exhibition | EXHIBITION |
+    | zine | ZINE |
+    | newspaper | NEWSPAPER |
+    | motion / motion graphics / 3D motion graphics / 3D motion title sequence | MOTION（有 3D 的再加 3D） |
+    | merch | MERCH |
+    | Interactive game | GAME + INTERACTIVE |
+    | Interactive device design | INTERACTIVE + DEVICE |
+    | wayfinding system | WAYFINDING |
+    | Interior design | INTERIOR |
+    | Typography | TYPOGRAPHY |
+    | poster | POSTER |
+    | information design | INFORMATION |
+
+  - **每个作品的标签**（"+ VIDEO" 为自动添加）：
+
+    | 作品 | 年份 | 描述第二行 | 标签 |
+    |---|---|---|---|
+    | 5:50 Cafe | 2026 | Brand identity, space, packaging, web | BRAND / SPACE / PACKAGING / WEB |
+    | Switchback | 2026 | Product design, brand | PRODUCT / BRAND + VIDEO |
+    | Modern Myths: Under the Cyber Skin | 2026 | Editorial design, exhibition | EDITORIAL / EXHIBITION |
+    | Daily Sprout: Planting Pen | 2026 | Package design | PACKAGING + VIDEO |
+    | Sónar | 2026 | Event identity, motion, merch | EVENT / MOTION / MERCH + VIDEO |
+    | Under the Mask | 2026 | Editorial design | EDITORIAL |
+    | Lotus Cigarette | 2026 | 3D motion graphics | 3D / MOTION + VIDEO |
+    | Artificial Octopus | 2026 | 3D motion title sequence | 3D / MOTION + VIDEO |
+    | Leviathan Absinthe, by Dream Recovery Department | 2026 | Packaging, brand | PACKAGING / BRAND + VIDEO |
+    | Code For Fun: Where Play Meets Purpose | 2025 | Brand identity, space, UI | BRAND / SPACE / UI + VIDEO |
+    | The Eye That Dreams | 2025 | Editorial design, zine | EDITORIAL / ZINE |
+    | DADA! DADA! | 2025 | Editorial design, newspaper | EDITORIAL / NEWSPAPER |
+    | Low Battery, No Childhood | 2025 | Editorial design, zine | EDITORIAL / ZINE |
+    | Modular Typefaces | 2025 | Typography, poster, information design | TYPOGRAPHY / POSTER / INFORMATION |
+    | Allodox | 2024 | Interactive game | GAME / INTERACTIVE |
+    | Ungreen Shop (UGS) | 2024 | Branding, motion graphics, packaging | BRAND / MOTION / PACKAGING |
+    | Yiwugo | 2024 | Branding, wayfinding system, front-end design | BRAND / WAYFINDING / WEB |
+    | Nuclear Tide Evolutionaries | 2024 | Interactive device design | INTERACTIVE / DEVICE |
+    | Modern Rhythm, Day and Night Change: Restaurant Design | 2023 | Interior design, team project | INTERIOR |
+
+  - **使用次数**：VIDEO 7 · BRAND 6 · EDITORIAL 5 · PACKAGING 4 · MOTION 4 · SPACE 2 · WEB 2 · 3D 2 · ZINE 2 · INTERACTIVE 2 · 其余各 1（PRODUCT、EXHIBITION、EVENT、MERCH、UI、NEWSPAPER、TYPOGRAPHY、POSTER、INFORMATION、GAME、WAYFINDING、DEVICE、INTERIOR）。
+  - **加新作品时**：在描述第二行写类别，按上表转换成标签，写进两个 `data.js` 的 `tags`，再在这张表里加一行。
+- **Modular Typefaces（2025）**：根据上课做的笔记做的分类系统海报，一共 4 张，每张海报上包含笔记的基础信息。封面完整显示（`fit: 'contain'`），文字是根据你在对话里的说明写的（`discription.txt` 还是空的）。
 - **图集的排列顺序：草图 → 场景图 → 小物件 → 周边**（封面大图仍在最前面）。顺序写在 `tools/build-assets.ps1` 的 `order` 里，改完重新运行这个脚本。
 
 ### 3.6.1 Switchback 的轮播大图（D1、D2 都有）
@@ -246,3 +302,4 @@
 | `45cbb9f` | D1 Code For Fun：集装箱展台小图靠右对齐（新增 `right` 设置） |
 | `2db461a` | Sónar：Visual Stage Design 替换舞台视觉设计（封面，D1、D2） |
 | `50511cf` | Code For Fun：展会大墙往上移到集装箱展台图前面（D1、D2）；展台图再缩小 30%（D1，新增 `size` 设置） |
+| （本次） | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |

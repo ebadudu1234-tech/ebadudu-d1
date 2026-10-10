@@ -179,6 +179,7 @@ $items = @(
   @('dada-newspaper',       'rect', "$W\DADA newspaper\press\page_01.jpg",                      0,   0, 2400, 3429, 0, 0),
   @('game-zine',            'cut',  "$W\2000s game zine\Siminar_4_W4_Page_3.jpg",             716, 452, 272, 550, 30, 1),
   @('code-for-fun',         'cut',  "$W\Code for fun\press\FLORA-Untitled-227a033b.jpg",        0,   0, 1248, 832, 26, 1),
+  @('modular-typefaces',    'rect', "$W\modular typefaces poster\press\Artboard 3@2x-5.jpg",   0,   0, 1600, 2400, 0, 0),
   @('allodox',              'cut',  "$W\Allodox\ALLODOX-3_Page_24.jpg",                      1025, 1792, 285, 302, 40, 1),
   @('ungreen-shop',         'cut',  "$W\Ungreeen Shop\ungreen-3_Page_12.jpg",                1195, 178, 250, 150, 34, 1),
   @('yiwugo',               'cut',  "$W\Yiwugo\press\YIWUGO-3_Page_05.jpg",                   420, 425, 240, 255, 40, 1),

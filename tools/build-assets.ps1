@@ -82,6 +82,7 @@ $manifest = @(
       # merch: ID badges, business cards, letterhead, tote, T-shirt, cap
       '11', 'CARD', '無趣创意2', 'bag', 'cloth', 'MM_Home Office_1');
       skip = @('FLORA-Untitled-de7abda2.mp4', '追设计样机.png') }  # exact duplicates of FLORA-final.mp4 and App_phone_2.png
+  @{ slug = 'modular-typefaces'; dir = 'modular typefaces poster'; order = @('*') }
   @{ slug = 'allodox'; dir = 'Allodox'; order = @('*') }
   @{ slug = 'ungreen-shop'; dir = 'Ungreeen Shop'; order = @('*') }
   @{ slug = 'yiwugo'; dir = 'Yiwugo'; order = @('*') }
