@@ -235,4 +235,4 @@
 | `fabdda1` | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
 | `d0feb94` | D1 首页第六行：Lotus Cigarette 动画换到大图，Ungreen Shop 换成小图 |
 | `c86344d` | D1 首页第六行改为 Artificial Octopus（大）+ Lotus Cigarette（小），去掉 Ungreen Shop |
-| （本次） | Code For Fun：展会大墙和街头海报两张大图显示，顺序不变；`big` 改为在图集原位置全宽显示（D1、D2） |
+| `c0d660a` | Code For Fun：展会大墙和街头海报两张大图显示，顺序不变；`big` 改为在图集原位置全宽显示（D1、D2） |
