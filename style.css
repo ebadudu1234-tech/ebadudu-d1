@@ -534,11 +534,9 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .p-missing { padding-top: 40vh; text-align: center; color: var(--muted); }
 
 /* ============ About Me ============
-   Ways taken from the reference survey (prolilab/references), in D1's own type and colours:
-   the title with cut-out toys around it you can pick up (Jackie Hu), the story in big type
-   that lights up word by word (Ning Huang) with small pictures inside the sentences
-   (YanXin Zhang), numbered mono labels (Bohdan), the closing line on its own, a CV-like
-   info table (Emi Takahashi) */
+   Text first: each paragraph's key sentence is set large, the rest small in a narrow column
+   on the right (the Figma 457 column), under mono labels. On the first screen, small objects
+   from the works float up and down and dodge the mouse; their size follows the screen. */
 .about { padding: 0 var(--gutter) 140px; }
 .ab-mono {
   margin: 0;
@@ -548,7 +546,6 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   text-transform: uppercase;
   color: var(--muted);
 }
-/* first screen: the title sits on the bottom edge, the toys are scattered above it */
 .ab-hero {
   position: relative;
   min-height: 100vh;
@@ -557,9 +554,9 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   flex-direction: column;
   justify-content: flex-end;
   padding-bottom: clamp(40px, 5.3vw, 80px);
+  overflow: hidden;
 }
 .ab-corner { position: absolute; top: 130px; left: 0; }
-.ab-hint { position: absolute; right: 0; bottom: clamp(40px, 5.3vw, 80px); }
 .ab-title {
   position: relative;
   z-index: 2;
@@ -569,91 +566,52 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   font-weight: 400;
   font-size: clamp(64px, 11.1vw, 168px);
   line-height: .9;
-  pointer-events: none;
 }
 .ab-name { position: relative; z-index: 2; margin: 18px 0 0; font-size: 18px; color: var(--muted); }
-.ab-toys { position: absolute; inset: 0; --k: clamp(.55px, .066vw, 1px); }
+.ab-toys { position: absolute; inset: 0; }
+/* placed, floated and pushed by main.js (transform); the size is set from the screen */
 .ab-toy {
   position: absolute;
-  width: calc(var(--s) * var(--k));
-  translate: -50% -50%;
-  rotate: var(--rot);
-  cursor: grab;
-  touch-action: none;
+  left: 0;
+  top: 0;
+  max-width: none;
+  pointer-events: none;
   user-select: none;
-  -webkit-user-drag: none;
+  will-change: transform;
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .12));
-  transition: rotate .6s var(--ease-spring), scale .4s var(--ease-spring);
 }
-.ab-toy:hover { scale: 1.06; }
-.ab-toy.is-held { cursor: grabbing; z-index: 5; scale: 1.12; transition: scale .3s var(--ease-spring); }
-/* the story: label | big text; words wait in light grey and turn black as you read down */
-.ab-chapter {
+/* each paragraph: label | the key sentence large, the rest small and narrow on the right */
+.ab-chapter, .ab-end {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   gap: var(--gap, 32px);
   padding: clamp(60px, 7.9vw, 120px) 0;
   border-top: 1px solid var(--line);
 }
-.ab-label { padding-top: .6em; }
-.ab-text {
+.ab-label { padding-top: .9em; }
+.ab-copy { display: grid; gap: clamp(20px, 2.1vw, 32px); }
+.ab-big {
+  max-width: 15em;
   margin: 0;
-  font-size: clamp(24px, 3.17vw, 48px);
-  line-height: 1.25;
-  color: var(--soft);
+  font-size: clamp(28px, 3.97vw, 60px);
+  line-height: 1.15;
 }
-.ab-w { transition: color .35s ease; }
-.ab-w.is-lit { color: var(--ink); }
-/* a small picture inside the sentence pops in when its place is reached */
-.ab-pic {
-  display: inline-block;
-  height: 1.05em;
-  margin: 0 .08em;
-  vertical-align: -.2em;
-  opacity: 0;
-  scale: .4;
-  rotate: -12deg;
-  transition: opacity .3s ease, scale .6s var(--ease-spring), rotate .6s var(--ease-spring);
+.ab-small {
+  justify-self: end;
+  width: min(100%, 457px);
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--muted);
 }
-.ab-pic.is-lit { opacity: 1; scale: 1; rotate: 0deg; }
-.ab-pic img { height: 100%; width: auto; max-width: none; }
-.ab-pic.is-photo img { aspect-ratio: 4 / 3; object-fit: cover; }
-/* the closing line on its own, then the shelves */
-.ab-end { padding-top: clamp(60px, 7.9vw, 120px); border-top: 1px solid var(--line); }
 .ab-closing {
   max-width: 14ch;
-  margin: 24px 0 0;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(40px, 6.35vw, 96px);
+  font-size: clamp(44px, 6.35vw, 96px);
   line-height: 1.05;
 }
-/* shelves: each work's small object stands on a line; the lines run edge to edge */
-.shelf {
-  display: flex;
-  flex-wrap: wrap;
-  margin: clamp(32px, 4.2vw, 64px) 0 0;
-  padding: 0;
-  list-style: none;
-}
-.shelf li { flex: 1 0 auto; }
-.shelf a {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: clamp(96px, 9.9vw, 150px);
-  padding: 0 clamp(8px, 1.3vw, 20px);
-  border-bottom: 1px solid var(--ink);
-}
-.shelf img {
-  max-height: 84%;
-  width: auto;
-  transform-origin: 50% 100%;
-  transition: transform .5s var(--ease-spring);
-}
-/* touched, a toy hops */
-.shelf a:hover img, .shelf a:focus-visible img { transform: translateY(-10px) rotate(-5deg); }
 /* info table */
-.ab-info { margin-top: clamp(80px, 9vw, 140px); }
 .ab-info dl { margin: 0; }
 .ab-info dl > div {
   display: grid;
@@ -667,9 +625,6 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .ab-info dd { margin: 0; font-size: 18px; line-height: 1.45; }
 .ab-mail { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease-out); }
 .ab-mail:hover { background-size: 100% 1px; }
-@media (prefers-reduced-motion: reduce) {
-  .ab-w, .ab-pic { transition: none; }
-}
 
 /* ============ Work appears (Apple-style) ============
    1. the frame wipes open from the bottom
@@ -778,7 +733,8 @@ figure.work-in { background: none; }
   .p-duo { flex-direction: column; }
   .p-duo > figure { flex: none; width: 100%; }
   .ab-corner { top: 90px; }
-  .ab-chapter, .ab-info dl > div { grid-template-columns: 1fr; gap: 10px; }
+  .ab-chapter, .ab-end, .ab-info dl > div { grid-template-columns: 1fr; gap: 10px; }
+  .ab-small { justify-self: start; }
   .ab-label { padding-top: 0; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }

@@ -590,96 +590,75 @@ function renderProject(root) {
 
 /* ---------- About Me ---------- */
 function setupAbout(root) {
-  // small pictures sitting inside the sentences
-  root.querySelectorAll('[data-pic]').forEach((s) => {
-    s.innerHTML = `<img src="assets/${s.dataset.pic}" alt="" loading="lazy" decoding="async">`;
-  });
-
-  // the story lights up word by word as you read down; the pictures pop in at their place
-  const texts = [...root.querySelectorAll('[data-reveal-words]')];
-  texts.forEach((p) => {
-    [...p.childNodes].forEach((n) => {
-      if (n.nodeType !== Node.TEXT_NODE) return;
-      const frag = document.createDocumentFragment();
-      n.textContent.split(/(\s+)/).forEach((w) => {
-        if (!w) return;
-        if (/^\s+$/.test(w)) { frag.append(w); return; }
-        const s = document.createElement('span');
-        s.className = 'ab-w';
-        s.textContent = w;
-        frag.append(s);
-      });
-      n.replaceWith(frag);
-    });
-    p.__bits = [...p.querySelectorAll('.ab-w, .ab-pic')];
-  });
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let queued = false;
-  const light = () => {
-    queued = false;
-    texts.forEach((p) => {
-      const r = p.getBoundingClientRect();
-      // 0 when the paragraph's top reaches the lower part of the screen, 1 when its end passes the middle
-      const t = still ? 1 : Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.3)));
-      const n = Math.round(t * p.__bits.length);
-      p.__bits.forEach((b, i) => b.classList.toggle('is-lit', i < n));
-    });
-  };
-  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(light); } }, { passive: true });
-  addEventListener('resize', light);
-  light();
-
-  // the toys around the title: picked up, carried, put down anywhere
+  // the toys on the first screen: each floats up and down on its own beat and slips away
+  // from the mouse (or a finger), then drifts back home; their size follows the screen
   const toys = root.querySelector('#ab-toys');
   if (toys) {
+    const hero = toys.parentElement;
     const rand = seeded('toy-energy');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const kept = ['550-cafe', 'switchback', 'planting-pen', 'sonar', 'leviairab', 'after-dada', 'game-zine', 'code-for-fun', 'allodox', 'ungreen-shop', 'yiwugo', 'nuclear-tide'];
-    // places around the upper part and the right side, clear of the title on the bottom left
-    const spots = [[10, 24], [27, 15], [46, 22], [64, 13], [84, 22], [92, 44], [74, 38], [56, 44], [36, 40], [86, 66], [68, 62], [18, 42]];
-    toys.innerHTML = kept.filter(bySlug).map((slug, i) => {
-      const [x, y] = spots[i % spots.length];
-      const size = Math.round(90 + rand() * 60);
-      const rot = Math.round((rand() - 0.5) * 30);
-      return `<img class="ab-toy" src="assets/trinkets/${slug}.png" alt="" draggable="false" style="left:${x}%;top:${y}%;--s:${size};--rot:${rot}deg">`;
-    }).join('');
-    toys.addEventListener('pointerdown', (e) => {
-      const toy = e.target.closest('.ab-toy');
-      if (!toy) return;
-      e.preventDefault();
-      toy.setPointerCapture(e.pointerId);
-      const box = toys.getBoundingClientRect();
-      const rest = toy.style.getPropertyValue('--rot');
-      let lastX = e.clientX;
-      toy.classList.add('is-held');
-      toys.append(toy);  // the one in hand goes on top
-      const move = (ev) => {
-        // it tilts with the hand's speed, like something carried
-        const tilt = Math.max(-25, Math.min(25, (ev.clientX - lastX) * 1.5));
-        lastX = ev.clientX;
-        toy.style.left = `${((ev.clientX - box.left) / box.width) * 100}%`;
-        toy.style.top = `${((ev.clientY - box.top) / box.height) * 100}%`;
-        toy.style.setProperty('--rot', `${tilt}deg`);
+    // homes (as parts of the first screen) around the top and right, clear of the title
+    const homes = [[.1, .24], [.27, .15], [.46, .22], [.64, .13], [.84, .22], [.92, .44], [.74, .38], [.56, .44], [.36, .4], [.86, .66], [.68, .62], [.18, .42]];
+    const items = kept.filter(bySlug).map((slug, i) => {
+      const el = document.createElement('img');
+      el.className = 'ab-toy';
+      el.src = `assets/trinkets/${slug}.png`;
+      el.alt = '';
+      el.draggable = false;
+      toys.append(el);
+      const [hx, hy] = homes[i % homes.length];
+      return {
+        el, hx, hy,
+        s: 90 + rand() * 60,                 // size on a 1392px-wide, 900px-tall screen
+        rot: (rand() - 0.5) * 30,
+        phase: rand() * Math.PI * 2,
+        speed: 0.8 + rand() * 0.7,           // float rhythm, radians per second
+        ox: 0, oy: 0, vx: 0, vy: 0,          // the push away from the mouse, and its speed
       };
-      // listened for on the window, so a fast hand that slips off the toy still carries it
-      const drop = () => {
-        toy.classList.remove('is-held');
-        toy.style.setProperty('--rot', rest);  // springs back to how it was standing
-        removeEventListener('pointermove', move);
-        removeEventListener('pointerup', drop);
-        removeEventListener('pointercancel', drop);
-      };
-      addEventListener('pointermove', move);
-      addEventListener('pointerup', drop);
-      addEventListener('pointercancel', drop);
     });
-  }
+    let W = 0, H = 0, unit = 1;
+    const measure = () => {
+      W = hero.clientWidth;
+      H = hero.clientHeight;
+      unit = Math.max(0.5, Math.min(W / 1392, H / 900));
+      items.forEach((it) => { it.el.style.width = `${Math.round(it.s * unit)}px`; });
+    };
+    measure();
+    addEventListener('resize', measure);
 
-  // one small object from every work on the shelves, each leading to its work
-  const shelf = root.querySelector('#shelf');
-  if (shelf) {
-    shelf.innerHTML = PROJECTS.map((p, i) => `
-      <li class="reveal" style="--d:${(i % 8) * 0.04}s"><a href="${projectUrl(p)}" title="${esc(p.title)}">
-        <img src="assets/trinkets/${p.slug}.png" alt="${esc(p.title)}" loading="lazy" decoding="async"></a></li>`).join('');
+    let mx = -1e5, my = -1e5;
+    const aim = (e) => { const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; };
+    const away = () => { mx = -1e5; my = -1e5; };
+    hero.addEventListener('pointermove', aim);
+    hero.addEventListener('pointerdown', aim);
+    hero.addEventListener('pointerleave', away);
+    hero.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') away(); });
+
+    // only move while the first screen is in view
+    let shown = true;
+    new IntersectionObserver(([e]) => { shown = e.isIntersecting; }).observe(hero);
+    const tick = (now) => {
+      requestAnimationFrame(tick);
+      if (!shown) return;
+      const reach = 160 + 120 * unit;            // how close the mouse may come before they move
+      items.forEach((it) => {
+        const hx = it.hx * W, hy = it.hy * H;
+        const bob = still ? 0 : Math.sin((now / 1000) * it.speed + it.phase) * 16 * unit;
+        const dx = hx + it.ox - mx, dy = hy + it.oy + bob - my;
+        const d = Math.hypot(dx, dy) || 1;
+        // a soft spring home, plus a push straight away from the mouse while it is near
+        let fx = -it.ox * 0.026, fy = -it.oy * 0.026;
+        if (d < reach) { const f = (1 - d / reach) * 9; fx += (dx / d) * f; fy += (dy / d) * f; }
+        it.vx = (it.vx + fx) * 0.84;
+        it.vy = (it.vy + fy) * 0.84;
+        it.ox += it.vx;
+        it.oy += it.vy;
+        const tilt = it.rot + Math.max(-20, Math.min(20, it.vx * 2));
+        it.el.style.transform = `translate(${(hx + it.ox).toFixed(1)}px, ${(hy + it.oy + bob).toFixed(1)}px) translate(-50%, -50%) rotate(${tilt.toFixed(1)}deg)`;
+      });
+    };
+    requestAnimationFrame(tick);
   }
 
   // the info table: how much work, and which disciplines (from the tags)

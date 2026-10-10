@@ -252,13 +252,14 @@
 - 手机宽度下排版要能正常显示，不能出现横向滚动。
 
 ### 3.10 ABOUT ME 页（about.html）
-- 文字来自 `E:\Homework\NB web\about me\putin\About Me.txt`，**D1 用 Version 1「Warning: I Run on Toy Energy」**，原文照搬，不改一个字。
-- **按 `prolilab/references` 里参考网站的做法重新做**（字体、颜色仍是 D1 自己的：白底、Margarine、Metrophobic、Intel One Mono）：
-  - 第一屏：Margarine 超大标题放在屏幕底边，上面散落 12 个作品里的小物件，**可以用鼠标/手指拿起来、拖到任何地方**，放下时弹回原来的角度（参考 Jackie Hu 桌面上的实物剪贴）；左上 "(ABOUT ME)"、右下 "↖ pick up a toy" 用等宽小字。
-  - 故事三段：左边等宽编号 _01 / _02 / _03（参考 Bohdan），右边大字；**往下滚时文字一个词一个词从浅灰变黑**（参考 Ning Huang）；**句子里插小图**：玩具、作品小图、青蛙，读到那里时弹出来（参考 YanXin Zhang）。
-  - _04：最后一句单独放大（Margarine），下面是小物件架子（每个作品一个，点进作品）。
-  - 信息表（参考 Emi Takahashi）：Name / Get in touch / Work（作品数量和年份，自动统计）/ Disciplines（标签，自动统计）。
-  - 系统开了"减少动态效果"时，文字直接全部显示。
+- 文字来自 `E:\Homework\NB web\about me\putin\About Me.txt`，**D1 用 Version 1「Warning: I Run on Toy Energy」**，原文照搬、顺序不变。
+- **不放任何跳到作品的链接**（没有作品架子、没有"All my work"），页面以文字为主；唯一的链接是邮箱。
+- **排版：重点句用大字，其余用小字**：每段左边是等宽编号 _01 / _02 / _03，右边先是大字重点句（Metrophobic，最大 60px），其余内容用 18px 灰色小字，放在右侧 457px 的窄栏里（手机上左对齐）。第三段有两句重点（"A good toy does not need a manual…" 和 "I like to make overwhelming things feel less overwhelming…"）。_04 是最后一句，Margarine 大字单独放。最后是信息表：Name / Get in touch / Work（作品数量和年份，自动统计）/ Disciplines（标签，自动统计）。
+- **第一屏 "Warning: I Run on Toy Energy"**：标题在屏幕底边，上面 12 个作品小物件：
+  - 一直**上下漂浮**（每个节奏不同）；
+  - **一直躲着鼠标**：鼠标（或手指）靠近就被推开，离开后慢慢回到原位，移动时会随速度倾斜；
+  - **大小自适应**：按屏幕宽高缩放，手机上最小约为电脑的一半；第一屏离开屏幕时停止计算。
+  - 系统开了"减少动态效果"时不漂浮，只躲鼠标。
 - 所有页面导航里的 ABOUT ME 都链接到 about.html。
 
 ## 3B. D2 网站（概要，详细见 `website/D2/prompt/requirements.md`）
@@ -332,3 +333,4 @@
 | `ff31818` | 手机端优化：视频在屏幕上自动静音播放、不用点（D1、D2）；D1 WORK 页标签一行左右滑、每行加小封面；作品页并排图改上下排；首页和列表用 960px 小图 |
 | `dd52c55` | 新增 ABOUT ME 页：D1 用 Version 1（Toy Energy，带小物件架子），D2 用 Version 2（Let Me Guide You，作品地图封面）；导航 ABOUT ME 指向 about.html |
 | `5c181e3` | ABOUT ME 页按参考网站的做法重做（可拖动的玩具、逐词显现、句中插图、信息表） |
+| （本次） | ABOUT ME：去掉作品链接，重点句大字、其余小字；第一屏小物件一直上下漂浮、躲着鼠标、大小自适应 |

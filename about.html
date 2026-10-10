@@ -20,45 +20,49 @@
   </ul>
 </nav>
 
-<!-- About Me, version 1 ("Warning: I Run on Toy Energy").
-     Ways borrowed from the reference survey (prolilab/references):
-     - first screen: the title with cut-out objects around it that can be picked up (Jackie Hu's desk)
-     - the story in big type that lights up word by word as you scroll (Ning Huang), with small
-       pictures sitting inside the sentences (YanXin Zhang), under numbered mono labels (Bohdan)
-     - the closing line on its own, then the shelf; a CV-like info table (Emi Takahashi) -->
+<!-- About Me, version 1 ("Warning: I Run on Toy Energy"), text first.
+     Every paragraph is kept word for word and in order; its key sentence is set large
+     (.ab-big) and the rest small (.ab-small). The first screen's toys float and dodge the mouse. -->
 <main class="about" id="about">
   <section class="ab-hero">
     <p class="ab-mono ab-corner reveal">(ABOUT ME)</p>
     <h1 class="ab-title reveal" style="--d:.05s">Warning: I Run on Toy Energy</h1>
     <p class="ab-name reveal" style="--d:.12s">Zihe Wang</p>
-    <!-- the toys: one small object from works, scattered; drag them around -->
     <div class="ab-toys" id="ab-toys" aria-hidden="true"></div>
-    <p class="ab-mono ab-hint">↖ pick up a toy</p>
   </section>
 
-  <section class="ab-story">
-    <article class="ab-chapter">
-      <p class="ab-mono ab-label">_01</p>
-      <p class="ab-text" data-reveal-words>My shelves have always been full of toys. <span class="ab-pic" data-pic="trinkets/550-cafe.png"></span><span class="ab-pic" data-pic="trinkets/sonar.png"></span> They have never been just toys to me. They are my friends, and every time I look at them, they give me a special, happy energy. When I could not find the part I wanted, I designed it myself and built it with a 3D printer. <span class="ab-pic" data-pic="trinkets/switchback.png"></span></p>
-    </article>
-    <article class="ab-chapter">
-      <p class="ab-mono ab-label">_02</p>
-      <p class="ab-text" data-reveal-words>That energy led me to graphic design, <span class="ab-pic is-photo" data-pic="thumbs/after-dada.jpg"></span> and then to games. <span class="ab-pic is-photo" data-pic="thumbs/allodox.jpg"></span> For my graduation project, I built a game and led a small team for the first time: two programmers, and I made all the art. I gave everyone the same tasks and the same time, but everyone has different skills, so it did not work well. Now I try to see what each person is good at, and I lead with more encouragement.</p>
-    </article>
-    <article class="ab-chapter">
-      <p class="ab-mono ab-label">_03</p>
-      <p class="ab-text" data-reveal-words>A good toy does not need a manual to make someone smile. <span class="ab-pic" data-pic="frog.png"></span> It speaks without a word. That is what I want from design. I like to make overwhelming things feel less overwhelming, and let them feel like play. <span class="ab-pic" data-pic="trinkets/code-for-fun.png"></span> When I start a project, I always think about how to turn it into something real, and I keep watching new design technology to find better ways to do it. My toys give me happy energy, and I want my work to give people the same energy.</p>
-    </article>
-  </section>
+  <article class="ab-chapter">
+    <p class="ab-mono ab-label reveal">_01</p>
+    <div class="ab-copy">
+      <p class="ab-big reveal">My shelves have always been full of toys.</p>
+      <p class="ab-small reveal" style="--d:.08s">They have never been just toys to me. They are my friends, and every time I look at them, they give me a special, happy energy. When I could not find the part I wanted, I designed it myself and built it with a 3D printer.</p>
+    </div>
+  </article>
+
+  <article class="ab-chapter">
+    <p class="ab-mono ab-label reveal">_02</p>
+    <div class="ab-copy">
+      <p class="ab-big reveal">That energy led me to graphic design, and then to games.</p>
+      <p class="ab-small reveal" style="--d:.08s">For my graduation project, I built a game and led a small team for the first time: two programmers, and I made all the art. I gave everyone the same tasks and the same time, but everyone has different skills, so it did not work well. Now I try to see what each person is good at, and I lead with more encouragement.</p>
+    </div>
+  </article>
+
+  <article class="ab-chapter">
+    <p class="ab-mono ab-label reveal">_03</p>
+    <div class="ab-copy">
+      <p class="ab-big reveal">A good toy does not need a manual to make someone smile. It speaks without a word.</p>
+      <p class="ab-small reveal" style="--d:.08s">That is what I want from design.</p>
+      <p class="ab-big reveal">I like to make overwhelming things feel less overwhelming, and let them feel like play.</p>
+      <p class="ab-small reveal" style="--d:.08s">When I start a project, I always think about how to turn it into something real, and I keep watching new design technology to find better ways to do it. My toys give me happy energy, and I want my work to give people the same energy.</p>
+    </div>
+  </article>
 
   <section class="ab-end">
-    <p class="ab-mono ab-label">_04</p>
+    <p class="ab-mono ab-label reveal">_04</p>
     <p class="ab-closing reveal">I hope everything I design earns a place on someone's shelf.</p>
-    <!-- one small object from every work, standing on shelves; filled from data.js -->
-    <ul class="shelf" id="shelf" aria-label="A small object from each work"></ul>
   </section>
 
-  <!-- info as a small table, like a CV column; filled from data.js where it can be -->
+  <!-- a small info table, like a CV column; the counts are read from data.js -->
   <section class="ab-info">
     <dl>
       <div><dt class="ab-mono">Name</dt><dd>Zihe Wang</dd></div>
@@ -67,8 +71,6 @@
       <div><dt class="ab-mono">Disciplines</dt><dd id="ab-tags"></dd></div>
     </dl>
   </section>
-
-  <nav class="p-next"><span>Next</span><a href="work.html">All my work →</a></nav>
 </main>
 
 <script src="media.js"></script>
