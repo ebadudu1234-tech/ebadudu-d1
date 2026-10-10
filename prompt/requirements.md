@@ -228,4 +228,4 @@
 | `f6b353c` | WORK 页：鼠标没碰到作品时右侧预览图不显示 |
 | `97b1f93` | Restaurant 换成 final renders（D1、D2）；D1 WORK 页标签加 ALL |
 | `3ba0ce2` | Restaurant：平面图单独大图显示；入口和室外渲染图并列（新增 `big` / `pairs` 设置，D1、D2） |
-| （本次） | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
+| `fabdda1` | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
