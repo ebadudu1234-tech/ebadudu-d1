@@ -319,4 +319,4 @@
 | `c60c31f` | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |
 | `02a3d70` | 准备把 D1 上线到 zihewang.site：新增 `tools/make-deploy.ps1`，生成上传文件夹 deploy-D1（拖拽到 Netlify） |
 | `219b836` | 新增 2023 作品 Old Walls, New Life: Chayang Old Street Renewal（STREETSCAPE / ENVIRONMENTAL，D1、D2）；标签文档加入两个新标签 |
-| （本次） | 手机端优化：视频在屏幕上自动静音播放、不用点（D1、D2）；D1 WORK 页标签一行左右滑、每行加小封面；作品页并排图改上下排；首页和列表用 960px 小图 |
+| `ff31818` | 手机端优化：视频在屏幕上自动静音播放、不用点（D1、D2）；D1 WORK 页标签一行左右滑、每行加小封面；作品页并排图改上下排；首页和列表用 960px 小图 |
