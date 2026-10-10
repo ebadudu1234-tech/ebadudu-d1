@@ -197,4 +197,4 @@
 | `e54898d` | Switchback 轮播大图的替换时间从 2.6 秒缩短到 1.5 秒 |
 | `0721d79` | Ungreen Shop、Yiwugo、Nuclear Tide 改为 2024 年（D1、D2） |
 | `f07e707` | Allodox 改为 2024；After Dada、2000s Game Zine、DADA Newspaper 改为 2025（D1、D2）；首页推荐待你决定，暂未调整 |
-| （本次） | Planting Pen：三对草图 ↔ 渲染图在图集里按正常大小每 1.5 秒互换（草图先）；方盒草图和 CLOSED FORM 从网站删除（D1、D2） |
+| `16be6b9` | Planting Pen：三对草图 ↔ 渲染图在图集里按正常大小每 1.5 秒互换（草图先）；方盒草图和 CLOSED FORM 从网站删除（D1、D2） |
