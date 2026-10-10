@@ -172,4 +172,4 @@
 | `42e526d` | 新增这份要求汇总文件 |
 | `0ec4458` | 视频作品鼠标移上去播放、视频作品放大格子、首页推荐改为新作且照片多的项目、Code For Fun 封面改用 FLORA-final 截图、新增 9 张 Code for fun 图片 |
 | `59f335b` | 首页和 WORK 页：鼠标碰到作品时出现从作品里提取的小物品，并在作品框内跟随鼠标；WORK 页整行都可悬停；处理脚本保存到 tools/ |
-| （本次） | 新建 D2 网站（按 Figma direction 2），D2 的要求另存在 D2/prompt |
+| `23a042a` | 新建 D2 网站（按 Figma direction 2），D2 的要求另存在 D2/prompt |
