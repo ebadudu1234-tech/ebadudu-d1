@@ -331,4 +331,4 @@
 | `219b836` | 新增 2023 作品 Old Walls, New Life: Chayang Old Street Renewal（STREETSCAPE / ENVIRONMENTAL，D1、D2）；标签文档加入两个新标签 |
 | `ff31818` | 手机端优化：视频在屏幕上自动静音播放、不用点（D1、D2）；D1 WORK 页标签一行左右滑、每行加小封面；作品页并排图改上下排；首页和列表用 960px 小图 |
 | `dd52c55` | 新增 ABOUT ME 页：D1 用 Version 1（Toy Energy，带小物件架子），D2 用 Version 2（Let Me Guide You，作品地图封面）；导航 ABOUT ME 指向 about.html |
-| （本次） | ABOUT ME 页按参考网站的做法重做（可拖动的玩具、逐词显现、句中插图、信息表） |
+| `5c181e3` | ABOUT ME 页按参考网站的做法重做（可拖动的玩具、逐词显现、句中插图、信息表） |
