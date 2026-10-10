@@ -421,30 +421,45 @@ function renderProject(root) {
     : `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
   const text = (t) => (t ? `<p class="p-text reveal" style="--d:.1s">${esc(t)}</p>` : '');
 
-  // lead row (image + intro), tail row (detail + image), justified pairs in between
+  // the description: first paragraph beside the lead image, last one beside the tail image,
+  // any in between are set among the gallery rows
+  const paras = p.text || [p.intro, p.detail].filter(Boolean);
+  const firstText = paras[0];
+  const lastText = paras.length > 1 ? paras[paras.length - 1] : '';
+  const notes = paras.slice(1, -1);
+
+  // lead row (image + first paragraph), tail row (last paragraph + image), justified pairs in between
   const lead = rest.shift();
-  const tail = rest.length > 1 && p.detail ? rest.pop() : null;
+  const tail = rest.length > 1 && lastText ? rest.pop() : null;
   let rows = '';
-  if (lead) rows += `<div class="p-row p-lead">${fig(lead)}${text(p.intro)}</div>`;
-  // hero-only projects (a single film or image): both paragraphs share one row
-  else rows += `<div class="p-row p-lead">${text(p.intro)}${text(p.detail)}</div>`;
+  if (lead) rows += `<div class="p-row p-lead">${fig(lead)}${text(firstText)}</div>`;
+  // hero-only projects (a single film or image): the paragraphs share one row
+  else rows += `<div class="p-row p-lead">${paras.map(text).join('')}</div>`;
   if (seq.length) {
     rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
       seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
   }
+  const gallery = [];
   for (let i = 0; i < rest.length; i += 2) {
     const pair = rest.slice(i, i + 2);
-    rows += pair.length === 2
+    gallery.push(pair.length === 2
       ? `<div class="p-row p-pair">${pair.map(fig).join('')}</div>`
-      : `<div class="p-row p-single">${fig(pair[0])}</div>`;
+      : `<div class="p-row p-single">${fig(pair[0])}</div>`);
   }
-  if (tail) rows += `<div class="p-row p-tail">${text(p.detail)}${fig(tail)}</div>`;
-  else if (p.detail && lead) rows += `<div class="p-row p-tail">${text(p.detail)}</div>`;
-
+  // middle paragraphs: one after the first gallery row, then one every two rows
+  const pending = lead ? [...notes] : [];
+  gallery.forEach((row, i) => {
+    rows += row;
+    if (pending.length && i % 2 === 0) rows += `<div class="p-row p-note">${text(pending.shift())}</div>`;
+  });
+  pending.forEach((n) => { rows += `<div class="p-row p-note">${text(n)}</div>`; });
+  if (tail) rows += `<div class="p-row p-tail">${text(lastText)}${fig(tail)}</div>`;
+  else if (lastText && lead) rows += `<div class="p-row p-note">${text(lastText)}</div>`;
   const next = PROJECTS[(PROJECTS.indexOf(p) + 1) % PROJECTS.length];
   root.innerHTML = `
     <figure class="p-hero work-in${p.fit === 'contain' ? ' contain' : ' parallax'}"><div class="wipe">${hero ? mediaHtml(hero, { hero: true, alt: p.title }) : ''}</div></figure>
     <h1 class="p-title reveal">${esc(p.title)}</h1>
+    ${p.subtitle ? `<p class="p-sub reveal" style="--d:.04s">${esc(p.subtitle)}</p>` : ''}
     <div class="reveal" style="--d:.05s">${tagsHtml(p.tags)}</div>
     <div class="p-body">${rows}</div>
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;

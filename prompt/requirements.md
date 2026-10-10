@@ -115,7 +115,7 @@
 - 联系页上方要显示导航栏。
 
 ### 3.5 WORK 页
-- 按年份分组（2026 / 2025），组与组之间有分隔线。
+- 按年份分组（2026 / 2025 / 2024 / 2023），组与组之间有分隔线。
 - 顶部是标签筛选按钮，点一下筛选，再点一下取消。
 - 鼠标悬停的作品：文字变黑、出现下划线、显示标签。整行都算悬停范围，不只是文字。
 - **右侧预览框的尺寸不是固定的，要随作品封面图的比例变化**；太高的图最多占屏幕高度的 70%。
@@ -125,6 +125,12 @@
 - 并排的两张图高度一致，每张都按原图比例显示，**不裁切**。
 - 视频作品的顶部视频自动静音循环播放；图集里的视频要点击才播放。
 - 页面最下面有"下一个作品"的链接。
+- **作品名、副标题和说明文字都来自我写的文本描述**（MY WORK 里每个作品的描述），原文照搬，不改写：
+  - 描述第一行 = 作品名，第二行 = 副标题（作品名下面一行灰字）；
+  - 第一段放在顶部大图下面；最后一段放在图集最后；中间的段落穿插在图集之间（D1）。D2 把所有段落都放在 "ABOUT THIS WORK" 里。
+  - 在 `data.js` 里是 `subtitle` 和 `text: [段落, 段落, …]`。
+- **content reference 文件夹不用读、不用加到网站上。**
+- **图集的排列顺序：草图 → 场景图 → 小物件 → 周边**（封面大图仍在最前面）。顺序写在 `tools/build-assets.ps1` 的 `order` 里，改完重新运行这个脚本。
 
 ### 3.6.1 Switchback 的轮播大图（D1、D2 都有）
 - 在作品介绍下面放**一张大图**，三张图**轮流替换**（交叉淡入淡出，每张停 1.5 秒，淡入淡出 0.6 秒），**从草图开始**：
@@ -141,7 +147,8 @@
   - 书本盒草图（pack 2）↔ 书本盒渲染图；
   - 盖子 + 两层盒草图（pack 4）↔ Top / Side / Front View 渲染图。
 - **没有配对的草图删除**：方盒 + 笔 + 植物盒草图（pack 3）不在网站上出现；带标注的书本盒渲染图（CLOSED FORM）也不出现（原图仍保留在 MY WORK 里）。
-- 在 `data.js` 里：`swaps: [[4, 9], [5, 8], [7, 10]]`（每对：[草图, 渲染图]），`hide: [6, 11]`。
+- 在 `data.js` 里：`swaps: [[1, 9], [2, 10], [3, 11]]`（每对：[草图, 渲染图]）；pack 3 和 CLOSED FORM 直接在 `build-assets.ps1` 里跳过。
+- 原来的封面图（"@1…"）已经从文件夹里删掉了，**封面改用包装盒照片（Screenshot File）**。
 
 ### 3.7 作品出现时的动效（苹果风格）
 - 图片框从下往上展开；里面的图从稍微放大、略带模糊，变成清晰的原大小。
@@ -173,10 +180,11 @@
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
-- 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide。
+- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站（图片在 `MY WORK/restaurant and cafe/work`，压缩版在 `press`），标签 INTERIOR。
+- 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Restaurant。
 - [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
-- [ ] 核对作品说明文字和部分作品名（Planting Pen、Sónar 等是 Claude 根据图片写的），在 `data.js` 里修改。
+- [x] 作品说明文字和作品名已全部换成我写的文本描述。
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
 - [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
 - [ ] 确认"五格"的意思：目前做的是五行、10 个作品；如果是指 5 个作品，需要再改。
@@ -198,3 +206,4 @@
 | `0721d79` | Ungreen Shop、Yiwugo、Nuclear Tide 改为 2024 年（D1、D2） |
 | `f07e707` | Allodox 改为 2024；After Dada、2000s Game Zine、DADA Newspaper 改为 2025（D1、D2）；首页推荐待你决定，暂未调整 |
 | `16be6b9` | Planting Pen：三对草图 ↔ 渲染图在图集里按正常大小每 1.5 秒互换（草图先）；方盒草图和 CLOSED FORM 从网站删除（D1、D2） |
+| （本次） | 用我的文本描述更新所有作品名、副标题和说明；图集按草图 → 场景 → 小物件 → 周边重新排序；新增 2023 年的 Restaurant；加入新图片和视频；D2 的 NEXT WORK 不触碰时不透明度降到 80%（D1、D2） |

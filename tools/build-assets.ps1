@@ -14,25 +14,81 @@ $jpg = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Objec
 $ep = New-Object System.Drawing.Imaging.EncoderParameters 1
 $ep.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter ([System.Drawing.Imaging.Encoder]::Quality), ([long]84)
 
+$create = 'Create a clean realistic product rendering based on the uploaded sketch. Show the product in a three-view layout_ front view, side view, and top view. Arrange the three views neatly on a clean white or light neutral ba'
 # slug, folder, files in display order (base names; '*' = everything else in natural order), skip list
+# Order inside each work: hero first, then sketch -> scene -> small objects -> merch
+# (editorial and presentation-board works keep their page order)
 $manifest = @(
-  @{ slug = '550-cafe'; dir = '5：50'; order = @('magnifics_upscale-precision-dPAYYtqBMwmowiMUPcWQ-Brown_Sugar_Storefront_Interior_Integration_2026-03-20_16-19', 'Brown_Sugar_Image_51_2026-03-14_20-10', 'View Request', 'Image 123', 'Image 117', 'Image 124', 'Badge Addition', 'Cup Patterns', 'Desk Placement', 'Product Scene Layout (1)', 'Enamel Pins Design', 'Small Sticker Size', '薛先生的素材铺1', 'Image 132', 'Image 130', 'Image 133') }
-  @{ slug = 'switchback'; dir = 'Switchback'; order = @('magnifics_upscale-precision-LF1TcKQpzKLEqFZuISBZ-High-Quality Photo', 'Untitled-1', 'refine my sketch', 'add a detachable hood at the neck, connected with a zipper', 'add logo', 'magnifics_upscale-aOrg3paDc7ZnBS5o8V0g-Image 41 (1)', 'LABEL 1', 'Image 48', 'Image 90 (1)', 'Image 72', 'Image 84', 'Image 31', 'Labrador Beach Run', 'Video 1') }
-  @{ slug = 'under-the-cyber-skin'; dir = 'Under the cyber skin'; order = @('Myth3_Spreads_Page_heropage', 'Image', '02', 'Image 8', 'Remove Typ1es', 'Poster Placement (3)', '*') }
-  @{ slug = 'planting-pen'; dir = 'Plant pen'; order = @('@1 it is the product stucture,@2 is the out look like, i need to render@1 to make it more like Professional product photography， keep the layout of @1, using the white background', '种植工具组合', 'Shelf Product Addition', 'REMOVE THE OTHER ELEMNT EXPECT OF THE PACK', 'pack 1', 'pack 2', 'pack 3', 'pack 4', '*') }
-  @{ slug = 'sonar'; dir = 'Sonar'; order = @('舞台视觉设计', 'Festival Poster Mockup', '86be78de-10e5-4fe4-9d59-1db49b559cee', '投影映射艺术', 'Image 11', '动态视觉效果', '竖屏舞台视觉') }
+  @{ slug = '550-cafe'; dir = '5：50'; order = @(
+      'magnifics_upscale-precision-dPAYYtqBMwmowiMUPcWQ-Brown_Sugar_Storefront_Interior_Integration_2026-03-20_16-19',
+      # scenes
+      'Brown_Sugar_Image_51_2026-03-14_20-10', 'View Request', 'Image 123', 'Image 117', 'Image 124', 'Badge Addition', 'Desk Placement', 'Product Scene Layout (1)',
+      # small objects
+      'Cup Patterns', '薛先生的素材铺1', 'Image 132', 'Image 130', 'Image 133',
+      # merch
+      'Enamel Pins Design', 'Small Sticker Size') }
+  @{ slug = 'switchback'; dir = 'Switchback'; order = @(
+      'magnifics_upscale-precision-LF1TcKQpzKLEqFZuISBZ-High-Quality Photo',
+      # sketch -> line -> render (the big sequence frame)
+      'Untitled-1', 'refine my sketch', 'add a detachable hood at the neck, connected with a zipper',
+      # scenes
+      'Image 48', 'Image 90 (1)', 'LABEL 1', 'add logo', 'magnifics_upscale-aOrg3paDc7ZnBS5o8V0g-Image 41 (1)', 'Labrador Beach Run', 'Video 1',
+      # small objects
+      'Image 72', 'Image 84', 'Image 31') }
+  @{ slug = 'under-the-cyber-skin'; dir = 'Under the cyber skin'; order = @(
+      'Myth3_Spreads_Page_heropage',
+      # exhibition scenes: title wall, intro wall, dark room, white gallery, poster cube
+      'Image', 'Remove Typ1es', 'Image 8', '02', 'Poster Placement (3)',
+      # the magazine spreads
+      '*') }
+  @{ slug = 'planting-pen'; dir = 'Plant pen'; order = @(
+      'Screenshot File',   # hero: the Planting Pen box
+      # sketches (each takes turns with its render, listed at the end)
+      'pack 1', 'pack 2', 'pack 4',
+      # scenes
+      'Shelf Product Addition', '种植工具组合', 'Feishu20261009-234925',
+      # small objects
+      'img_v3_0213i_cc64562e-b40c-43f1-92a8-1a37f9aee18g', 'REMOVE THE OTHER ELEMNT EXPECT OF THE PACK',
+      # renders paired with the sketches: MODULAR, book box, top/side/front
+      "$create (1)", 'ce004938-f8c4-40b1-9817-be6ea1ee8a30', "$create (2)");
+      skip = @('pack 3.png', 'Create a clean realistic product rendering based on the uploaded sketch. Show the product in a three-view layout_ front view, side view, and top view. Arrange the three views neatly on a clean white or light neutral backgr.png') }
+  @{ slug = 'sonar'; dir = 'Sonar'; order = @(
+      '舞台视觉设计',
+      # scenes
+      '投影映射艺术', 'Festival Poster Mockup', 'Billboard Animation', '动态视觉效果', '竖屏舞台视觉',
+      # merch
+      'Image 11', '86be78de-10e5-4fe4-9d59-1db49b559cee') }
   @{ slug = 'toyukukoku'; dir = 'Toyukukoku'; order = @('*') }
   @{ slug = 'lotus'; dir = 'lotus'; order = @('*') }
   @{ slug = 'ocupus'; dir = 'ocupus motion'; order = @('*') }
-  @{ slug = 'leviairab'; dir = 'LEVIAIRAB BOTTLE'; order = @('*') }
+  @{ slug = 'leviairab'; dir = 'LEVIAIRAB BOTTLE'; order = @(
+      'Image 16',
+      # scene
+      'Feishu20261009-235211',
+      # small objects
+      'Image 14', 'Feishu20261009-235200',
+      # merch
+      'Image Expansion') }
   @{ slug = 'after-dada'; dir = 'After dada'; order = @('After_Dadda_Page_HERO', '*'); skip = @('After_Dadda_Page_HERO.png') }
   @{ slug = 'dada-newspaper'; dir = 'DADA newspaper'; order = @('dada-v5_heropage', '*') }
   @{ slug = 'game-zine'; dir = '2000s game zine'; order = @('Siminar_4_W4_Page_HERO', '*') }
-  @{ slug = 'code-for-fun'; dir = 'Code for fun'; order = @('FLORA-final', 'magnifics_upscale-0h0kXhiTbPvL37uBZEYp-presentation 2', 'exhibition 1', 'POP UP_1', 'FLORA-Image Editing Request-bdb7cfb7', 'magnifics_upscale-A0H9lwIoD9XCpf8CMBKo-FLORA-Enhancing Glass Scene-af64e359', 'UI_computer_2', 'UI_computer_3', 'UI_computer_4', 'App_phone_1', 'App_phone_2', 'ar glasses_Inner', 'AR GLASSES', 'click_2', '黑鲸素材 (23)', 'Poster_subway', 'e91451db16fe5fc9e50f11c02a647e6f', 'digital poster', 'T22486(2)', 'ppt1', 'CARD', '無趣创意2', '11', 'cloth', 'bag', 'MM_Home Office_1', 'FLORA-Untitled-227a033b'); skip = @('FLORA-Untitled-de7abda2.mp4', '追设计样机.png') }  # FLORA-Untitled mp4 and 追设计样机 are exact duplicates
+  @{ slug = 'code-for-fun'; dir = 'Code for fun'; order = @(
+      'FLORA-final',
+      # scenes: expo, booth, pop-up, lobby, studio, stage, street posters, subway, bus stop, digital screen, banners
+      'magnifics_upscale-0h0kXhiTbPvL37uBZEYp-presentation 2', 'exhibition 1', 'POP UP_1', 'FLORA-Image Editing Request-bdb7cfb7', 'magnifics_upscale-A0H9lwIoD9XCpf8CMBKo-FLORA-Enhancing Glass Scene-af64e359', 'ppt1', '黑鲸素材 (23)', 'Poster_subway', 'e91451db16fe5fc9e50f11c02a647e6f', 'digital poster', 'T22486(2)',
+      # small objects: website, app, AR glasses, kit box
+      'UI_computer_2', 'UI_computer_3', 'UI_computer_4', 'App_phone_1', 'App_phone_2', 'ar glasses_Inner', 'AR GLASSES', 'click_2', 'FLORA-Untitled-227a033b',
+      # merch: ID badges, business cards, letterhead, tote, T-shirt, cap
+      '11', 'CARD', '無趣创意2', 'bag', 'cloth', 'MM_Home Office_1');
+      skip = @('FLORA-Untitled-de7abda2.mp4', '追设计样机.png') }  # exact duplicates of FLORA-final.mp4 and App_phone_2.png
   @{ slug = 'allodox'; dir = 'Allodox'; order = @('*') }
   @{ slug = 'ungreen-shop'; dir = 'Ungreeen Shop'; order = @('*') }
   @{ slug = 'yiwugo'; dir = 'Yiwugo'; order = @('*') }
   @{ slug = 'nuclear-tide'; dir = 'Zhangyu'; order = @('*') }
+  @{ slug = 'restaurant'; dir = 'restaurant and cafe\work'; order = @(
+      '图层 14',
+      # the floor plan (drawing), then the scenes
+      'PLAN 餐厅2-1 Model (2)(2)', '123', '图层 16') }
 )
 
 function NatKey($n) { [regex]::Replace($n, '\d+', { param($x) $x.Value.PadLeft(6, '0') }) }

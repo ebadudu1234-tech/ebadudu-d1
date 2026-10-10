@@ -174,7 +174,7 @@ $items = @(
   @('toyukukoku',           'rect', "$S\assets\work\toyukukoku\03.jpg",                         0,   0, 1600, 2071, 0, 0),
   @('lotus',                'rect', "$S\assets\work\lotus\01-poster.jpg",                     980,   0, 940, 900, 0, 0),
   @('ocupus',               'rect', "$S\assets\work\ocupus\01-poster.jpg",                    420,  60, 1080, 960, 0, 0),
-  @('leviairab',            'rect', "$W\LEVIAIRAB BOTTLE\press\Image 16.jpg",                 760,   0, 1080, 1350, 0, 0),
+  @('leviairab',            'cut',  "$W\LEVIAIRAB BOTTLE\press\Image 14.jpg",                 470,   5, 560, 1340, 30, 1),
   @('after-dada',           'cut',  "$W\After dada\After_Dadda_Page_11.jpg",                  240,   5, 560, 300, 30, 1),
   @('dada-newspaper',       'rect', "$W\DADA newspaper\press\page_01.jpg",                      0,   0, 2400, 3429, 0, 0),
   @('game-zine',            'cut',  "$W\2000s game zine\Siminar_4_W4_Page_3.jpg",             716, 452, 272, 550, 30, 1),
@@ -182,6 +182,7 @@ $items = @(
   @('allodox',              'cut',  "$W\Allodox\ALLODOX-3_Page_24.jpg",                      1025, 1792, 285, 302, 40, 1),
   @('ungreen-shop',         'cut',  "$W\Ungreeen Shop\ungreen-3_Page_12.jpg",                1195, 178, 250, 150, 34, 1),
   @('yiwugo',               'cut',  "$W\Yiwugo\press\YIWUGO-3_Page_05.jpg",                   420, 425, 240, 255, 40, 1),
+  @('restaurant',           'rect', "$W\restaurant and cafe\work\press\图层 14.jpg",           150, 380, 1300, 630, 0, 0),
   @('nuclear-tide',         'cut',  "$W\Zhangyu\zhangyu-3_Page_17.jpg",                      2820, 300, 640, 1450, 42, 3)
 )
 foreach ($t in $items) {
