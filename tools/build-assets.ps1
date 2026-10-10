@@ -52,8 +52,9 @@ $manifest = @(
       # renders paired with the sketches: MODULAR, book box, top/side/front
       "$create (1)", 'ce004938-f8c4-40b1-9817-be6ea1ee8a30', "$create (2)");
       skip = @('pack 3.png', 'Create a clean realistic product rendering based on the uploaded sketch. Show the product in a three-view layout_ front view, side view, and top view. Arrange the three views neatly on a clean white or light neutral backgr.png') }
-  @{ slug = 'sonar'; dir = 'Sonar'; order = @(
-      '舞台视觉设计',
+  # Visual Stage Design replaces the older 舞台视觉设计 as the lead image
+  @{ slug = 'sonar'; dir = 'Sonar'; skip = @('舞台视觉设计.png'); order = @(
+      'Visual Stage Design',
       # scenes
       '投影映射艺术', 'Festival Poster Mockup', 'Billboard Animation', '动态视觉效果', '竖屏舞台视觉',
       # merch
