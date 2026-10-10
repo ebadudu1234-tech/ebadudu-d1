@@ -483,7 +483,9 @@ function renderProject(root) {
   const place = (items) => {
     if (items.length === 2) return `<div class="p-row p-place"><div class="p-duo">${items.map(fig).join('')}</div></div>`;
     const m = items[0];
-    return `<div class="p-row p-place ${m.w / m.h >= 1.7 ? 'p-full' : 'p-center'}">${fig(m)}</div>`;
+    // `right`: singles that sit against the right edge instead of in the middle
+    const where = m.w / m.h >= 1.7 ? 'p-full' : (p.right || []).includes(m.idx) ? 'p-center p-end' : 'p-center';
+    return `<div class="p-row p-place ${where}">${fig(m)}</div>`;
   };
 
   if (lead) rows += withText(lead, firstText);

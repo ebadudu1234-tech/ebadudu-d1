@@ -22,6 +22,7 @@
    hide      : media items left off the site
    big       : media items shown on their own, full width, at their own place in the gallery
    pairs     : [a, b] media items that always sit side by side in one row
+   right     : media items that, when alone in a row, sit against the right edge
    ========================================================= */
 const PROJECTS = [
   {
@@ -106,7 +107,7 @@ const PROJECTS = [
     ],
   },
   {
-    slug: 'code-for-fun', title: 'Code For Fun: Where Play Meets Purpose', year: 2025, tags: ['BRAND', 'SPACE', 'UI'], cover: 0, big: [3, 10],
+    slug: 'code-for-fun', title: 'Code For Fun: Where Play Meets Purpose', year: 2025, tags: ['BRAND', 'SPACE', 'UI'], cover: 0, big: [3, 10], right: [2],
     subtitle: 'Brand identity, space, UI',
     text: [
       `Code For Fun is a coding education brand for kids aged 9 and up. Kids want fun, parents want real outcomes, and schools need something that can scale. Most platforms are only playful or too academic. I wanted one brand that is playful but serious.`,
