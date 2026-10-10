@@ -76,7 +76,7 @@ $manifest = @(
   @{ slug = 'code-for-fun'; dir = 'Code for fun'; order = @(
       'FLORA-final',
       # scenes: expo, booth, pop-up, lobby, studio, stage, street posters, subway, bus stop, digital screen, banners
-      'magnifics_upscale-0h0kXhiTbPvL37uBZEYp-presentation 2', 'exhibition 1', 'POP UP_1', 'FLORA-Image Editing Request-bdb7cfb7', 'magnifics_upscale-A0H9lwIoD9XCpf8CMBKo-FLORA-Enhancing Glass Scene-af64e359', 'ppt1', '黑鲸素材 (23)', 'Poster_subway', 'e91451db16fe5fc9e50f11c02a647e6f', 'digital poster', 'T22486(2)',
+      'magnifics_upscale-0h0kXhiTbPvL37uBZEYp-presentation 2', 'POP UP_1', 'exhibition 1','FLORA-Image Editing Request-bdb7cfb7', 'magnifics_upscale-A0H9lwIoD9XCpf8CMBKo-FLORA-Enhancing Glass Scene-af64e359', 'ppt1', '黑鲸素材 (23)', 'Poster_subway', 'e91451db16fe5fc9e50f11c02a647e6f', 'digital poster', 'T22486(2)',
       # small objects: website, app, AR glasses, kit box
       'UI_computer_2', 'UI_computer_3', 'UI_computer_4', 'App_phone_1', 'App_phone_2', 'ar glasses_Inner', 'AR GLASSES', 'click_2', 'FLORA-Untitled-227a033b',
       # merch: ID badges, business cards, letterhead, tote, T-shirt, cap

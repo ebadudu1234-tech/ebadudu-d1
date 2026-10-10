@@ -442,8 +442,10 @@ function renderProject(root) {
     const g = swaps.find((s) => s[0] === i);
     rest.push(g ? { ...m, idx: i, swap: g.map((k) => media[k]).filter(Boolean) } : { ...m, idx: i });
   });
-  // images that can't sit beside text: fixed pairs and big ones
-  const bound = (m) => paired.has(m.idx) || bigSet.has(m.idx);
+  // images that can't sit beside text or pair up freely: fixed pairs, big ones, and the
+  // ones given their own place (`right`, `size`), which always stand alone
+  const ownPlace = new Set([...(p.right || []), ...Object.keys(p.size || {}).map(Number)]);
+  const bound = (m) => paired.has(m.idx) || bigSet.has(m.idx) || ownPlace.has(m.idx);
   const solo = !rest.length;  // nothing but the hero (a single film or image)  // pairs: the second image follows the first by a beat
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
   const fig = (m, i = 0) => m.swap
@@ -485,7 +487,9 @@ function renderProject(root) {
     const m = items[0];
     // `right`: singles that sit against the right edge instead of in the middle
     const where = m.w / m.h >= 1.7 ? 'p-full' : (p.right || []).includes(m.idx) ? 'p-center p-end' : 'p-center';
-    return `<div class="p-row p-place ${where}">${fig(m)}</div>`;
+    // `size`: { index: factor } scales a single image down (e.g. 0.7 = 30% smaller)
+    const k = (p.size || {})[m.idx];
+    return `<div class="p-row p-place ${where}"${k ? ` style="--k:${k}"` : ''}>${fig(m)}</div>`;
   };
 
   if (lead) rows += withText(lead, firstText);

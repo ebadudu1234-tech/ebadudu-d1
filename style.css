@@ -500,7 +500,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 /* one image: a wide one edge to edge, otherwise centred and held to the screen height */
 .p-full > figure { flex: none; width: 100%; }
 .p-center { justify-content: center; }
-.p-center > figure { flex: none; width: min(66%, calc(85vh * var(--r))); }
+.p-center > figure { flex: none; width: calc(min(66%, calc(85vh * var(--r))) * var(--k, 1)); }
 .p-center.p-end { justify-content: flex-end; }
 .p-text {
   flex: 0 0 32.8%;
