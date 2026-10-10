@@ -34,11 +34,34 @@ function startReveals() {
       }
     });
   }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach((el) => {
+  document.querySelectorAll('.reveal, .work-in').forEach((el) => {
     const watch = el.closest('.line') || el;
     targets.set(watch, el);
     io.observe(watch);
   });
+  startParallax();
+}
+
+/* Covers drift a little slower than the page (Apple-style depth). The image is
+   scaled 1.1 inside its frame, so ±4% of travel never shows an edge. */
+function startParallax() {
+  const items = [...document.querySelectorAll('.parallax')];
+  if (!items.length) return;
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    items.forEach((box) => {
+      const r = box.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      // -1 when the frame's centre is at the bottom of the screen, 1 at the top
+      const p = (innerHeight / 2 - (r.top + r.height / 2)) / (innerHeight / 2 + r.height / 2);
+      const media = box.querySelector('img, video');
+      if (media) media.style.translate = `0 ${(p * r.height * 0.04).toFixed(1)}px`;
+    });
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener('resize', update);
+  update();
 }
 
 /* ---------- Begin animation (index only) ---------- */
@@ -163,8 +186,8 @@ function flyToHeadline(hi, headline) {
 /* ---------- Main page: featured cards (small · large / large · small) ---------- */
 function renderFeatured(root) {
   const card = (p, size, d) => `
-    <a class="card ${size} reveal" style="--d:${d}s" href="${projectUrl(p)}">
-      <div class="card-media"><img src="${coverOf(p)}" alt="${esc(p.title)}" decoding="async"></div>
+    <a class="card ${size} work-in" style="--d:${d}s" href="${projectUrl(p)}">
+      <div class="card-media parallax"><img src="${coverOf(p)}" alt="${esc(p.title)}" decoding="async"></div>
       <p class="card-title">${esc(p.title)}</p>
       ${tagsHtml(p.tags)}
     </a>`;
@@ -174,8 +197,8 @@ function renderFeatured(root) {
     const flip = (i / 2) % 2 === 1;
     const [a, b] = [list[i], list[i + 1]];
     html += `<div class="row ${flip ? 'row-2' : 'row-1'}">`
-      + (a ? card(a, flip ? 'lg' : 'sm', 0.15) : '')
-      + (b ? card(b, flip ? 'sm' : 'lg', 0.25) : '')
+      + (a ? card(a, flip ? 'lg' : 'sm', 0) : '')
+      + (b ? card(b, flip ? 'sm' : 'lg', 0.12) : '')
       + '</div>';
   }
   root.innerHTML = html;
@@ -320,7 +343,9 @@ function renderProject(root) {
   const heroIdx = p.hero || 0;
   const hero = media[heroIdx];
   const rest = media.filter((_, i) => i !== heroIdx);
-  const fig = (m) => `<figure class="reveal" style="--r:${(m.w / m.h).toFixed(4)}">${mediaHtml(m, { alt: p.title })}</figure>`;
+  // pairs: the second image follows the first by a beat
+  // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
+  const fig = (m, i = 0) => `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
   const text = (t) => (t ? `<p class="p-text reveal" style="--d:.1s">${esc(t)}</p>` : '');
 
   // lead row (image + intro), tail row (detail + image), justified pairs in between
@@ -341,7 +366,7 @@ function renderProject(root) {
 
   const next = PROJECTS[(PROJECTS.indexOf(p) + 1) % PROJECTS.length];
   root.innerHTML = `
-    <figure class="p-hero reveal${p.fit === 'contain' ? ' contain' : ''}">${hero ? mediaHtml(hero, { hero: true, alt: p.title }) : ''}</figure>
+    <figure class="p-hero work-in${p.fit === 'contain' ? ' contain' : ' parallax'}"><div class="wipe">${hero ? mediaHtml(hero, { hero: true, alt: p.title }) : ''}</div></figure>
     <h1 class="p-title reveal">${esc(p.title)}</h1>
     <div class="reveal" style="--d:.05s">${tagsHtml(p.tags)}</div>
     <div class="p-body">${rows}</div>
@@ -374,10 +399,13 @@ if (workList) setupWorkList(workList);
 const project = document.getElementById('project');
 if (project) renderProject(project);
 
-// the begin animation plays on every load of the home page (click or any key skips it);
-// only a direct link to #contact goes straight in
+// the begin animation plays once per visit (click or any key skips it); coming back
+// from WORK or a project, or a direct link to #contact, goes straight to the page
+let seenIntro = false;
+try { seenIntro = sessionStorage.getItem('ebadudu-intro') === '1'; } catch (e) {}
 const intro = document.getElementById('intro');
-if (intro && !location.hash) {
+if (intro && !seenIntro && !location.hash) {
+  try { sessionStorage.setItem('ebadudu-intro', '1'); } catch (e) {}
   playIntro(intro);
 } else {
   intro?.classList.add('is-gone');
