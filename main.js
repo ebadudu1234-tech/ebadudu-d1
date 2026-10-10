@@ -15,6 +15,26 @@ const hoverVideoOf = (p) => {
   return p.hoverVideo != null ? media[p.hoverVideo] : media.find((m) => m.type === 'video');
 };
 const projectUrl = (p) => `project.html?p=${encodeURIComponent(p.slug)}`;
+// 960px cover (tools/thumbs.ps1), so phones don't pull the 2400px originals
+const thumbOf = (p) => `assets/thumbs/${p.slug}.jpg`;
+const coverSrcset = (p) => {
+  const m = coverItem(p);
+  return m ? `${thumbOf(p)} 960w, ${coverOf(p)} ${m.w}w` : '';
+};
+
+/* Phones and tablets have no hover: there every video plays by itself, muted,
+   while it is on screen, and stops when it scrolls away */
+const TOUCH = !matchMedia('(hover: hover) and (pointer: fine)').matches;
+const inView = new IntersectionObserver((entries) => entries.forEach((e) => {
+  // a card makes its clip only once it is actually on screen
+  const v = e.target.tagName === 'VIDEO' ? e.target : e.target.__video?.(e.isIntersecting);
+  if (!v) return;
+  if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+}), { threshold: 0.35 });
+function playWhileVisible(el) {
+  if (el.tagName === 'VIDEO') { el.muted = true; el.playsInline = true; }
+  inView.observe(el);
+}
 
 /* Loop a video from `start` seconds (skips the ArtCenter title card at the head of some films) */
 function loopFrom(v, start = 0) {
@@ -46,6 +66,15 @@ function setupHoverVideos(root) {
     if (!m) return;
     const box = el.querySelector('.card-media');
     let v = null;
+    if (TOUCH) {
+      // no hover on a phone: the clip is made the first time the card comes on screen
+      el.__video = (make) => {
+        if (!v && make) { v = makeHoverVideo(m, p.start); v.preload = 'metadata'; box.append(v); }
+        return v;
+      };
+      playWhileVisible(el);
+      return;
+    }
     el.addEventListener('mouseenter', () => {
       if (!v) { v = makeHoverVideo(m, p.start); box.append(v); }
       v.play().catch(() => {});
@@ -66,7 +95,9 @@ PROJECTS.forEach((p) => {
 
 function mediaHtml(m, { hero = false, alt = '' } = {}) {
   if (m.type === 'video') {
-    // the hero plays silently on loop; gallery videos wait for a click
+    // the hero plays silently on loop; gallery videos wait for a click — except on phones,
+    // where every video plays muted by itself while on screen (no controls to tap)
+    if (TOUCH) return `<video src="${m.src}" poster="${m.poster}" muted loop playsinline preload="metadata"${hero ? ' autoplay' : ''}></video>`;
     return hero
       ? `<video src="${m.src}" poster="${m.poster}" autoplay muted loop playsinline controls></video>`
       : `<video src="${m.src}" poster="${m.poster}" controls playsinline preload="none"></video>`;
@@ -239,7 +270,7 @@ function flyToHeadline(hi, headline) {
 function renderFeatured(root) {
   const card = (p, size, d) => `
     <a class="card ${size} work-in" style="--d:${d}s" href="${projectUrl(p)}" data-slug="${p.slug}">
-      <div class="card-media parallax"><img src="${coverOf(p)}" alt="${esc(p.title)}" decoding="async"></div>
+      <div class="card-media parallax"><img src="${coverOf(p)}" srcset="${coverSrcset(p)}" sizes="(max-width: 720px) 100vw, 62vw" alt="${esc(p.title)}" decoding="async"></div>
       <p class="card-title">${esc(p.title)}</p>
       ${tagsHtml(p.tags)}
     </a>`;
@@ -342,6 +373,7 @@ function setupWorkList(listRoot) {
         ${PROJECTS.filter((p) => p.year === y).map((p, i) => `
           <li class="reveal" style="--d:${0.1 + gi * 0.1 + i * 0.04}s" data-tags="${p.tags.join(' ')}" data-slug="${p.slug}">
             <a class="work-link" href="${projectUrl(p)}" data-slug="${p.slug}">
+              <img class="work-thumb" src="${thumbOf(p)}" alt="" loading="lazy" decoding="async">
               <span class="name">${esc(p.title)}</span>${tagsHtml(p.tags)}
             </a>
           </li>`).join('')}
@@ -552,6 +584,7 @@ function renderProject(root) {
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;
   const heroVideo = root.querySelector('.p-hero video');
   if (heroVideo) loopFrom(heroVideo, p.start);
+  if (TOUCH) root.querySelectorAll('video').forEach(playWhileVisible);
   root.querySelectorAll('.p-seq:not(.p-big), figure.swap').forEach((el) => playSequence(el));
 }
 

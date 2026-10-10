@@ -414,6 +414,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   color: var(--muted);
   transition: color .3s;
 }
+.work-thumb { display: none; }
 .work-link .name { position: relative; }
 .work-link .name::after {
   content: '';
@@ -613,13 +614,31 @@ figure.work-in { background: none; }
   .page { padding-top: 110px; padding-bottom: 80px; }
   .row-1, .row-2 { grid-template-columns: 1fr; row-gap: 32px; }
   .card.sm .card-media, .card.lg .card-media { aspect-ratio: 4 / 3; }
-  .work { grid-template-columns: 1fr; padding-top: 80px; }
-  .work-link { flex-wrap: wrap; gap: 8px 16px; }
-  .work-link .tags { opacity: 1; transform: none; }
+  .work { grid-template-columns: minmax(0, 1fr); padding-top: 80px; }
+  /* tags: one row you swipe sideways, so the list starts on the first screen */
+  .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 calc(-1 * var(--gutter)) 32px;
+    padding: 0 var(--gutter) 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filters .chip { flex: none; }
+  /* no preview column on a phone: each row carries a small cover instead */
+  .work-items { gap: 18px; }
+  .work-link { display: grid; grid-template-columns: 96px 1fr; grid-template-rows: auto 1fr; gap: 8px 14px; align-items: start; color: var(--ink); }
+  .work-thumb { display: block; grid-row: 1 / span 2; width: 96px; aspect-ratio: 4 / 3; object-fit: cover; background: var(--block); }
+  .work-link .name, .work-link .tags { grid-column: 2; }
+  .work-link .tags { opacity: 1; transform: none; flex-wrap: wrap; gap: 6px 8px; }
   .preview-col { display: none; }
   .project { padding-top: 90px; }
   .p-row { flex-direction: column; }
   .p-row > figure, .p-text, .p-duo { flex: none; width: 100%; margin-left: 0; }
+  /* pairs stack on a phone: two side by side would each be only ~160px wide */
+  .p-duo { flex-direction: column; }
+  .p-duo > figure { flex: none; width: 100%; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }
 }
