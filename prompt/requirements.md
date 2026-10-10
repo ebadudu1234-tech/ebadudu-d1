@@ -164,12 +164,14 @@
 - [ ] **GitHub 仓库链接**：我在 github.com 新建一个空仓库（不要勾 README），把链接发给 Claude，然后把所有版本上传。
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
-- [ ] 其余年份仍按文件日期：Code For Fun、Allodox 放在 2025，其余放在 2026，待确认。
+- [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
+- 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide。
+- [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
+- [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
 - [ ] 核对作品说明文字和部分作品名（Planting Pen、Sónar 等是 Claude 根据图片写的），在 `data.js` 里修改。
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
 - [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
 - [ ] 确认"五格"的意思：目前做的是五行、10 个作品；如果是指 5 个作品，需要再改。
-- [ ] Code For Fun 的年份：按文件日期（2025 年 11–12 月）目前归在 2025，但已经按要求放进首页推荐。如果它属于"新一年"，需要改成 2026。
 
 ## 6. 版本记录
 
@@ -186,3 +188,4 @@
 | `3e5c595` | D1、D2 的 Switchback 作品页：介绍下面加一张大图，草图 → 线稿 → 渲染图轮流替换 |
 | `e54898d` | Switchback 轮播大图的替换时间从 2.6 秒缩短到 1.5 秒 |
 | `0721d79` | Ungreen Shop、Yiwugo、Nuclear Tide 改为 2024 年（D1、D2） |
+| （本次） | Allodox 改为 2024；After Dada、2000s Game Zine、DADA Newspaper 改为 2025（D1、D2）；首页推荐待你决定，暂未调整 |
