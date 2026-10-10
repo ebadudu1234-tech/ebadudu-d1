@@ -138,6 +138,10 @@
   - 第一段放在顶部大图下面；最后一段放在图集最后；中间的段落穿插在图集之间（D1）。D2 把所有段落都放在 "ABOUT THIS WORK" 里。
   - 在 `data.js` 里是 `subtitle` 和 `text: [段落, 段落, …]`。
 - **content reference 文件夹不用读、不用加到网站上。**
+- **大图（`big`）**：指定的图片单独占一整行、全宽显示，**位置和顺序不变**（就在它在图集里原来的位置）。大图旁边不放文字。
+  - Code For Fun：展会大墙（04）和街头数字海报（11）大图显示（`big: [3, 10]`）。
+  - Restaurant：平面图（`big: [1]`）。
+- **并列（`pairs`）**：指定的两张图永远在同一行。
 - **图文排版按 Figma "TITLE PAHE" 的组合方式**：
   - 图 | 文（图在左约 50–60%，文字栏在右 457/1392）；
   - 图 + 图（两张同高）；
@@ -197,7 +201,7 @@
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
-- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（放在介绍下面，和 Switchback 的大图同一位置；`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
+- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
 - 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Restaurant。
 - [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
@@ -231,3 +235,4 @@
 | `fabdda1` | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
 | `d0feb94` | D1 首页第六行：Lotus Cigarette 动画换到大图，Ungreen Shop 换成小图 |
 | `c86344d` | D1 首页第六行改为 Artificial Octopus（大）+ Lotus Cigarette（小），去掉 Ungreen Shop |
+| （本次） | Code For Fun：展会大墙和街头海报两张大图显示，顺序不变；`big` 改为在图集原位置全宽显示（D1、D2） |

@@ -430,18 +430,20 @@ function renderProject(root) {
   // `swaps`: pairs that take turns inside a normal gallery image (sketch first), at the sketch's place
   // `hide`: images left off the site
   const seq = (p.sequence || []).map((i) => media[i]).filter(Boolean);
-  // `big`: images shown on their own, full width, in the same place as the sequence frame
-  const big = (p.big || []).map((i) => media[i]).filter(Boolean);
+  // `big`: images shown on their own, full width, where they fall in the gallery
+  const bigSet = new Set(p.big || []);
   // `pairs`: two images that always share one row, side by side
   const paired = new Map((p.pairs || []).flatMap(([a, b]) => [[a, b], [b, a]]));
   const swaps = p.swaps || [];
-  const skip = new Set([heroIdx, ...(p.sequence || []), ...(p.big || []), ...(p.hide || []), ...swaps.flatMap((g) => g.slice(1))]);
+  const skip = new Set([heroIdx, ...(p.sequence || []), ...(p.hide || []), ...swaps.flatMap((g) => g.slice(1))]);
   const rest = [];
   media.forEach((m, i) => {
     if (skip.has(i)) return;
     const g = swaps.find((s) => s[0] === i);
     rest.push(g ? { ...m, idx: i, swap: g.map((k) => media[k]).filter(Boolean) } : { ...m, idx: i });
   });
+  // images that can't sit beside text: fixed pairs and big ones
+  const bound = (m) => paired.has(m.idx) || bigSet.has(m.idx);
   const solo = !rest.length;  // nothing but the hero (a single film or image)  // pairs: the second image follows the first by a beat
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
   const fig = (m, i = 0) => m.swap
@@ -464,9 +466,9 @@ function renderProject(root) {
   const rand = seeded(p.slug);
   const between = (a, b) => a + (b - a) * rand();
   const pct = (v) => `${v.toFixed(1)}%`;
-  // an image that must stay beside its partner can't take the lead or tail place next to text
-  const lead = rest.length && !paired.has(rest[0].idx) ? rest.shift() : null;
-  const tail = rest.length > 1 && lastText && !paired.has(rest[rest.length - 1].idx) ? rest.pop() : null;
+  // a big image, or one that must stay beside its partner, can't take the lead or tail place next to text
+  const lead = rest.length && !bound(rest[0]) ? rest.shift() : null;
+  const tail = rest.length > 1 && lastText && !bound(rest[rest.length - 1]) ? rest.pop() : null;
   let rows = '';
   let side = 'left';  // which side the next image-with-text row puts its picture
   const withText = (m, t) => {
@@ -503,13 +505,10 @@ function renderProject(root) {
     rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
       seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
   }
-  big.forEach((m) => {
-    rows += `<figure class="p-seq p-big work-in" style="--r:${(m.w / m.h).toFixed(4)}"><div class="wipe"><img src="${m.src}" alt="${esc(p.title)}" class="is-on" decoding="async"></div></figure>`;
-  });
   // the middle paragraphs are spread evenly through the gallery, each beside one of its images
-  // (only images without a fixed partner can carry one)
+  // (only images that are neither big nor fixed in a pair can carry one)
   const pending = solo ? [] : [...notes];
-  const free = rest.map((m, k) => k).filter((k) => !paired.has(rest[k].idx));
+  const free = rest.map((m, k) => k).filter((k) => !bound(rest[k]));
   const noteAt = new Map();
   const loose = [];  // paragraphs that found no image of their own (very small galleries)
   pending.forEach((t, k) => {
@@ -518,9 +517,16 @@ function renderProject(root) {
   });
   for (let i = 0; i < rest.length;) {
     if (noteAt.has(i)) { rows += withText(rest[i], noteAt.get(i)); i += 1; continue; }
+    if (bigSet.has(rest[i].idx)) {
+      const m = rest[i];
+      rows += `<figure class="p-seq p-big work-in" style="--r:${(m.w / m.h).toFixed(4)}"><div class="wipe">${
+        m.type === 'video' ? mediaHtml(m, { alt: p.title }) : `<img src="${m.src}" alt="${esc(p.title)}" class="is-on" loading="lazy" decoding="async">`}</div></figure>`;
+      i += 1;
+      continue;
+    }
     const after = rest[i + 1];
     const fixed = after && paired.get(rest[i].idx) === after.idx;
-    const pair = fixed || (after && !noteAt.has(i + 1) && !paired.has(rest[i].idx) && !paired.has(after.idx) && rand() < 0.62);
+    const pair = fixed || (after && !noteAt.has(i + 1) && !bound(rest[i]) && !bound(after) && rand() < 0.62);
     rows += place(rest.slice(i, i + (pair ? 2 : 1)));
     i += pair ? 2 : 1;
   }
