@@ -402,7 +402,10 @@ function renderProject(root) {
   const media = mediaOf(p);
   const heroIdx = p.hero || 0;
   const hero = media[heroIdx];
-  const rest = media.filter((_, i) => i !== heroIdx);
+  // `sequence`: images that take turns in one big frame under the intro (e.g. sketch → line → render)
+  const seqIdx = p.sequence || [];
+  const seq = seqIdx.map((i) => media[i]).filter(Boolean);
+  const rest = media.filter((_, i) => i !== heroIdx && !seqIdx.includes(i));
   // pairs: the second image follows the first by a beat
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
   const fig = (m, i = 0) => `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
@@ -415,6 +418,10 @@ function renderProject(root) {
   if (lead) rows += `<div class="p-row p-lead">${fig(lead)}${text(p.intro)}</div>`;
   // hero-only projects (a single film or image): both paragraphs share one row
   else rows += `<div class="p-row p-lead">${text(p.intro)}${text(p.detail)}</div>`;
+  if (seq.length) {
+    rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
+      seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
+  }
   for (let i = 0; i < rest.length; i += 2) {
     const pair = rest.slice(i, i + 2);
     rows += pair.length === 2
@@ -433,6 +440,24 @@ function renderProject(root) {
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;
   const heroVideo = root.querySelector('.p-hero video');
   if (heroVideo) loopFrom(heroVideo, p.start);
+  const seqEl = root.querySelector('.p-seq');
+  if (seqEl) playSequence(seqEl);
+}
+
+/* The sequence frame: images cross-fade in turn, starting from the first (the sketch)
+   when the frame comes into view */
+function playSequence(el, hold = 2600) {
+  const imgs = [...el.querySelectorAll('img')];
+  let n = 0, timer = 0;
+  const go = () => {
+    imgs.forEach((im, i) => im.classList.toggle('is-on', i === n));
+    timer = setTimeout(() => { n = (n + 1) % imgs.length; go(); }, hold);
+  };
+  // it starts at the sketch; scrolling away only pauses it, coming back carries on
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !timer) go();
+    if (!e.isIntersecting && timer) { clearTimeout(timer); timer = 0; }
+  }, { threshold: 0.15 }).observe(el);
 }
 
 /* ---------- Hover trinket: a small object from each work follows the mouse ----------
