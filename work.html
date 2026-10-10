@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work — EBADUDU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Intel+One+Mono&family=Margarine&family=Metrophobic&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="index.html">EBADUDU</a>
+  <ul>
+    <li><a href="work.html" aria-current="page">WORK</a></li>
+    <li><a href="#">PLAY AREA</a></li>
+    <li><a href="index.html#contact">ABOUT ME</a></li>
+  </ul>
+</nav>
+
+<main class="work">
+  <div>
+    <!-- tag filter chips + year groups, filled from data.js -->
+    <div class="filters reveal" id="filters" role="group" aria-label="Filter by tag"></div>
+    <div id="work-list"></div>
+  </div>
+
+  <!-- preview box takes the shape of the hovered work's cover image -->
+  <aside class="preview-col reveal" style="--d:.2s" aria-hidden="true">
+    <div class="preview" id="preview"></div>
+  </aside>
+</main>
+
+<script src="media.js"></script>
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
