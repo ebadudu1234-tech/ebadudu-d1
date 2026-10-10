@@ -447,8 +447,10 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   height: calc(var(--w) / var(--r));
   background: var(--block);
   overflow: hidden;
-  transition: width .55s var(--ease-out), height .55s var(--ease-out);
+  transition: width .55s var(--ease-out), height .55s var(--ease-out), opacity .35s ease;
 }
+/* nothing touched: no picture, no grey box */
+.preview.is-empty { opacity: 0; }
 .preview img, .preview video {
   position: absolute;
   inset: 0;

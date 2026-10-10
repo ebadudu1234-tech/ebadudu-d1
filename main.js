@@ -344,9 +344,21 @@ function setupWorkList(listRoot) {
     </section>`).join('');
 
   const links = [...listRoot.querySelectorAll('.work-link')];
-  let swapTimer;
+  let swapTimer, leaveTimer;
+  // the preview only shows while a work is touched
+  preview.classList.add('is-empty');
+  const deactivate = () => {
+    clearTimeout(swapTimer);
+    links.forEach((l) => l.classList.remove('active'));
+    preview.classList.add('is-empty');
+    preview.querySelector('video')?.pause();
+  };
   const activate = (link, instant) => {
+    clearTimeout(leaveTimer);
     if (link.classList.contains('active')) return;
+    // coming back from nothing: no cross-fade, the box just appears with the new work
+    if (preview.classList.contains('is-empty')) instant = true;
+    preview.classList.remove('is-empty');
     links.forEach((l) => l.classList.remove('active'));
     link.classList.add('active');
     const p = bySlug(link.dataset.slug);
@@ -370,11 +382,15 @@ function setupWorkList(listRoot) {
     swapTimer = setTimeout(show, 180);
   };
   // the whole row is the hover target, not just the words
+  // leaving waits a moment, so sliding across the gap between two rows doesn't flash it off
+  const leave = () => { clearTimeout(leaveTimer); leaveTimer = setTimeout(deactivate, 120); };
   links.forEach((link) => {
-    link.closest('li').addEventListener('mouseenter', () => activate(link));
+    const row = link.closest('li');
+    row.addEventListener('mouseenter', () => activate(link));
+    row.addEventListener('mouseleave', leave);
     link.addEventListener('focus', () => activate(link));
+    link.addEventListener('blur', leave);
   });
-  if (links[0]) activate(links[0], true);
 
   // one tag at a time; pressing the active chip again clears the filter
   filters.addEventListener('click', (e) => {
@@ -390,8 +406,6 @@ function setupWorkList(listRoot) {
     listRoot.querySelectorAll('.year-group').forEach((g) => {
       g.hidden = !g.querySelector('.work-items > li:not([hidden])');
     });
-    const first = listRoot.querySelector('.work-items > li:not([hidden]) .work-link');
-    if (first) activate(first);
   });
 }
 
