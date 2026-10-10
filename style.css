@@ -494,12 +494,13 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
    --w is the picture's share, tall pictures are held to the screen height */
 .p-with { justify-content: space-between; }
 .p-with > figure { flex: none; width: min(var(--w), calc(80vh * var(--r))); }
-/* images on their own: --w wide (100% or narrower), --x in from the left, the rest empty */
-.p-place > figure { flex: none; width: min(var(--w), calc(85vh * var(--r))); margin-left: var(--x); }
-.p-duo { display: flex; gap: var(--gap); width: min(var(--w), calc(85vh * var(--sr) + var(--gap))); margin-left: var(--x); }
+/* two images: same height, widths follow their shapes, together exactly edge to edge */
+.p-duo { display: flex; gap: var(--gap); width: 100%; }
 .p-duo > figure { flex: var(--r) 1 0; min-width: 0; }
-/* a row that leaves extra air above itself */
-.p-air { margin-top: calc(var(--gap) * 2.5); }
+/* one image: a wide one edge to edge, otherwise centred and held to the screen height */
+.p-full > figure { flex: none; width: 100%; }
+.p-center { justify-content: center; }
+.p-center > figure { flex: none; width: min(66%, calc(85vh * var(--r))); }
 .p-text {
   flex: 0 0 32.8%;
   margin: 6px 0 0;
@@ -618,7 +619,6 @@ figure.work-in { background: none; }
   .project { padding-top: 90px; }
   .p-row { flex-direction: column; }
   .p-row > figure, .p-text, .p-duo { flex: none; width: 100%; margin-left: 0; }
-  .p-air { margin-top: 0; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }
 }

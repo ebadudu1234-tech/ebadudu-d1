@@ -460,40 +460,30 @@ function renderProject(root) {
   const notes = paras.slice(1, -1);
 
   // The Figma composition: image | text, then image + image, then text | image, and so on.
-  // Every paragraph sits beside an image; rows without text may leave empty space around
-  // their pictures. How much, and where, is drawn from the work's own seed, so each work
-  // gets its own rhythm (the same one on every visit).
+  // Every paragraph sits beside an image, and every row keeps to the page's left and right
+  // edges: two images always fill the row from edge to edge. The only free space is the gap
+  // between an image and its text, and now and then a single image set in the middle; where
+  // those singles fall is drawn from the work's own seed (the same on every visit).
   const rand = seeded(p.slug);
-  const between = (a, b) => a + (b - a) * rand();
-  const pct = (v) => `${v.toFixed(1)}%`;
   // a big image, or one that must stay beside its partner, can't take the lead or tail place next to text
   const lead = rest.length && !bound(rest[0]) ? rest.shift() : null;
   const tail = rest.length > 1 && lastText && !bound(rest[rest.length - 1]) ? rest.pop() : null;
   let rows = '';
   let side = 'left';  // which side the next image-with-text row puts its picture
   const withText = (m, t) => {
-    // the picture takes 50–60% (left) or 40–50% (right, as in Figma); the text column stays 457/1392
-    const w = side === 'left' ? between(50, 60) : between(40, 50);
+    // Figma: image 795 | text 457 on the first row, text 457 | image 617 on the third (of 1392)
     const html = side === 'left'
-      ? `<div class="p-row p-with" style="--w:${pct(w)}">${fig(m)}${text(t)}</div>`
-      : `<div class="p-row p-with" style="--w:${pct(w)}">${text(t)}${fig(m)}</div>`;
+      ? `<div class="p-row p-with" style="--w:57.11%">${fig(m)}${text(t)}</div>`
+      : `<div class="p-row p-with" style="--w:44.32%">${text(t)}${fig(m)}</div>`;
     side = side === 'left' ? 'right' : 'left';
     return html;
   };
-  // a row of images with no text: a pair of equal heights, or one picture, set full width
-  // or narrower and pushed to one side, the rest left as empty space
+  // a row of images with no text: two side by side at one height, filling the row exactly,
+  // or a single one — edge to edge when it is wide, otherwise in the middle
   const place = (items) => {
-    const r = items.reduce((s, m) => s + m.w / m.h, 0);
-    const full = items.length === 2 ? rand() < 0.55 : r > 2 && rand() < 0.6;
-    const w = full ? 100 : items.length === 2 ? between(64, 84) : between(r < 1 ? 34 : 48, r < 1 ? 46 : 70);
-    // (a full row of tall pictures is held to the screen height, so it can still sit left or right)
-    const align = (full ? ['left', 'right'] : ['left', 'right', 'inset'])[Math.floor(rand() * (full ? 2 : 3))];
-    const x = align === 'inset' ? between(8, 100 - w) : 0;
-    const air = !full && rand() < 0.35 ? ' p-air' : '';
-    const box = items.length === 2
-      ? `<div class="p-duo" style="--sr:${r.toFixed(4)}">${items.map(fig).join('')}</div>`
-      : fig(items[0]);
-    return `<div class="p-row p-place${air}" style="--w:${pct(w)};--x:${pct(x)};justify-content:${align === 'right' ? 'flex-end' : 'flex-start'}">${box}</div>`;
+    if (items.length === 2) return `<div class="p-row p-place"><div class="p-duo">${items.map(fig).join('')}</div></div>`;
+    const m = items[0];
+    return `<div class="p-row p-place ${m.w / m.h >= 1.7 ? 'p-full' : 'p-center'}">${fig(m)}</div>`;
   };
 
   if (lead) rows += withText(lead, firstText);
@@ -526,7 +516,19 @@ function renderProject(root) {
     }
     const after = rest[i + 1];
     const fixed = after && paired.get(rest[i].idx) === after.idx;
-    const pair = fixed || (after && !noteAt.has(i + 1) && !bound(rest[i]) && !bound(after) && rand() < 0.62);
+    // the next image carries a paragraph: hand it to this one instead, so nobody is left alone
+    if (!fixed && after && noteAt.has(i + 1) && !bound(rest[i])) {
+      noteAt.set(i, noteAt.get(i + 1));
+      noteAt.delete(i + 1);
+      continue;
+    }
+    // images go two by two. Only a stretch with an odd count (between paragraphs and fixed
+    // images) leaves one over; it stands alone in the middle, at a place the seed picks
+    let run = 0;
+    while (i + run < rest.length && !noteAt.has(i + run) && !bound(rest[i + run])) run += 1;
+    const canPair = after && !noteAt.has(i + 1) && !bound(rest[i]) && !bound(after);
+    const alone = canPair && run % 2 === 1 && rand() < 0.5;
+    const pair = fixed || (canPair && !alone);
     rows += place(rest.slice(i, i + (pair ? 2 : 1)));
     i += pair ? 2 : 1;
   }
