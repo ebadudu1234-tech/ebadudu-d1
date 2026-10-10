@@ -243,4 +243,4 @@
 | `c0d660a` | Code For Fun：展会大墙和街头海报两张大图显示，顺序不变；`big` 改为在图集原位置全宽显示（D1、D2） |
 | `aecb598` | D1 作品页：两张并排严格左右顶满，图文行贴齐左右两边（按 Figma 像素），单张图少量居中；D2 NEXT WORK 不触碰时不透明度降到 60% |
 | `45cbb9f` | D1 Code For Fun：集装箱展台小图靠右对齐（新增 `right` 设置） |
-| （本次） | Sónar：Visual Stage Design 替换舞台视觉设计（封面，D1、D2） |
+| `2db461a` | Sónar：Visual Stage Design 替换舞台视觉设计（封面，D1、D2） |
