@@ -239,4 +239,4 @@
 | `d0feb94` | D1 首页第六行：Lotus Cigarette 动画换到大图，Ungreen Shop 换成小图 |
 | `c86344d` | D1 首页第六行改为 Artificial Octopus（大）+ Lotus Cigarette（小），去掉 Ungreen Shop |
 | `c0d660a` | Code For Fun：展会大墙和街头海报两张大图显示，顺序不变；`big` 改为在图集原位置全宽显示（D1、D2） |
-| （本次） | D1 作品页：两张并排严格左右顶满，图文行贴齐左右两边（按 Figma 像素），单张图少量居中；D2 NEXT WORK 不触碰时不透明度降到 60% |
+| `aecb598` | D1 作品页：两张并排严格左右顶满，图文行贴齐左右两边（按 Figma 像素），单张图少量居中；D2 NEXT WORK 不触碰时不透明度降到 60% |
