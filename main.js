@@ -1,5 +1,4 @@
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 /* ---------- Project data helpers ---------- */
@@ -54,7 +53,7 @@ async function playIntro(intro) {
   const pieces = [['Hi', 'hi'], [',', 'comma'], [' '], ["I'm Zihe", 'name'], ['.']];
   let n = 0;
   const letters = (text) => [...text]
-    .map((c) => `<span style="transition-delay:${0.25 + n++ * 0.04}s">${c === ' ' ? '&nbsp;' : c}</span>`)
+    .map((c) => `<span style="transition-delay:${0.1 + n++ * 0.025}s">${c === ' ' ? '&nbsp;' : c}</span>`)
     .join('');
   hi.innerHTML = pieces
     .map(([text, key]) => `<span class="piece"${key ? ` data-piece="${key}"` : ''}>${letters(text)}</span>`)
@@ -75,11 +74,11 @@ async function playIntro(intro) {
     if (hiShown) {
       // Hello World + frog step aside, then "Hi, I'm Zihe." flies into the big headline
       intro.querySelector('.stage').classList.add('clear');
-      await wait(350);
+      await wait(250);
       const headline = document.querySelector('.headline');
       headline.classList.add('morph');
       const flights = flyToHeadline(hi, headline);
-      await wait(450);
+      await wait(300);
       intro.classList.add('is-leaving');
       startReveals();
       await Promise.all(flights.map((f) => f.finished));
@@ -100,32 +99,32 @@ async function playIntro(intro) {
   await document.fonts.ready;
 
   // 1. type "Hello World"
-  await wait(500);
+  await wait(200);
   for (const ch of 'Hello World') {
     if (skipped) return;
     helloText.textContent += ch;
-    await wait(75 + Math.random() * 60);
+    await wait(40 + Math.random() * 30);
   }
-  await wait(450);
+  await wait(220);
   hello.classList.add('typed');
 
   // 2. strike it out
   if (skipped) return;
   hello.classList.add('struck');
-  await wait(750);
+  await wait(420);
 
   // 3. Hello World slides left, "Hi, I'm Zihe." appears, frog pops up
   if (skipped) return;
   hiWrap.style.width = hi.scrollWidth + 'px';
   hi.classList.add('show');
-  await wait(250);
+  await wait(150);
   frog.classList.add('in');
-  await wait(800);
+  await wait(500);
   frog.classList.add('wiggle');
   hiShown = true;  // letters have landed, safe to fly
 
-  // 4. hold, then fly to the top-left and reveal the main page
-  await wait(1200);
+  // 4. short hold, then fly to the top-left and reveal the main page
+  await wait(650);
   finish();
 }
 
@@ -154,7 +153,7 @@ function flyToHeadline(hi, headline) {
         { transform: 'none' },
         { transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${toSize / fromSize})` },
       ],
-      { duration: 1100, delay: i * 40, easing: ease, fill: 'forwards' }
+      { duration: 800, delay: i * 30, easing: ease, fill: 'forwards' }
     );
   });
   hi.style.visibility = 'hidden';
@@ -182,20 +181,61 @@ function renderFeatured(root) {
   root.innerHTML = html;
 }
 
-/* Ending: the frog photo travels from frame 1 to frame 2 as the section scrolls into view */
+/* Ending: the work grid scrolls freely, but the contact screen turns like a page —
+   any scroll that would reveal part of it carries you the whole way in (or back out). */
 function setupContact(section) {
-  const photo = section.querySelector('.contact-photo');
-  let ticking = false;
-  const update = () => {
-    ticking = false;
-    const r = section.getBoundingClientRect();
-    // 0 when the section's top touches the bottom of the screen, 1 when it reaches the top
-    const p = Math.min(1, Math.max(0, 1 - r.top / innerHeight));
-    photo.style.setProperty('--p', p.toFixed(4));
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  let busy = false;
+  const top = () => section.getBoundingClientRect().top;
+  const sectionY = () => scrollY + top();
+  const partlyIn = () => { const t = top(); return t > 1 && t < innerHeight - 1; };
+  const atContact = () => Math.abs(top()) <= 2;
+
+  const pageTo = (y) => {
+    busy = true;
+    const from = scrollY, dist = y - from, t0 = performance.now(), dur = 900;
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      scrollTo(0, from + dist * ease(t));
+      if (t < 1) requestAnimationFrame(step);
+      else setTimeout(() => { busy = false; }, 150);  // swallow the wheel's trailing momentum
+    };
+    requestAnimationFrame(step);
   };
-  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-  addEventListener('resize', update);
-  update();
+  // dir 1 = down, -1 = up; returns true when the page turn takes over the gesture
+  const turn = (dir) => {
+    if (busy) return true;
+    if (dir > 0 && partlyIn()) { pageTo(sectionY()); return true; }
+    if (dir < 0 && (atContact() || partlyIn())) { pageTo(sectionY() - innerHeight); return true; }
+    return false;
+  };
+
+  addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) >= 1 && turn(Math.sign(e.deltaY))) e.preventDefault();
+  }, { passive: false });
+  addEventListener('keydown', (e) => {
+    const dir = ['ArrowDown', 'PageDown', ' '].includes(e.key) ? 1 : ['ArrowUp', 'PageUp'].includes(e.key) ? -1 : 0;
+    if (dir && turn(dir)) e.preventDefault();
+  });
+  let y0 = null;
+  addEventListener('touchstart', (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', (e) => {
+    if (y0 === null) return;
+    const dy = y0 - e.touches[0].clientY;
+    if (Math.abs(dy) > 12 && turn(Math.sign(dy)) && e.cancelable) e.preventDefault();
+  }, { passive: false });
+  // scrollbar drags and fling momentum: settle on whichever side is closer
+  addEventListener('scrollend', () => {
+    if (!busy && partlyIn()) pageTo(top() < innerHeight / 2 ? sectionY() : sectionY() - innerHeight);
+  });
+
+  // the frog sets off by itself once the contact screen is in place: head first, then body
+  // the nav stays on screen here, as in the Figma frame
+  new IntersectionObserver(([e]) => {
+    if (e.intersectionRatio >= 0.9) section.classList.add('is-up');
+    else if (e.intersectionRatio < 0.3) section.classList.remove('is-up');
+    document.body.classList.toggle('on-contact', e.intersectionRatio >= 0.9);
+  }, { threshold: [0, 0.3, 0.9, 1] }).observe(section);
 }
 
 /* ---------- Work page: tag filter + year list → hover preview ---------- */
@@ -328,18 +368,16 @@ setupNav(document.querySelector('.nav'));
 const featured = document.getElementById('featured');
 if (featured) renderFeatured(featured);
 const contact = document.getElementById('contact');
-if (contact && !reduceMotion) setupContact(contact);
+if (contact) setupContact(contact);
 const workList = document.getElementById('work-list');
 if (workList) setupWorkList(workList);
 const project = document.getElementById('project');
 if (project) renderProject(project);
 
-// the intro plays once per visit; coming back to the home page skips straight to it
-let seenIntro = false;
-try { seenIntro = sessionStorage.getItem('ebadudu-intro') === '1'; } catch (e) {}
+// the begin animation plays on every load of the home page (click or any key skips it);
+// only a direct link to #contact goes straight in
 const intro = document.getElementById('intro');
-if (intro && !reduceMotion && !seenIntro && !location.hash) {
-  try { sessionStorage.setItem('ebadudu-intro', '1'); } catch (e) {}
+if (intro && !location.hash) {
   playIntro(intro);
 } else {
   intro?.classList.add('is-gone');

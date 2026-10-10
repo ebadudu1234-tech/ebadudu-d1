@@ -49,6 +49,7 @@ img, video { display: block; max-width: 100%; }
    images) and tucks away while scrolling down */
 .nav.is-scrolled { background: var(--bg); padding-top: 20px; padding-bottom: 18px; pointer-events: auto; }
 .nav.is-hidden { transform: translateY(-100%); }
+body.on-contact .nav { transform: none; }
 .logo {
   font-family: var(--font-display);
   font-size: 18px;
@@ -126,7 +127,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .nav ul { transition-delay: .15s; }
 
 /* Hello World + frog step aside before the fly */
-.hello { transition: opacity .45s ease, transform .6s var(--ease-out); }
+.hello { transition: opacity .3s ease, transform .4s var(--ease-out); }
 .stage.clear .hello { opacity: 0; transform: translateX(-.4em); }
 
 /* the travelling copy of "Hi, I'm Zihe." */
@@ -174,7 +175,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   background: var(--ink);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform .6s cubic-bezier(.65, 0, .35, 1);
+  transition: transform .35s cubic-bezier(.65, 0, .35, 1);
   z-index: 2;
 }
 .hello.struck .strike { transform: scaleX(1); }
@@ -192,7 +193,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   transform: translateY(1.2em) scale(.4) rotate(-12deg);
   transform-origin: 50% 90%;
   pointer-events: none;
-  transition: transform .8s var(--ease-spring), opacity .25s ease;
+  transition: transform .5s var(--ease-spring), opacity .2s ease;
 }
 .frog.in { opacity: 1; transform: none; }
 .frog.in.wiggle { animation: wiggle 1.4s ease-in-out infinite; }
@@ -206,7 +207,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .hi-wrap {
   width: 0;
   overflow: hidden;
-  transition: width .9s var(--ease-out);
+  transition: width .55s var(--ease-out);
 }
 .hi {
   display: inline-block;
@@ -218,7 +219,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   display: inline-block;
   opacity: 0;
   transform: translateY(.5em) rotate(8deg);
-  transition: transform .6s var(--ease-spring), opacity .3s ease;
+  transition: transform .4s var(--ease-spring), opacity .2s ease;
 }
 .hi.show span { opacity: 1; transform: none; }
 
@@ -280,9 +281,11 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 }
 
 /* ============ Ending: "Get in touch" (main page end ANIMATION) ============ */
+/* exactly one screen, so it turns like a page */
 .contact {
   position: relative;
-  height: max(calc(982 * var(--u)), 100svh);
+  height: 100vh;
+  height: 100svh;
   overflow: hidden;
 }
 .contact-text {
@@ -303,18 +306,24 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   transition: background-size .5s var(--ease-out);
 }
 .contact-text a:hover { background-size: 100% 2px; }
-/* the frog photo rises and slides right as you scroll in (frame 1 → frame 2) */
+/* frame 1: only the frog's head peeks over the bottom edge (anchored to the bottom,
+   803 = 982 - 179 in the Figma frame, so it peeks on any screen height).
+   frame 2 (.is-up, set once the page has turned): it climbs up and right to show its body */
 .contact-photo {
   position: absolute;
   left: calc(-1252 * var(--u));
-  top: calc(179 * var(--u));
+  top: calc(100% - 803 * var(--u));
   width: calc(3196 * var(--u));
   height: calc(3196 * var(--u));
   display: grid;
   place-items: center;
   pointer-events: none;
-  transform: translate(calc(286 * var(--u) * var(--p, 0)), calc(-396 * var(--u) * var(--p, 0)));
+  transition: transform .6s var(--ease-out);
   will-change: transform;
+}
+.contact.is-up .contact-photo {
+  transform: translate(calc(286 * var(--u)), calc(-396 * var(--u)));
+  transition: transform 1.6s cubic-bezier(.3, 1.2, .5, 1) .35s;
 }
 .contact-photo img {
   width: calc(2364 * var(--u));
@@ -515,9 +524,4 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   .p-row > figure, .p-text { flex: none; width: 100%; }
   .p-pair > figure { flex: none; }
   .p-tail { flex-direction: column-reverse; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0s !important; animation: none !important; }
-  .contact-photo { --p: 1; }  /* rest on the final frame */
 }

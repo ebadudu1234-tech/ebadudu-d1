@@ -101,5 +101,12 @@ const PROJECTS = [
   },
 ];
 
-/* Home page grid (Figma: small · large / large · small). Slugs from above. */
-const FEATURED = ['switchback', '550-cafe', 'code-for-fun', 'under-the-cyber-skin'];
+/* Home page grid, two per row, rows alternate small · large / large · small
+   (the Figma frame shows the first two rows). Slugs from above. */
+const FEATURED = [
+  'switchback', '550-cafe',
+  'code-for-fun', 'under-the-cyber-skin',
+  'allodox', 'ungreen-shop',
+  'yiwugo', 'dada-newspaper',
+  'planting-pen', 'sonar',
+];
