@@ -163,7 +163,8 @@
 
 - [ ] **GitHub 仓库链接**：我在 github.com 新建一个空仓库（不要勾 README），把链接发给 Claude，然后把所有版本上传。
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
-- [ ] 核对作品年份：目前是按文件日期猜的（Code For Fun、Allodox、Ungreen、Yiwugo、Nuclear Tide 放在 2025，其余放在 2026）。
+- [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
+- [ ] 其余年份仍按文件日期：Code For Fun、Allodox 放在 2025，其余放在 2026，待确认。
 - [ ] 核对作品说明文字和部分作品名（Planting Pen、Sónar 等是 Claude 根据图片写的），在 `data.js` 里修改。
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
 - [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
@@ -184,3 +185,4 @@
 | `23a042a` | 新建 D2 网站（按 Figma direction 2），D2 的要求另存在 D2/prompt |
 | `3e5c595` | D1、D2 的 Switchback 作品页：介绍下面加一张大图，草图 → 线稿 → 渲染图轮流替换 |
 | `e54898d` | Switchback 轮播大图的替换时间从 2.6 秒缩短到 1.5 秒 |
+| （本次） | Ungreen Shop、Yiwugo、Nuclear Tide 改为 2024 年（D1、D2） |
