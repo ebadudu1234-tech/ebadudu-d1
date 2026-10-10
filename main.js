@@ -330,7 +330,7 @@ function setupWorkList(listRoot) {
       <h2 class="year reveal" style="--d:${0.05 + gi * 0.1}s">${y}</h2>
       <ul class="work-items">
         ${PROJECTS.filter((p) => p.year === y).map((p, i) => `
-          <li class="reveal" style="--d:${0.1 + gi * 0.1 + i * 0.04}s" data-tags="${p.tags.join(' ')}">
+          <li class="reveal" style="--d:${0.1 + gi * 0.1 + i * 0.04}s" data-tags="${p.tags.join(' ')}" data-slug="${p.slug}">
             <a class="work-link" href="${projectUrl(p)}" data-slug="${p.slug}">
               <span class="name">${esc(p.title)}</span>${tagsHtml(p.tags)}
             </a>
@@ -364,8 +364,9 @@ function setupWorkList(listRoot) {
     preview.classList.add('swap');
     swapTimer = setTimeout(show, 180);
   };
+  // the whole row is the hover target, not just the words
   links.forEach((link) => {
-    link.addEventListener('mouseenter', () => activate(link));
+    link.closest('li').addEventListener('mouseenter', () => activate(link));
     link.addEventListener('focus', () => activate(link));
   });
   if (links[0]) activate(links[0], true);
@@ -434,6 +435,57 @@ function renderProject(root) {
   if (heroVideo) loopFrom(heroVideo, p.start);
 }
 
+/* ---------- Hover trinket: a small object from each work follows the mouse ----------
+   Each work has a cut-out in assets/trinkets/<slug>.png. While a project is hovered it
+   trails the cursor (eased, tilting with its speed) but its centre never leaves that
+   project's frame: the card image on the home page, the row on the WORK page. */
+function setupTrinkets(selector, frameOf) {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const holder = document.createElement('div');
+  holder.className = 'trinket';
+  holder.setAttribute('aria-hidden', 'true');
+  const img = document.createElement('img');
+  img.alt = '';
+  holder.append(img);
+  document.body.append(holder);
+
+  let frame = null, mx = 0, my = 0, x = 0, y = 0, tilt = 0, running = false;
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const target = () => {
+    const r = frame.getBoundingClientRect();
+    return [clamp(mx, r.left, r.right), clamp(my, r.top, r.bottom)];
+  };
+  const tick = () => {
+    if (!frame) { running = false; return; }
+    const [tx, ty] = target();
+    const dx = (tx - x) * 0.2, dy = (ty - y) * 0.2;
+    x += dx; y += dy;
+    tilt += (clamp(dx * 1.6, -18, 18) - tilt) * 0.15;
+    holder.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${tilt.toFixed(2)}deg)`;
+    requestAnimationFrame(tick);
+  };
+
+  addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+  document.querySelectorAll(selector).forEach((el) => {
+    el.addEventListener('pointerenter', (e) => {
+      mx = e.clientX; my = e.clientY;
+      frame = frameOf(el);
+      img.src = `assets/trinkets/${el.dataset.slug}.png`;
+      if (!holder.classList.contains('is-on')) { [x, y] = target(); tilt = 0; }  // appear right at the cursor
+      holder.classList.add('is-on');
+      if (!running) { running = true; requestAnimationFrame(tick); }
+    });
+    el.addEventListener('pointerleave', () => {
+      frame = null;
+      holder.classList.remove('is-on');
+    });
+  });
+
+  // warm the cache so the first hover shows the object at once
+  const warm = () => document.querySelectorAll(selector).forEach((el) => { new Image().src = `assets/trinkets/${el.dataset.slug}.png`; });
+  setTimeout(warm, 1200);
+}
+
 /* ---------- Nav: white bar after scrolling, hides going down, returns going up ---------- */
 function setupNav(nav) {
   let lastY = scrollY;
@@ -452,11 +504,17 @@ function setupNav(nav) {
 /* ---------- Boot ---------- */
 setupNav(document.querySelector('.nav'));
 const featured = document.getElementById('featured');
-if (featured) renderFeatured(featured);
+if (featured) {
+  renderFeatured(featured);
+  setupTrinkets('#featured .card', (el) => el.querySelector('.card-media'));
+}
 const contact = document.getElementById('contact');
 if (contact) setupContact(contact);
 const workList = document.getElementById('work-list');
-if (workList) setupWorkList(workList);
+if (workList) {
+  setupWorkList(workList);
+  setupTrinkets('#work-list .work-items > li', (el) => el);
+}
 const project = document.getElementById('project');
 if (project) renderProject(project);
 

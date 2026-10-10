@@ -276,6 +276,31 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .card:hover .card-media img { transform: scale(1.035); filter: brightness(.96); }
 .card:hover .card-media video { transform: scale(1.035); }
 
+/* hover trinket: a small object from the hovered work trails the cursor (JS moves .trinket) */
+.trinket {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 45;
+  pointer-events: none;
+  will-change: transform;
+}
+.trinket img {
+  display: block;
+  max-width: 120px;
+  max-height: 120px;
+  translate: -50% -50%;
+  /* sticker look: thin white outline + soft drop shadow */
+  filter:
+    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(0 10px 14px rgba(0, 0, 0, .22));
+  opacity: 0;
+  scale: .3;
+  transition: opacity .2s ease, scale .45s var(--ease-spring);
+}
+.trinket.is-on img { opacity: 1; scale: 1; }
+
 /* hover video: sits over the still cover and fades in once it is really playing */
 .hover-video {
   position: absolute;

@@ -38,6 +38,7 @@
   - `FLORA-Untitled-de7abda2.mp4` 和 `FLORA-final.mp4` 完全相同；
   - `追设计样机.png` 和 `App_phone_2.png` 画面一致。
 - 这台电脑没有 Python / Node / ffmpeg，所有处理都是用 PowerShell + .NET + Windows 自带接口完成的。
+- 处理脚本都保存在 `D1/tools/`，用法见 `D1/tools/README.md`。
 
 ## 3. D1 网站要求
 
@@ -73,6 +74,36 @@
 - **Code For Fun 的封面使用 `FLORA-final.mp4` 的截图**；鼠标移上去播放的也是这段视频，作品页顶部同样用它。
 - 手机等触屏设备没有"鼠标移上去"，只显示静态封面。
 
+### 3.3.2 鼠标跟随的小物品
+- **首页和 WORK 页**里，鼠标碰到某个作品时，会出现一个**从这个作品里提取出来的小物品**。
+- 小物品**始终跟随鼠标**，带一点缓动和倾斜，但**不会离开这个作品的框**：
+  - 首页：卡片的图片框；
+  - WORK 页：作品所在的那一整行。
+- **尺寸不要太大**：最大 120px，带白色描边和柔和阴影，像一张贴纸。
+- 手机等触屏设备不显示。
+- 文件放在 `assets/trinkets/<slug>.png`，由 `tools/trinkets.ps1` 生成。
+- 每个作品用的小物品：
+
+| 作品 | 小物品 | 方式 |
+|---|---|---|
+| 5:50 Cafe | 腰果珐琅徽章 | 抠图 |
+| Switchback | 带折叠水碗的斜挎包 | 抠图 |
+| Planting Pen | 草莓种子补充装盒 | 抠图 |
+| Code For Fun | Classroom Organizer 盒子 | 抠图 |
+| Sónar | 渔夫帽上的 Sónar 标志徽章 | 抠图 |
+| After Dada | 圆顶礼帽 | 抠图 |
+| 2000s Game Zine | Nokia 手机 | 抠图 |
+| Allodox | 游戏里的像素 REFILL 售货机 | 抠图 |
+| Ungreen Shop | 'UGS' 标志 | 抠图 |
+| Yiwugo | 两只蜜蜂角色 | 抠图 |
+| Nuclear Tide Evolutionaries | 装置渲染图 | 抠图 |
+| DADA Newspaper | 报纸封面 | 小图 |
+| Toyukukoku | 杂志 "GO!" 内页 | 小图 |
+| Under the Cyber Skin | 杂志封面 | 小图 |
+| Lotus Cigarette | 视频截图（香烟和莲花） | 小图 |
+| Artificial Octopus | 视频截图 | 小图 |
+| Leviairab Bottle | 两个酒瓶 | 小图 |
+
 ### 3.4 首页结尾：联系方式（Get in touch）
 - 内容：灰色 "Get in touch"，下面是黑色 "ebadudu1234@gmail.com"（点击会打开邮件）。
 - **上面的作品区是正常滚动的**。
@@ -84,7 +115,7 @@
 ### 3.5 WORK 页
 - 按年份分组（2026 / 2025），组与组之间有分隔线。
 - 顶部是标签筛选按钮，点一下筛选，再点一下取消。
-- 鼠标悬停的作品：文字变黑、出现下划线、显示标签。
+- 鼠标悬停的作品：文字变黑、出现下划线、显示标签。整行都算悬停范围，不只是文字。
 - **右侧预览框的尺寸不是固定的，要随作品封面图的比例变化**；太高的图最多占屏幕高度的 70%。
 
 ### 3.6 作品详情页（Figma "TITLE PAHE"）
@@ -132,3 +163,4 @@
 | `0a1d65e` | 开头动画每次访问只播一次；苹果风格的作品出现动效 |
 | `42e526d` | 新增这份要求汇总文件 |
 | `0ec4458` | 视频作品鼠标移上去播放、视频作品放大格子、首页推荐改为新作且照片多的项目、Code For Fun 封面改用 FLORA-final 截图、新增 9 张 Code for fun 图片 |
+| （本次） | 首页和 WORK 页：鼠标碰到作品时出现从作品里提取的小物品，并在作品框内跟随鼠标；WORK 页整行都可悬停；处理脚本保存到 tools/ |
