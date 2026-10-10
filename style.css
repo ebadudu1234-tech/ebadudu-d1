@@ -505,6 +505,10 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .p-seq .wipe { position: relative; background: #fff; }
 .p-seq .wipe img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .6s ease, scale 1.8s var(--ease-settle), filter 1s ease; }
 .p-seq .wipe img.is-on { opacity: 1; }
+/* a normal gallery image whose sketch and render take turns */
+.p-row figure.swap .wipe { position: relative; background: #fff; }
+.p-row figure.swap .wipe img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .6s ease, scale 1.8s var(--ease-settle), filter 1s ease; }
+.p-row figure.swap .wipe img.is-on { opacity: 1; }
 .p-single > figure { width: min(100%, calc(85vh * var(--r))); aspect-ratio: var(--r); }
 .p-next {
   display: flex;

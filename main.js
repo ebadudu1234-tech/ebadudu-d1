@@ -403,12 +403,22 @@ function renderProject(root) {
   const heroIdx = p.hero || 0;
   const hero = media[heroIdx];
   // `sequence`: images that take turns in one big frame under the intro (e.g. sketch → line → render)
-  const seqIdx = p.sequence || [];
-  const seq = seqIdx.map((i) => media[i]).filter(Boolean);
-  const rest = media.filter((_, i) => i !== heroIdx && !seqIdx.includes(i));
-  // pairs: the second image follows the first by a beat
+  // `swaps`: pairs that take turns inside a normal gallery image (sketch first), at the sketch's place
+  // `hide`: images left off the site
+  const seq = (p.sequence || []).map((i) => media[i]).filter(Boolean);
+  const swaps = p.swaps || [];
+  const skip = new Set([heroIdx, ...(p.sequence || []), ...(p.hide || []), ...swaps.flatMap((g) => g.slice(1))]);
+  const rest = [];
+  media.forEach((m, i) => {
+    if (skip.has(i)) return;
+    const g = swaps.find((s) => s[0] === i);
+    rest.push(g ? { ...m, swap: g.map((k) => media[k]).filter(Boolean) } : m);
+  });  // pairs: the second image follows the first by a beat
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
-  const fig = (m, i = 0) => `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
+  const fig = (m, i = 0) => m.swap
+    ? `<figure class="work-in swap" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${
+      m.swap.map((s, k) => `<img src="${s.src}" alt="${esc(p.title)}"${k ? '' : ' class="is-on"'} loading="lazy" decoding="async">`).join('')}</div></figure>`
+    : `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
   const text = (t) => (t ? `<p class="p-text reveal" style="--d:.1s">${esc(t)}</p>` : '');
 
   // lead row (image + intro), tail row (detail + image), justified pairs in between
@@ -440,8 +450,7 @@ function renderProject(root) {
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;
   const heroVideo = root.querySelector('.p-hero video');
   if (heroVideo) loopFrom(heroVideo, p.start);
-  const seqEl = root.querySelector('.p-seq');
-  if (seqEl) playSequence(seqEl);
+  root.querySelectorAll('.p-seq, figure.swap').forEach((el) => playSequence(el));
 }
 
 /* The sequence frame: images cross-fade in turn, starting from the first (the sketch)
