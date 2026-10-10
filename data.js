@@ -194,5 +194,5 @@ const FEATURED = [
   'planting-pen', 'switchback',
   'sonar', 'leviairab',
   'game-zine', 'under-the-cyber-skin',
-  'ungreen-shop', { slug: 'lotus', keep: true },
+  'lotus', 'ungreen-shop',
 ];

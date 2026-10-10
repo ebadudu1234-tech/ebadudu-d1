@@ -70,7 +70,7 @@
     3. Planting Pen | Switchback
     4. Sónar | **Leviathan Absinthe（Dream Recovery Department，替换了假面骑士 Toyukukoku）**
     5. 2000s Game Zine | Under the Cyber Skin
-    6. Ungreen Shop（大）| **Lotus Cigarette 动画（固定为小图）**
+    6. **Lotus Cigarette 动画（大图）** | Ungreen Shop（小）
   - 有视频的作品会自动换到大格子；写成 `{ slug: 'lotus', keep: true }` 的作品固定在写的位置，不自动换。
   - Lotus、Artificial Octopus、Leviairab 都只有一个视频或一张图，所以没有放进首页。
 - **有视频的作品放在大格子里**（代码会自动把它换到该行的大格）。
@@ -229,3 +229,4 @@
 | `97b1f93` | Restaurant 换成 final renders（D1、D2）；D1 WORK 页标签加 ALL |
 | `3ba0ce2` | Restaurant：平面图单独大图显示；入口和室外渲染图并列（新增 `big` / `pairs` 设置，D1、D2） |
 | `fabdda1` | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
+| （本次） | D1 首页第六行：Lotus Cigarette 动画换到大图，Ungreen Shop 换成小图 |
