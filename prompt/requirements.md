@@ -190,7 +190,7 @@
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
-- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。
+- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（放在介绍下面，和 Switchback 的大图同一位置；`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
 - 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Restaurant。
 - [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
@@ -220,3 +220,4 @@
 | `21d1d70` | D1 作品页图文排版改为 Figma 的组合方式（图|文、图+图、文|图），每段文字都在图旁边，允许留白且每个作品不同；标签改为来自描述的类别，VIDEO 自动添加（D1、D2）；预览服务器改为并行处理，修复 D2 返回 WORK 后再点作品卡住 |
 | `f6b353c` | WORK 页：鼠标没碰到作品时右侧预览图不显示 |
 | `97b1f93` | Restaurant 换成 final renders（D1、D2）；D1 WORK 页标签加 ALL |
+| （本次） | Restaurant：平面图单独大图显示；入口和室外渲染图并列（新增 `big` / `pairs` 设置，D1、D2） |

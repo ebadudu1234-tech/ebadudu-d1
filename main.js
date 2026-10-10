@@ -427,14 +427,19 @@ function renderProject(root) {
   // `swaps`: pairs that take turns inside a normal gallery image (sketch first), at the sketch's place
   // `hide`: images left off the site
   const seq = (p.sequence || []).map((i) => media[i]).filter(Boolean);
+  // `big`: images shown on their own, full width, in the same place as the sequence frame
+  const big = (p.big || []).map((i) => media[i]).filter(Boolean);
+  // `pairs`: two images that always share one row, side by side
+  const paired = new Map((p.pairs || []).flatMap(([a, b]) => [[a, b], [b, a]]));
   const swaps = p.swaps || [];
-  const skip = new Set([heroIdx, ...(p.sequence || []), ...(p.hide || []), ...swaps.flatMap((g) => g.slice(1))]);
+  const skip = new Set([heroIdx, ...(p.sequence || []), ...(p.big || []), ...(p.hide || []), ...swaps.flatMap((g) => g.slice(1))]);
   const rest = [];
   media.forEach((m, i) => {
     if (skip.has(i)) return;
     const g = swaps.find((s) => s[0] === i);
-    rest.push(g ? { ...m, swap: g.map((k) => media[k]).filter(Boolean) } : m);
-  });  // pairs: the second image follows the first by a beat
+    rest.push(g ? { ...m, idx: i, swap: g.map((k) => media[k]).filter(Boolean) } : { ...m, idx: i });
+  });
+  const solo = !rest.length;  // nothing but the hero (a single film or image)  // pairs: the second image follows the first by a beat
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
   const fig = (m, i = 0) => m.swap
     ? `<figure class="work-in swap" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${
@@ -456,8 +461,9 @@ function renderProject(root) {
   const rand = seeded(p.slug);
   const between = (a, b) => a + (b - a) * rand();
   const pct = (v) => `${v.toFixed(1)}%`;
-  const lead = rest.shift();
-  const tail = rest.length > 1 && lastText ? rest.pop() : null;
+  // an image that must stay beside its partner can't take the lead or tail place next to text
+  const lead = rest.length && !paired.has(rest[0].idx) ? rest.shift() : null;
+  const tail = rest.length > 1 && lastText && !paired.has(rest[rest.length - 1].idx) ? rest.pop() : null;
   let rows = '';
   let side = 'left';  // which side the next image-with-text row puts its picture
   const withText = (m, t) => {
@@ -487,29 +493,38 @@ function renderProject(root) {
 
   if (lead) rows += withText(lead, firstText);
   // hero-only projects (a single film or image): the paragraphs share one row
-  else rows += `<div class="p-row p-with">${paras.map(text).join('')}</div>`;
+  else if (solo) rows += `<div class="p-row p-with">${paras.map(text).join('')}</div>`;
+  // the gallery opens with a fixed pair: the first paragraph stands in the text column above it
+  else rows += `<div class="p-row p-note">${text(firstText)}</div>`;
   if (seq.length) {
     rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
       seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
   }
+  big.forEach((m) => {
+    rows += `<figure class="p-seq p-big work-in" style="--r:${(m.w / m.h).toFixed(4)}"><div class="wipe"><img src="${m.src}" alt="${esc(p.title)}" class="is-on" decoding="async"></div></figure>`;
+  });
   // the middle paragraphs are spread evenly through the gallery, each beside one of its images
-  const pending = lead ? [...notes] : [];
+  // (only images without a fixed partner can carry one)
+  const pending = solo ? [] : [...notes];
+  const free = rest.map((m, k) => k).filter((k) => !paired.has(rest[k].idx));
   const noteAt = new Map();
   const loose = [];  // paragraphs that found no image of their own (very small galleries)
   pending.forEach((t, k) => {
-    const at = Math.min(rest.length - 1, Math.round((k + 1) * rest.length / (pending.length + 1)));
-    if (at >= 0 && !noteAt.has(at)) noteAt.set(at, t); else loose.push(t);
+    const at = free[Math.min(free.length - 1, Math.round((k + 1) * free.length / (pending.length + 1)))];
+    if (at != null && !noteAt.has(at)) noteAt.set(at, t); else loose.push(t);
   });
   for (let i = 0; i < rest.length;) {
     if (noteAt.has(i)) { rows += withText(rest[i], noteAt.get(i)); i += 1; continue; }
-    const pair = i + 1 < rest.length && !noteAt.has(i + 1) && rand() < 0.62;
+    const after = rest[i + 1];
+    const fixed = after && paired.get(rest[i].idx) === after.idx;
+    const pair = fixed || (after && !noteAt.has(i + 1) && !paired.has(rest[i].idx) && !paired.has(after.idx) && rand() < 0.62);
     rows += place(rest.slice(i, i + (pair ? 2 : 1)));
     i += pair ? 2 : 1;
   }
   // they sit on their own, in the text column
   loose.forEach((n) => { rows += `<div class="p-row p-note">${text(n)}</div>`; });
   if (tail) { side = 'right'; rows += withText(tail, lastText); }
-  else if (lastText && lead) rows += `<div class="p-row p-note">${text(lastText)}</div>`;
+  else if (lastText && !solo) rows += `<div class="p-row p-note">${text(lastText)}</div>`;
   const next = PROJECTS[(PROJECTS.indexOf(p) + 1) % PROJECTS.length];
   root.innerHTML = `
     <figure class="p-hero work-in${p.fit === 'contain' ? ' contain' : ' parallax'}"><div class="wipe">${hero ? mediaHtml(hero, { hero: true, alt: p.title }) : ''}</div></figure>
@@ -520,7 +535,7 @@ function renderProject(root) {
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;
   const heroVideo = root.querySelector('.p-hero video');
   if (heroVideo) loopFrom(heroVideo, p.start);
-  root.querySelectorAll('.p-seq, figure.swap').forEach((el) => playSequence(el));
+  root.querySelectorAll('.p-seq:not(.p-big), figure.swap').forEach((el) => playSequence(el));
 }
 
 /* A steady random number source for a string: the same work always gets the same numbers */
