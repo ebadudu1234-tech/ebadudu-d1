@@ -186,11 +186,13 @@ const PROJECTS = [
 /* Home page grid, two per row, rows alternate small · large / large · small
    (the Figma frame shows the first two rows). Slugs from above.
    Picks: the newest work with the most photos; works with a video are moved
-   into the large cell of their row automatically. */
+   into the large cell of their row automatically, unless written as
+   { slug, keep: true }, which stays in the cell it is written in. */
 const FEATURED = [
-  'after-dada', 'switchback',
+  'after-dada', '550-cafe',
   'code-for-fun', 'dada-newspaper',
-  'planting-pen', '550-cafe',
-  'sonar', 'toyukukoku',
+  'planting-pen', 'switchback',
+  'sonar', 'leviairab',
   'game-zine', 'under-the-cyber-skin',
+  'ungreen-shop', { slug: 'lotus', keep: true },
 ];

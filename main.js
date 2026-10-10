@@ -244,14 +244,17 @@ function renderFeatured(root) {
       ${tagsHtml(p.tags)}
     </a>`;
   const hasVideo = (p) => !!(p && hoverVideoOf(p));
-  const list = FEATURED.map(bySlug).filter(Boolean);
+  // entries are slugs, or { slug, keep: true } for a work that stays in the cell it's written in
+  const list = FEATURED.map((f) => (typeof f === 'string' ? { slug: f } : f))
+    .map((f) => ({ ...bySlug(f.slug), keep: !!f.keep })).filter((p) => p.slug);
   let html = '';
   for (let i = 0; i < list.length; i += 2) {
     const flip = (i / 2) % 2 === 1;
     let [a, b] = [list[i], list[i + 1]];
     const sizeA = flip ? 'lg' : 'sm';
-    // works with a video always take the large cell of their row
-    if (b && ((sizeA === 'sm' && hasVideo(a) && !hasVideo(b)) || (sizeA === 'lg' && hasVideo(b) && !hasVideo(a)))) [a, b] = [b, a];
+    // works with a video take the large cell of their row (unless either is kept in place)
+    if (b && !a.keep && !b.keep
+      && ((sizeA === 'sm' && hasVideo(a) && !hasVideo(b)) || (sizeA === 'lg' && hasVideo(b) && !hasVideo(a)))) [a, b] = [b, a];
     html += `<div class="row ${flip ? 'row-2' : 'row-1'}">`
       + (a ? card(a, sizeA, 0) : '')
       + (b ? card(b, flip ? 'sm' : 'lg', 0.12) : '')

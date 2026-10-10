@@ -59,12 +59,19 @@
 - 点击或按任意键可以跳过。
 
 ### 3.3 首页
-- Figma 首页只是一个示例，按同样的方式**往下延伸到五行**（一共 10 个作品）。
+- Figma 首页只是一个示例，按同样的方式**往下延伸到六行**（一共 12 个作品；原来五行，后来又加了一行）。
 - 每行一大一小交替：第一行小｜大，第二行大｜小，以此类推。
 - 卡片尺寸：小 472×334，大 884×556，间距 36px。
 - 每张卡片下面有作品名和标签（BRAND / VIDEO 等）。
 - **首页推荐放我新一年做的作品，并且优先选照片多的项目。**
-  - 现在的 10 个作品：After Dada、Switchback、Code For Fun、DADA Newspaper、Planting Pen、5:50 Cafe、Sónar、Toyukukoku、2000s Game Zine、Under the Cyber Skin。
+  - 现在的 12 个作品（每行：左 | 右）：
+    1. After Dada | **5:50 Cafe（brown sugar，第一行大图）**
+    2. Code For Fun | DADA Newspaper
+    3. Planting Pen | Switchback
+    4. Sónar | **Leviathan Absinthe（Dream Recovery Department，替换了假面骑士 Toyukukoku）**
+    5. 2000s Game Zine | Under the Cyber Skin
+    6. Ungreen Shop（大）| **Lotus Cigarette 动画（固定为小图）**
+  - 有视频的作品会自动换到大格子；写成 `{ slug: 'lotus', keep: true }` 的作品固定在写的位置，不自动换。
   - Lotus、Artificial Octopus、Leviairab 都只有一个视频或一张图，所以没有放进首页。
 - **有视频的作品放在大格子里**（代码会自动把它换到该行的大格）。
 - 首页放哪些作品、什么顺序，在 `data.js` 的 `FEATURED` 里改。
@@ -197,7 +204,7 @@
 - [x] 作品说明文字和作品名已全部换成我写的文本描述。
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
 - [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
-- [ ] 确认"五格"的意思：目前做的是五行、10 个作品；如果是指 5 个作品，需要再改。
+- [x] 首页现在是六行、12 个作品。
 
 ## 6. 版本记录
 
@@ -221,3 +228,4 @@
 | `f6b353c` | WORK 页：鼠标没碰到作品时右侧预览图不显示 |
 | `97b1f93` | Restaurant 换成 final renders（D1、D2）；D1 WORK 页标签加 ALL |
 | `3ba0ce2` | Restaurant：平面图单独大图显示；入口和室外渲染图并列（新增 `big` / `pairs` 设置，D1、D2） |
+| （本次） | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
