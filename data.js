@@ -8,6 +8,8 @@
    tags     : shown as pills and used by the WORK page filter
    cover    : which media item (0-based) to use on cards / previews
    hero     : which media item opens the project page (default 0)
+   hoverVideo: which video plays when the cover is hovered (default: the first video)
+   start    : seconds to skip at the head of the cover / hero video (title card)
    fit      : 'contain' shows the hero without cropping (for tall pages)
    intro    : paragraph beside the first image on the project page
    detail   : paragraph further down the project page
@@ -45,12 +47,12 @@ const PROJECTS = [
     detail: 'Bold headlines, film stills and Japanese type are cut together like the tokusatsu shows they describe.',
   },
   {
-    slug: 'lotus', title: 'Lotus Cigarette', year: 2026, tags: ['3D', 'MOTION', 'VIDEO'], cover: 0,
+    slug: 'lotus', title: 'Lotus Cigarette', year: 2026, tags: ['3D', 'MOTION', 'VIDEO'], cover: 0, start: 6.5,
     intro: '3D motion graphics for a fictional Lotus cigarette — paper, gold foil and lotus leaves drifting through water.',
     detail: '3D Motion Graphics, Summer 2026. Faculty: Maruyama.',
   },
   {
-    slug: 'ocupus', title: 'Artificial Octopus', year: 2026, tags: ['3D', 'MOTION', 'VIDEO'], cover: 0,
+    slug: 'ocupus', title: 'Artificial Octopus', year: 2026, tags: ['3D', 'MOTION', 'VIDEO'], cover: 0, start: 5.6,
     intro: 'A 3D motion title sequence: an artificial octopus made of metal rings, glass tubes and soft pink tissue.',
     detail: '3D Motion Graphics, Summer 2026. Faculty: Maruyama.',
   },
@@ -75,9 +77,10 @@ const PROJECTS = [
     detail: '',
   },
   {
-    slug: 'code-for-fun', title: 'Code For Fun', year: 2025, tags: ['BRAND', 'SPACE', 'UI'], cover: 1,
+    // cover + hero: the FLORA-final storefront clip (still frame on the card, plays on hover)
+    slug: 'code-for-fun', title: 'Code For Fun', year: 2025, tags: ['BRAND', 'SPACE', 'UI', 'VIDEO'], cover: 0,
     intro: 'Where Play Meets Purpose — a brand for a kids’ coding education space, with zones like Pixel Lab, Maker Hub, Robo Lab and HTML Hero.',
-    detail: 'The identity runs from the expo booth and pop-up to an AR glasses interface, subway and street posters, banners, stationery and staff merch.',
+    detail: 'The identity runs from the storefront, expo booth and pop-up to the website, a learning app, an AR glasses interface, subway and street posters, banners, stationery, totes and staff merch.',
   },
   {
     slug: 'allodox', title: 'Allodox', year: 2025, tags: ['GAME'], cover: 0,
@@ -102,11 +105,13 @@ const PROJECTS = [
 ];
 
 /* Home page grid, two per row, rows alternate small · large / large · small
-   (the Figma frame shows the first two rows). Slugs from above. */
+   (the Figma frame shows the first two rows). Slugs from above.
+   Picks: the newest work with the most photos; works with a video are moved
+   into the large cell of their row automatically. */
 const FEATURED = [
-  'switchback', '550-cafe',
-  'code-for-fun', 'under-the-cyber-skin',
-  'allodox', 'ungreen-shop',
-  'yiwugo', 'dada-newspaper',
-  'planting-pen', 'sonar',
+  'after-dada', 'switchback',
+  'code-for-fun', 'dada-newspaper',
+  'planting-pen', '550-cafe',
+  'sonar', 'toyukukoku',
+  'game-zine', 'under-the-cyber-skin',
 ];

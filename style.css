@@ -274,6 +274,19 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   object-fit: cover;
 }
 .card:hover .card-media img { transform: scale(1.035); filter: brightness(.96); }
+.card:hover .card-media video { transform: scale(1.035); }
+
+/* hover video: sits over the still cover and fades in once it is really playing */
+.hover-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .45s ease, transform .9s var(--ease-out);
+}
+.is-playing > .hover-video { opacity: 1; }
 .card-title {
   margin: 16px 0 8px;
   font-size: 18px;
@@ -505,6 +518,7 @@ figure.work-in { background: none; }
     transform .9s var(--ease-out);
 }
 .parallax { --rest: 1.1; }
+.parallax img, .parallax video { translate: 0 var(--py, 0px); }
 .work-in.is-in .card-media,
 .work-in.is-in > .wipe { clip-path: inset(0 0 0 0); }
 .work-in.is-in img, .work-in.is-in video { scale: var(--rest, 1); filter: none; }

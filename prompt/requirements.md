@@ -32,6 +32,11 @@
   - 只有 PDF 的作品（Toyukukoku、DADA newspaper）→ 每页转成图片放进 press。
   - 大视频 → 转成 1080p H.264（lotus、ocupus、click_2）。
 - 网站使用的是 press 版本（没有 press 版本时用原图），统一复制到 `D1/assets/work/<slug>/`。
+- **之后往 MY WORK 里加新文件时，也要按同样的规则压缩，再放进网站。**
+  （例如 Code for fun 新增了网站界面、App 界面、电子海报、公交站海报、帆布袋共 9 张，已经压缩并放进网站。）
+- 内容完全相同的重复文件不放进网站：
+  - `FLORA-Untitled-de7abda2.mp4` 和 `FLORA-final.mp4` 完全相同；
+  - `追设计样机.png` 和 `App_phone_2.png` 画面一致。
 - 这台电脑没有 Python / Node / ffmpeg，所有处理都是用 PowerShell + .NET + Windows 自带接口完成的。
 
 ## 3. D1 网站要求
@@ -55,7 +60,18 @@
 - 每行一大一小交替：第一行小｜大，第二行大｜小，以此类推。
 - 卡片尺寸：小 472×334，大 884×556，间距 36px。
 - 每张卡片下面有作品名和标签（BRAND / VIDEO 等）。
+- **首页推荐放我新一年做的作品，并且优先选照片多的项目。**
+  - 现在的 10 个作品：After Dada、Switchback、Code For Fun、DADA Newspaper、Planting Pen、5:50 Cafe、Sónar、Toyukukoku、2000s Game Zine、Under the Cyber Skin。
+  - Lotus、Artificial Octopus、Leviairab 都只有一个视频或一张图，所以没有放进首页。
+- **有视频的作品放在大格子里**（代码会自动把它换到该行的大格）。
 - 首页放哪些作品、什么顺序，在 `data.js` 的 `FEATURED` 里改。
+
+### 3.3.1 视频作品的封面
+- 有视频的作品：封面先显示一张静态画面，**鼠标移上去后直接播放视频**（静音、循环），移开就暂停。
+- 首页卡片和 WORK 页右侧预览框都是这样。
+- 视频开头有 ArtCenter 片头的作品，播放时跳过片头：Lotus 从 6.5 秒开始，Artificial Octopus 从 5.6 秒开始。作品页顶部的视频也一样跳过。
+- **Code For Fun 的封面使用 `FLORA-final.mp4` 的截图**；鼠标移上去播放的也是这段视频，作品页顶部同样用它。
+- 手机等触屏设备没有"鼠标移上去"，只显示静态封面。
 
 ### 3.4 首页结尾：联系方式（Get in touch）
 - 内容：灰色 "Get in touch"，下面是黑色 "ebadudu1234@gmail.com"（点击会打开邮件）。
@@ -104,6 +120,7 @@
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
 - [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
 - [ ] 确认"五格"的意思：目前做的是五行、10 个作品；如果是指 5 个作品，需要再改。
+- [ ] Code For Fun 的年份：按文件日期（2025 年 11–12 月）目前归在 2025，但已经按要求放进首页推荐。如果它属于"新一年"，需要改成 2026。
 
 ## 6. 版本记录
 
@@ -114,3 +131,4 @@
 | `1933f8d` | 开头动画恢复并加速；首页延伸到五行；联系页整页翻动；青蛙自动出发 |
 | `0a1d65e` | 开头动画每次访问只播一次；苹果风格的作品出现动效 |
 | `42e526d` | 新增这份要求汇总文件 |
+| （本次） | 视频作品鼠标移上去播放、视频作品放大格子、首页推荐改为新作且照片多的项目、Code For Fun 封面改用 FLORA-final 截图、新增 9 张 Code for fun 图片 |

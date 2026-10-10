@@ -9,7 +9,54 @@ const coverOf = (p) => {
   const m = coverItem(p);
   return m && (m.poster || m.src);
 };
+// the clip that plays on hover: `hoverVideo` if set, else the project's first video
+const hoverVideoOf = (p) => {
+  const media = mediaOf(p);
+  return p.hoverVideo != null ? media[p.hoverVideo] : media.find((m) => m.type === 'video');
+};
 const projectUrl = (p) => `project.html?p=${encodeURIComponent(p.slug)}`;
+
+/* Loop a video from `start` seconds (skips the ArtCenter title card at the head of some films) */
+function loopFrom(v, start = 0) {
+  if (!start) { v.loop = true; return v; }
+  v.loop = false;
+  const toStart = () => { v.currentTime = start; };
+  if (v.readyState >= 1) toStart(); else v.addEventListener('loadedmetadata', toStart, { once: true });
+  v.addEventListener('ended', () => { toStart(); v.play().catch(() => {}); });
+  return v;
+}
+
+/* A muted clip laid over a still cover; fades in once it is actually playing */
+function makeHoverVideo(m, start) {
+  const v = document.createElement('video');
+  v.className = 'hover-video';
+  v.muted = true;
+  v.playsInline = true;
+  v.preload = 'auto';
+  v.src = m.src;
+  v.addEventListener('playing', () => v.parentElement?.classList.add('is-playing'));
+  return loopFrom(v, start);
+}
+
+/* Cards: the cover is a still; hovering plays the project's video over it */
+function setupHoverVideos(root) {
+  root.querySelectorAll('[data-slug]').forEach((el) => {
+    const p = bySlug(el.dataset.slug);
+    const m = p && hoverVideoOf(p);
+    if (!m) return;
+    const box = el.querySelector('.card-media');
+    let v = null;
+    el.addEventListener('mouseenter', () => {
+      if (!v) { v = makeHoverVideo(m, p.start); box.append(v); }
+      v.play().catch(() => {});
+    });
+    el.addEventListener('mouseleave', () => {
+      if (!v) return;
+      v.pause();
+      box.classList.remove('is-playing');
+    });
+  });
+}
 const tagsHtml = (tags) => `<ul class="tags">${tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
 
 function mediaHtml(m, { hero = false, alt = '' } = {}) {
@@ -55,8 +102,8 @@ function startParallax() {
       if (r.bottom < 0 || r.top > innerHeight) return;
       // -1 when the frame's centre is at the bottom of the screen, 1 at the top
       const p = (innerHeight / 2 - (r.top + r.height / 2)) / (innerHeight / 2 + r.height / 2);
-      const media = box.querySelector('img, video');
-      if (media) media.style.translate = `0 ${(p * r.height * 0.04).toFixed(1)}px`;
+      // a CSS variable, so a hover video added later lines up with the still under it
+      box.style.setProperty('--py', `${(p * r.height * 0.04).toFixed(1)}px`);
     });
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
@@ -186,22 +233,27 @@ function flyToHeadline(hi, headline) {
 /* ---------- Main page: featured cards (small · large / large · small) ---------- */
 function renderFeatured(root) {
   const card = (p, size, d) => `
-    <a class="card ${size} work-in" style="--d:${d}s" href="${projectUrl(p)}">
+    <a class="card ${size} work-in" style="--d:${d}s" href="${projectUrl(p)}" data-slug="${p.slug}">
       <div class="card-media parallax"><img src="${coverOf(p)}" alt="${esc(p.title)}" decoding="async"></div>
       <p class="card-title">${esc(p.title)}</p>
       ${tagsHtml(p.tags)}
     </a>`;
+  const hasVideo = (p) => !!(p && hoverVideoOf(p));
   const list = FEATURED.map(bySlug).filter(Boolean);
   let html = '';
   for (let i = 0; i < list.length; i += 2) {
     const flip = (i / 2) % 2 === 1;
-    const [a, b] = [list[i], list[i + 1]];
+    let [a, b] = [list[i], list[i + 1]];
+    const sizeA = flip ? 'lg' : 'sm';
+    // works with a video always take the large cell of their row
+    if (b && ((sizeA === 'sm' && hasVideo(a) && !hasVideo(b)) || (sizeA === 'lg' && hasVideo(b) && !hasVideo(a)))) [a, b] = [b, a];
     html += `<div class="row ${flip ? 'row-2' : 'row-1'}">`
-      + (a ? card(a, flip ? 'lg' : 'sm', 0) : '')
+      + (a ? card(a, sizeA, 0) : '')
       + (b ? card(b, flip ? 'sm' : 'lg', 0.12) : '')
       + '</div>';
   }
   root.innerHTML = html;
+  setupHoverVideos(root);
 }
 
 /* Ending: the work grid scrolls freely, but the contact screen turns like a page —
@@ -298,7 +350,14 @@ function setupWorkList(listRoot) {
     if (m) preview.style.setProperty('--r', (m.w / m.h).toFixed(4));
     const show = () => {
       preview.innerHTML = `<img src="${coverOf(p)}" alt="">`;
-      preview.classList.remove('swap');
+      preview.classList.remove('is-playing', 'swap');
+      // works with a video play it right away while hovered
+      const hv = hoverVideoOf(p);
+      if (hv) {
+        const v = makeHoverVideo(hv, p.start);
+        preview.append(v);
+        v.play().catch(() => {});
+      }
     };
     clearTimeout(swapTimer);
     if (instant) return show();
@@ -371,6 +430,8 @@ function renderProject(root) {
     <div class="reveal" style="--d:.05s">${tagsHtml(p.tags)}</div>
     <div class="p-body">${rows}</div>
     <nav class="p-next"><span>Next project</span><a href="${projectUrl(next)}">${esc(next.title)} →</a></nav>`;
+  const heroVideo = root.querySelector('.p-hero video');
+  if (heroVideo) loopFrom(heroVideo, p.start);
 }
 
 /* ---------- Nav: white bar after scrolling, hides going down, returns going up ---------- */
