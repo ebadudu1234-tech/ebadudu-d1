@@ -230,4 +230,4 @@
 | `3ba0ce2` | Restaurant：平面图单独大图显示；入口和室外渲染图并列（新增 `big` / `pairs` 设置，D1、D2） |
 | `fabdda1` | D1 首页加到六行：5:50 Cafe 放第一行大图，Dream Recovery 替换假面骑士，新增一行（Ungreen Shop 大图 + Lotus Cigarette 动画小图） |
 | `d0feb94` | D1 首页第六行：Lotus Cigarette 动画换到大图，Ungreen Shop 换成小图 |
-| （本次） | D1 首页第六行改为 Artificial Octopus（大）+ Lotus Cigarette（小），去掉 Ungreen Shop |
+| `c86344d` | D1 首页第六行改为 Artificial Octopus（大）+ Lotus Cigarette（小），去掉 Ungreen Shop |
