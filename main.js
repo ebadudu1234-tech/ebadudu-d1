@@ -327,7 +327,9 @@ function setupWorkList(listRoot) {
   const counts = {};
   PROJECTS.forEach((p) => p.tags.forEach((t) => { counts[t] = (counts[t] || 0) + 1; }));
   const allTags = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-  filters.innerHTML = allTags.map((t) => `<button class="chip" type="button" aria-pressed="false">${esc(t)}</button>`).join('');
+  // ALL comes first and is on until a tag is picked
+  filters.innerHTML = `<button class="chip" type="button" aria-pressed="true" data-all>ALL</button>`
+    + allTags.map((t) => `<button class="chip" type="button" aria-pressed="false">${esc(t)}</button>`).join('');
 
   const years = [...new Set(PROJECTS.map((p) => p.year))].sort((a, b) => b - a);
   listRoot.innerHTML = years.map((y, gi) => `
@@ -392,13 +394,13 @@ function setupWorkList(listRoot) {
     link.addEventListener('blur', leave);
   });
 
-  // one tag at a time; pressing the active chip again clears the filter
+  // one tag at a time; ALL, or pressing the active tag again, shows every work
   filters.addEventListener('click', (e) => {
     const chip = e.target.closest('.chip');
     if (!chip) return;
-    const on = chip.getAttribute('aria-pressed') !== 'true';
+    const on = !chip.hasAttribute('data-all') && chip.getAttribute('aria-pressed') !== 'true';
     filters.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', 'false'));
-    chip.setAttribute('aria-pressed', String(on));
+    (on ? chip : filters.querySelector('[data-all]')).setAttribute('aria-pressed', 'true');
     const tag = on ? chip.textContent : null;
     listRoot.querySelectorAll('.work-items > li').forEach((li) => {
       li.hidden = !!tag && !li.dataset.tags.split(' ').includes(tag);

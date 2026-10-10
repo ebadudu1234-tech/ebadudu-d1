@@ -116,7 +116,7 @@
 
 ### 3.5 WORK 页
 - 按年份分组（2026 / 2025 / 2024 / 2023），组与组之间有分隔线。
-- 顶部是标签筛选按钮，点一下筛选，再点一下取消。
+- 顶部是标签筛选按钮，**第一个是 ALL**（默认选中，显示全部作品）；点一个标签筛选，再点一下或点 ALL 回到全部。
 - 鼠标悬停的作品：文字变黑、出现下划线、显示标签。整行都算悬停范围，不只是文字。
 - **右侧预览框的尺寸不是固定的，要随作品封面图的比例变化**；太高的图最多占屏幕高度的 70%。
 - **鼠标没有碰到作品时，右侧图片（连同灰色底框）不显示**；碰到作品才出现，离开后淡出（在两行之间滑过时不会闪）。点标签筛选也不会自动显示。
@@ -190,7 +190,7 @@
 - [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
-- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站（图片在 `MY WORK/restaurant and cafe/work`，压缩版在 `press`），标签 INTERIOR。
+- [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。
 - 现在的年份：2026 = 5:50 Cafe、Switchback、Under the Cyber Skin、Planting Pen、Sónar、Toyukukoku、Lotus、Artificial Octopus、Leviairab；2025 = Code For Fun、After Dada、DADA Newspaper、2000s Game Zine；2024 = Allodox、Ungreen Shop、Yiwugo、Nuclear Tide；2023 = Restaurant。
 - [ ] Code For Fun 的年份（按文件日期放在 2025）待确认。
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
@@ -219,3 +219,4 @@
 | `842bbcf` | 用我的文本描述更新所有作品名、副标题和说明；图集按草图 → 场景 → 小物件 → 周边重新排序；新增 2023 年的 Restaurant；加入新图片和视频；D2 的 NEXT WORK 不触碰时不透明度降到 80%（D1、D2） |
 | `21d1d70` | D1 作品页图文排版改为 Figma 的组合方式（图|文、图+图、文|图），每段文字都在图旁边，允许留白且每个作品不同；标签改为来自描述的类别，VIDEO 自动添加（D1、D2）；预览服务器改为并行处理，修复 D2 返回 WORK 后再点作品卡住 |
 | `f6b353c` | WORK 页：鼠标没碰到作品时右侧预览图不显示 |
+| （本次） | Restaurant 换成 final renders（D1、D2）；D1 WORK 页标签加 ALL |
