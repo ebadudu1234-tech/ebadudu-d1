@@ -257,6 +257,11 @@
 - 本地预览服务器 `serve.ps1`（D1、D2 各一份）：同时处理多个请求，视频每次只传 2MB，保证看过视频后再点别的作品不会卡。
 - 作者信息：Zihe Wang <ebadudu1234@gmail.com>。
 
+## 4B. 上线（zihewang.site）
+- 网站放在 Netlify：站点 `inquisitive-tulumba-eeae59`，域名 **zihewang.site**。上线的是 **D1**（之前是 `E:\Homework\NB web\index.html` 那个旧的单页网站）。
+- 这台电脑没有 Node.js，所以用拖拽上传：运行 `D1/tools/make-deploy.ps1`，生成干净的上传文件夹 `E:\Homework\NB web\deploy-D1`（只有网页、脚本、样式和图片，不含笔记、工具和本地服务器），然后在 Netlify 的 Deploys 页面把这个文件夹拖进去。
+- 每次改完网站要更新线上，就重新运行这个脚本再拖一次；域名不用重新设置。
+
 ## 5. 待办 / 待确认
 
 - [ ] **GitHub 仓库链接**：我在 github.com 新建一个空仓库（不要勾 README），把链接发给 Claude，然后把所有版本上传。
@@ -303,3 +308,4 @@
 | `2db461a` | Sónar：Visual Stage Design 替换舞台视觉设计（封面，D1、D2） |
 | `50511cf` | Code For Fun：展会大墙往上移到集装箱展台图前面（D1、D2）；展台图再缩小 30%（D1，新增 `size` 设置） |
 | `c60c31f` | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |
+| （本次） | 准备把 D1 上线到 zihewang.site：新增 `tools/make-deploy.ps1`，生成上传文件夹 deploy-D1（拖拽到 Netlify） |
