@@ -302,4 +302,4 @@
 | `45cbb9f` | D1 Code For Fun：集装箱展台小图靠右对齐（新增 `right` 设置） |
 | `2db461a` | Sónar：Visual Stage Design 替换舞台视觉设计（封面，D1、D2） |
 | `50511cf` | Code For Fun：展会大墙往上移到集装箱展台图前面（D1、D2）；展台图再缩小 30%（D1，新增 `size` 设置） |
-| （本次） | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |
+| `c60c31f` | 新增 2025 作品 Modular Typefaces（分类系统海报，TYPOGRAPHY / POSTER / INFORMATION，D1、D2）；标签系统写成完整文档（规则、类别词对照表、每个作品的标签、使用次数） |
