@@ -251,6 +251,13 @@
 - 往下滚时导航栏收起；往上滚时以白底重新出现，避免压在图片上看不清。
 - 手机宽度下排版要能正常显示，不能出现横向滚动。
 
+### 3.10 ABOUT ME 页（about.html）
+- 文字来自 `E:\Homework\NB web\about me\putin\About Me.txt`，**D1 用 Version 1「Warning: I Run on Toy Energy」**，原文照搬。
+- 按作品页的视觉系统排：大写标题 ABOUT ME + 灰色副标题 Zihe Wang；第一行左边是 Margarine 手写体大标题（占图片的位置 795/1392），右边是 457 的文字栏；第二行左右两栏文字（右边低一点）；最后一句 "I hope everything I design earns a place on someone's shelf." 用 Margarine 大字。
+- 下面是**架子**：每个作品的小物件（和首页鼠标跟随的小物件同一套图）站在横线上，鼠标碰到会跳一下，点进对应作品。
+- 再下面是 Get in touch + 邮箱，最后是 "All my work →" 链接到 WORK。
+- 所有页面导航里的 ABOUT ME 都改成链接到 about.html（原来跳到首页结尾的联系页）。
+
 ## 3B. D2 网站（概要，详细见 `website/D2/prompt/requirements.md`）
 - 按 Figma direction 2 做：黑色背景、毛玻璃胶囊导航、Rokkitt 字体、绿色按钮。
 - 首页：开头动画（卡片散开 → 聚拢 → 叠起 → 第一张作品放大到全屏），然后是 6 个作品的全屏轮播，右侧有竖排小圆点。
@@ -283,7 +290,7 @@
 - [ ] **首页推荐待定**：D1 首页现在有 After Dada、DADA Newspaper、2000s Game Zine（已是 2025 年），和"首页放新一年作品"的要求冲突；D2 轮播第一个是 After Dada（和 Figma 一致）。等你决定是否调整，暂时不改。
 - [x] 作品说明文字和作品名已全部换成我写的文本描述。
 - [ ] 结尾青蛙照片只有 1024px，大屏上偏模糊；需要原图来替换。
-- [ ] PLAY AREA 页面还没做（现在是空链接）；ABOUT ME 暂时跳到首页结尾的联系页。
+- [ ] PLAY AREA 页面还没做（现在是空链接）。ABOUT ME 页已完成（about.html）。
 - [x] 首页现在是六行、12 个作品。
 
 ## 6. 版本记录
@@ -320,3 +327,4 @@
 | `02a3d70` | 准备把 D1 上线到 zihewang.site：新增 `tools/make-deploy.ps1`，生成上传文件夹 deploy-D1（拖拽到 Netlify） |
 | `219b836` | 新增 2023 作品 Old Walls, New Life: Chayang Old Street Renewal（STREETSCAPE / ENVIRONMENTAL，D1、D2）；标签文档加入两个新标签 |
 | `ff31818` | 手机端优化：视频在屏幕上自动静音播放、不用点（D1、D2）；D1 WORK 页标签一行左右滑、每行加小封面；作品页并排图改上下排；首页和列表用 960px 小图 |
+| （本次） | 新增 ABOUT ME 页：D1 用 Version 1（Toy Energy，带小物件架子），D2 用 Version 2（Let Me Guide You，作品地图封面）；导航 ABOUT ME 指向 about.html |

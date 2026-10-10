@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Me — EBADUDU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Intel+One+Mono&family=Margarine&family=Metrophobic&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="index.html">EBADUDU</a>
+  <ul>
+    <li><a href="work.html">WORK</a></li>
+    <li><a href="#">PLAY AREA</a></li>
+    <li><a href="about.html" aria-current="page">ABOUT ME</a></li>
+  </ul>
+</nav>
+
+<!-- About Me, version 1 ("Warning: I Run on Toy Energy"), set like a project page:
+     name + title, then the Figma rhythm of a big block on the left and the 457px text
+     column on the right, then text | text, then the closing line and a shelf of the
+     small objects from every work -->
+<main class="project about">
+  <h1 class="p-title reveal">About Me</h1>
+  <p class="p-sub reveal" style="--d:.04s">Zihe Wang</p>
+
+  <div class="p-body">
+    <div class="p-row a-lead">
+      <h2 class="a-headline reveal" style="--d:.08s">Warning: I Run on Toy Energy</h2>
+      <p class="p-text reveal" style="--d:.16s">My shelves have always been full of toys. They have never been just toys to me. They are my friends, and every time I look at them, they give me a special, happy energy. When I could not find the part I wanted, I designed it myself and built it with a 3D printer.</p>
+    </div>
+    <div class="p-row a-pair">
+      <p class="p-text reveal">That energy led me to graphic design, and then to games. For my graduation project, I built a game and led a small team for the first time: two programmers, and I made all the art. I gave everyone the same tasks and the same time, but everyone has different skills, so it did not work well. Now I try to see what each person is good at, and I lead with more encouragement.</p>
+      <p class="p-text reveal" style="--d:.1s">A good toy does not need a manual to make someone smile. It speaks without a word. That is what I want from design. I like to make overwhelming things feel less overwhelming, and let them feel like play. When I start a project, I always think about how to turn it into something real, and I keep watching new design technology to find better ways to do it. My toys give me happy energy, and I want my work to give people the same energy.</p>
+    </div>
+    <p class="a-closing reveal">I hope everything I design earns a place on someone's shelf.</p>
+    <!-- one small object from every work, standing on shelves; filled from data.js -->
+    <ul class="shelf" id="shelf" aria-label="A small object from each work"></ul>
+  </div>
+
+  <p class="contact-text a-contact reveal">
+    <span class="label">Get in touch</span>
+    <a href="mailto:ebadudu1234@gmail.com">ebadudu1234@gmail.com</a>
+  </p>
+
+  <nav class="p-next"><span>Next</span><a href="work.html">All my work →</a></nav>
+</main>
+
+<script src="media.js"></script>
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

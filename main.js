@@ -698,6 +698,13 @@ if (workList) {
 }
 const project = document.getElementById('project');
 if (project) renderProject(project);
+// About Me: one small object from every work on the shelves, each leading to its work
+const shelf = document.getElementById('shelf');
+if (shelf) {
+  shelf.innerHTML = PROJECTS.map((p, i) => `
+    <li class="reveal" style="--d:${(i % 8) * 0.04}s"><a href="${projectUrl(p)}" title="${esc(p.title)}">
+      <img src="assets/trinkets/${p.slug}.png" alt="${esc(p.title)}" loading="lazy" decoding="async"></a></li>`).join('');
+}
 
 // the begin animation plays once per visit (click or any key skips it); coming back
 // from WORK or a project, or a direct link to #contact, goes straight to the page

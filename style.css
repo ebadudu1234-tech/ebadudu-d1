@@ -533,6 +533,54 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .p-next a:hover { transform: translateX(8px); }
 .p-missing { padding-top: 40vh; text-align: center; color: var(--muted); }
 
+/* ============ About Me (set like a project page) ============ */
+/* lead: the headline takes the image's place (795/1392), the text the 457 column */
+.a-lead { justify-content: space-between; }
+.a-headline {
+  flex: 0 0 57.11%;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(44px, 4.76vw, 72px);
+  line-height: 1.2;
+}
+/* text | text: one column on each edge, the right one a step lower */
+.a-pair { justify-content: space-between; }
+.a-pair > .p-text + .p-text { margin-top: clamp(40px, 7.9vw, 120px); }
+.a-closing {
+  max-width: 75%;
+  margin: clamp(60px, 7.9vw, 120px) 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4.23vw, 64px);
+  line-height: 1.2;
+}
+/* shelves: each work's small object stands on a line; the lines run edge to edge */
+.shelf {
+  display: flex;
+  flex-wrap: wrap;
+  margin: clamp(32px, 4.2vw, 64px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.shelf li { flex: 1 0 auto; }
+.shelf a {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: clamp(96px, 9.9vw, 150px);
+  padding: 0 clamp(8px, 1.3vw, 20px);
+  border-bottom: 1px solid var(--ink);
+}
+.shelf img {
+  max-height: 84%;
+  width: auto;
+  transform-origin: 50% 100%;
+  transition: transform .5s var(--ease-spring);
+}
+/* touched, a toy hops */
+.shelf a:hover img, .shelf a:focus-visible img { transform: translateY(-10px) rotate(-5deg); }
+.a-contact { padding: clamp(80px, 9vw, 140px) 0 0; }
+
 /* ============ Work appears (Apple-style) ============
    1. the frame wipes open from the bottom
    2. the picture inside settles from a slight zoom and blur
@@ -639,6 +687,8 @@ figure.work-in { background: none; }
   /* pairs stack on a phone: two side by side would each be only ~160px wide */
   .p-duo { flex-direction: column; }
   .p-duo > figure { flex: none; width: 100%; }
+  .a-headline, .a-closing { flex: none; max-width: none; }
+  .a-pair > .p-text + .p-text { margin-top: 0; }
   /* text | image rows put the picture first on phones too */
   .p-with > .p-text:first-child { order: 1; }
 }
