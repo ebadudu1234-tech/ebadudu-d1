@@ -114,7 +114,7 @@ body.on-contact .nav { transform: none; }
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: opacity .8s ease;
+  transition: opacity .55s ease;
 }
 /* curtain fades away while "Hi, I'm Zihe." flies to the headline */
 .intro.is-leaving { opacity: 0; pointer-events: none; }
@@ -175,7 +175,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   background: var(--ink);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform .35s cubic-bezier(.65, 0, .35, 1);
+  transition: transform .24s cubic-bezier(.65, 0, .35, 1);
   z-index: 2;
 }
 .hello.struck .strike { transform: scaleX(1); }
@@ -193,7 +193,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   transform: translateY(1.2em) scale(.4) rotate(-12deg);
   transform-origin: 50% 90%;
   pointer-events: none;
-  transition: transform .5s var(--ease-spring), opacity .2s ease;
+  transition: transform .38s var(--ease-spring), opacity .2s ease;
 }
 .frog.in { opacity: 1; transform: none; }
 .frog.in.wiggle { animation: wiggle 1.4s ease-in-out infinite; }
@@ -207,7 +207,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
 .hi-wrap {
   width: 0;
   overflow: hidden;
-  transition: width .55s var(--ease-out);
+  transition: width .4s var(--ease-out);
 }
 .hi {
   display: inline-block;
@@ -219,7 +219,7 @@ body.intro-on .nav ul { opacity: 0; transform: translateY(-8px); }
   display: inline-block;
   opacity: 0;
   transform: translateY(.5em) rotate(8deg);
-  transition: transform .4s var(--ease-spring), opacity .2s ease;
+  transition: transform .32s var(--ease-spring), opacity .2s ease;
 }
 .hi.show span { opacity: 1; transform: none; }
 

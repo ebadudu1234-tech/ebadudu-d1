@@ -167,7 +167,7 @@ async function playIntro(intro) {
   intro.querySelector('.skip').textContent = TOUCH ? 'Tap to skip' : 'Click to skip';
   let n = 0;
   const letters = (text) => [...text]
-    .map((c) => `<span style="transition-delay:${0.1 + n++ * 0.025}s">${c === ' ' ? '&nbsp;' : c}</span>`)
+    .map((c) => `<span style="transition-delay:${0.06 + n++ * 0.018}s">${c === ' ' ? '&nbsp;' : c}</span>`)
     .join('');
   hi.innerHTML = pieces
     .map(([text, key]) => `<span class="piece"${key ? ` data-piece="${key}"` : ''}>${letters(text)}</span>`)
@@ -188,11 +188,11 @@ async function playIntro(intro) {
     if (hiShown) {
       // Hello World + frog step aside, then "Hi, I'm Zihe." flies into the big headline
       intro.querySelector('.stage').classList.add('clear');
-      await wait(250);
+      await wait(170);
       const headline = document.querySelector('.headline');
       headline.classList.add('morph');
       const flights = flyToHeadline(hi, headline);
-      await wait(300);
+      await wait(200);
       intro.classList.add('is-leaving');
       startReveals();
       await Promise.all(flights.map((f) => f.finished));
@@ -204,7 +204,7 @@ async function playIntro(intro) {
       document.body.classList.remove('intro-on');
       startReveals();
     }
-    setTimeout(() => intro.classList.add('is-gone'), 900);
+    setTimeout(() => intro.classList.add('is-gone'), 650);
   };
   intro.addEventListener('click', finish);
   addEventListener('keydown', finish, { once: true });
@@ -213,32 +213,32 @@ async function playIntro(intro) {
   await document.fonts.ready;
 
   // 1. type "Hello World"
-  await wait(200);
+  await wait(100);
   for (const ch of 'Hello World') {
     if (skipped) return;
     helloText.textContent += ch;
-    await wait(40 + Math.random() * 30);
+    await wait(26 + Math.random() * 18);
   }
-  await wait(220);
+  await wait(140);
   hello.classList.add('typed');
 
   // 2. strike it out
   if (skipped) return;
   hello.classList.add('struck');
-  await wait(420);
+  await wait(280);
 
   // 3. Hello World slides left, "Hi, I'm Zihe." appears, frog pops up
   if (skipped) return;
   hiWrap.style.width = hi.scrollWidth + 'px';
   hi.classList.add('show');
-  await wait(150);
+  await wait(100);
   frog.classList.add('in');
-  await wait(500);
+  await wait(340);
   frog.classList.add('wiggle');
   hiShown = true;  // letters have landed, safe to fly
 
   // 4. short hold, then fly to the top-left and reveal the main page
-  await wait(650);
+  await wait(420);
   finish();
 }
 
@@ -267,7 +267,7 @@ function flyToHeadline(hi, headline) {
         { transform: 'none' },
         { transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${toSize / fromSize})` },
       ],
-      { duration: 800, delay: i * 30, easing: ease, fill: 'forwards' }
+      { duration: 620, delay: i * 22, easing: ease, fill: 'forwards' }
     );
   });
   hi.style.visibility = 'hidden';
