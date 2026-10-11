@@ -378,3 +378,4 @@
 | `09205cb` | 新建 D3「玩具箱」网站（从 0 开始，现代为主 + 少量复古），详见 D3/prompt |
 | `a73d129` | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
 | `31afb59` | 三个 skill 复制到 D1 / D2 / D3 的 tools/skill（带许可和说明），并做好 claude.ai 上传包 |
+| `ab37b88` | 用三个 skill 升级三个网站：焦点框、Skip 链接、PLAY AREA 不再是空链接、meta 简介、图片编号说明、WORK 筛选写进网址；按下即反馈；D1 翻页改弹簧可中途掉头；D2 About 滚轮反方向立刻响应；"减少动态效果"只停背景漂移（开场照常）；网站自己的文案按 stop-slop 改；你的文字只列建议（prompt/copy-suggestions.md）。详见 4C |
