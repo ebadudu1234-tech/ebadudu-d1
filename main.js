@@ -113,6 +113,9 @@ function mediaHtml(m, { hero = false, alt = '' } = {}) {
 function startReveals() {
   // headline words start clipped by their .line wrapper, so watch the wrapper
   const targets = new Map();
+  // the trigger line is the bottom edge of the screen: a work starts to open the moment its
+  // top edge comes into view (it used to wait until 15% of it showed, so tall pictures
+  // popped open well up the screen)
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
@@ -120,7 +123,7 @@ function startReveals() {
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0 });
   document.querySelectorAll('.reveal, .work-in').forEach((el) => {
     const watch = el.closest('.line') || el;
     targets.set(watch, el);
