@@ -301,6 +301,7 @@
   - `apple-design`（来源 emilkowalski/skills）：苹果式的弹簧动效、可打断的动画、拖动结束时保留手速、毛玻璃层次、大标题收紧字距、"减少动态效果"适配。以后做动效时按它来。
   - `web-design-guidelines`（来源 vercel-labs/agent-skills，Vercel 官方）：检查网页的间距、对比度、字号、无障碍等，每次运行会从 Vercel 的 GitHub 拿最新规则（需要联网）。
   - `stop-slop`（来源 hardikpandya/stop-slop，MIT）：去掉文字里的 AI 腔（空话、副词、套路句式），按 5 项打分，低于 35/50 就重写。
+- **三个 skill 的备份**：每个网站都有 `tools/skill/`（apple-design、web-design-guidelines、stop-slop，各带 LICENSE，三个都是 MIT 许可，可以放在公开仓库），里面的 README 写了来源、用法和怎么恢复。真正在用的安装位置是 `C:\Users\12695\.claude\skills\`（Claude Code 所有项目都能用）。给 claude.ai 网页 / 桌面聊天用的上传包在 `E:\Homework\NB web\skills-for-claude-ai\`（三个 zip），在 claude.ai 的 Settings → Capabilities → Skills 上传。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
 - [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
@@ -352,3 +353,4 @@
 | `8e9e929` | ABOUT ME 集中到三屏：不按段落、按重要程度重组（大字信念 + 三栏主题小字 + 结尾和信息表），上方空白 32px |
 | `09205cb` | 新建 D3「玩具箱」网站（从 0 开始，现代为主 + 少量复古），详见 D3/prompt |
 | `a73d129` | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
+| （本次） | 三个 skill 复制到 D1 / D2 / D3 的 tools/skill（带许可和说明），并做好 claude.ai 上传包 |
