@@ -278,6 +278,13 @@
 - 网站要连接 GitHub。仓库根目录是 `E:\Homework\NB web\website`，D1 / D2 / D3 是三个独立文件夹。
 - MY WORK **不上传**（文件太大：594MB 的 PDF 等，GitHub 单个文件上限 100MB）。
 - **每改一版都要保存成一个版本（commit），并在说明里写清楚这一版改了什么。**
+- **GitHub 备份：三个网站分别备份到三个公开仓库**（账号 ebadudu1234-tech）：
+  - D1 → https://github.com/ebadudu1234-tech/ebadudu-d1
+  - D2 → https://github.com/ebadudu1234-tech/ebadudu-d2
+  - D3 → https://github.com/ebadudu1234-tech/ebadudu-d3
+  - 本地还是一个仓库（`website/`，分支 main 里有 D1 / D2 / D3）。每个网站的历史用 `git subtree split --prefix=D1 -b site-d1`（D2、D3 同理）分出来，再推到对应仓库的 main；每个仓库只有那个网站自己的文件和版本。
+  - **以后每次修改：保存版本（commit）后，把改到的网站重新分出来并推上去。**
+- **每个版本的说明（describe）都要详细写改了哪里**：哪个网站、哪个页面 / 文件、看到的效果有什么变化。
 - Git 安装路径：`C:\Program Files\Git\cmd\git.exe`。
 - 本地预览服务器 `serve.ps1`（D1、D2 各一份）：同时处理多个请求，视频每次只传 2MB，保证看过视频后再点别的作品不会卡。
 - 作者信息：Zihe Wang <ebadudu1234@gmail.com>。
@@ -289,8 +296,11 @@
 
 ## 5. 待办 / 待确认
 
-- [ ] **GitHub 仓库链接**：我在 github.com 新建一个空仓库（不要勾 README），把链接发给 Claude，然后把所有版本上传。
-- [ ] **"apple effect" 插件 / skill**：插件市场和 skill 目录里都没有找到这个名字。要提供截图、链接或描述后再安装；**安装前必须先经过我确认**。
+- [x] **GitHub**：三个网站各一个公开仓库，已上传所有版本（见第 4 节）。
+- [x] **"apple effect" 插件 / skill**：就是课上看到的 **Apple Design** skill，已经过我确认后安装（2026-10-11），同时装了 **Web Design Guidelines** 和 **Anti-AI-Slop Writing（stop-slop）**。三个都放在 `C:\Users\12695\.claude\skills\`，所有项目都能用：
+  - `apple-design`（来源 emilkowalski/skills）：苹果式的弹簧动效、可打断的动画、拖动结束时保留手速、毛玻璃层次、大标题收紧字距、"减少动态效果"适配。以后做动效时按它来。
+  - `web-design-guidelines`（来源 vercel-labs/agent-skills，Vercel 官方）：检查网页的间距、对比度、字号、无障碍等，每次运行会从 Vercel 的 GitHub 拿最新规则（需要联网）。
+  - `stop-slop`（来源 hardikpandya/stop-slop，MIT）：去掉文字里的 AI 腔（空话、副词、套路句式），按 5 项打分，低于 35/50 就重写。
 - [x] 作品年份：**Ungreen Shop、Yiwugo、Zhangyu（Nuclear Tide Evolutionaries）是 2024 年的作品**（已改，D1、D2 都改了）。
 - [x] **Allodox 也是 2024 年；After Dada、2000s Game Zine、DADA Newspaper 是 2025 年**（已改，D1、D2 都改了）。
 - [x] **restaurant（Modern Rhythm, Day and Night Change: Restaurant Design）是 2023 年的作品**，新加入网站，标签 INTERIOR。**图片用 `MY WORK/restaurant and cafe/final renders`**（压缩版在 `final renders/press`），替换了旧的渲染图（123、图层 14、图层 16）；平面图（PLAN）仍来自 `work` 文件夹。顺序：艺术装置（封面）→ 平面图 → 入口 → 室外 → 室内用餐区 → 吧台。**平面图单独大图显示**（`data.js` 里 `big: [1]`）；**入口和室外两张并列**（`pairs: [[2, 3]]`，永远在同一行）。
@@ -341,3 +351,4 @@
 | `e3343aa` | ABOUT ME：去掉作品链接，重点句大字、其余小字；第一屏小物件一直上下漂浮、躲着鼠标、大小自适应 |
 | `8e9e929` | ABOUT ME 集中到三屏：不按段落、按重要程度重组（大字信念 + 三栏主题小字 + 结尾和信息表），上方空白 32px |
 | `09205cb` | 新建 D3「玩具箱」网站（从 0 开始，现代为主 + 少量复古），详见 D3/prompt |
+| （本次） | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
