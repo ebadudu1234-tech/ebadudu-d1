@@ -351,4 +351,4 @@
 | `e3343aa` | ABOUT ME：去掉作品链接，重点句大字、其余小字；第一屏小物件一直上下漂浮、躲着鼠标、大小自适应 |
 | `8e9e929` | ABOUT ME 集中到三屏：不按段落、按重要程度重组（大字信念 + 三栏主题小字 + 结尾和信息表），上方空白 32px |
 | `09205cb` | 新建 D3「玩具箱」网站（从 0 开始，现代为主 + 少量复古），详见 D3/prompt |
-| （本次） | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
+| `a73d129` | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
