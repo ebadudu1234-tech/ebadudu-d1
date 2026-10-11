@@ -353,4 +353,4 @@
 | `8e9e929` | ABOUT ME 集中到三屏：不按段落、按重要程度重组（大字信念 + 三栏主题小字 + 结尾和信息表），上方空白 32px |
 | `09205cb` | 新建 D3「玩具箱」网站（从 0 开始，现代为主 + 少量复古），详见 D3/prompt |
 | `a73d129` | 安装 Apple Design、Web Design Guidelines、Anti-AI-Slop Writing（stop-slop）三个 skill，"apple effect" 待办完成 |
-| （本次） | 三个 skill 复制到 D1 / D2 / D3 的 tools/skill（带许可和说明），并做好 claude.ai 上传包 |
+| `31afb59` | 三个 skill 复制到 D1 / D2 / D3 的 tools/skill（带许可和说明），并做好 claude.ai 上传包 |
