@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Zihe Wang (EBADUDU) is a graphic designer. Brand, packaging, editorial, motion and game work from 2023 to 2026.">
+<meta name="theme-color" content="#ffffff">
 <title>EBADUDU — Zihe Wang</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,17 +12,18 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="intro-on">
+<a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="nav">
   <a class="logo" href="index.html">EBADUDU</a>
   <ul>
     <li><a href="work.html">WORK</a></li>
-    <li><a href="#">PLAY AREA</a></li>
+    <li><a aria-disabled="true" title="Coming soon">PLAY AREA</a></li>
     <li><a href="about.html">ABOUT ME</a></li>
   </ul>
 </nav>
 
-<!-- Begin animation: Hello World → strike → frog + "Hi, I'm Zihe." -->
+<!-- Begin animation: Hello World → strike → frog + "Hi, I’m Zihe." -->
 <div class="intro" id="intro" aria-hidden="true">
   <div class="stage">
     <div class="hello" id="hello">
@@ -29,17 +32,17 @@
       <img class="frog" id="frog" src="assets/frog.png" alt="">
     </div>
     <div class="hi-wrap" id="hi-wrap">
-      <span class="hi" id="hi">Hi, I'm Zihe.</span>
+      <span class="hi" id="hi">Hi, I’m Zihe.</span>
     </div>
   </div>
-  <span class="skip">click to skip</span>
+  <span class="skip">Click to skip</span>
 </div>
 
-<main class="page">
+<main class="page" id="main">
   <h1 class="headline">
-    <!-- data-piece: where each piece of the intro's "Hi, I'm Zihe." lands; .extra grows in after -->
+    <!-- data-piece: where each piece of the intro's "Hi, I’m Zihe." lands; .extra grows in after -->
     <span class="line"><span class="reveal"><span data-piece="hi">Hi</span><span class="extra">iiiiii</span><span data-piece="comma">,</span></span></span>
-    <span class="line"><span class="reveal" style="--d:.08s"><span data-piece="name">I'm Zihe</span><span class="extra"> Wang</span></span></span>
+    <span class="line"><span class="reveal" style="--d:.08s"><span data-piece="name">I’m Zihe</span><span class="extra"> Wang</span></span></span>
   </h1>
 
   <!-- filled from FEATURED in data.js: small · large / large · small -->

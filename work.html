@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="All 20 works by Zihe Wang, from 2023 to 2026. Filter them by discipline.">
+<meta name="theme-color" content="#ffffff">
 <title>Work — EBADUDU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,21 +12,24 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="nav">
   <a class="logo" href="index.html">EBADUDU</a>
   <ul>
     <li><a href="work.html" aria-current="page">WORK</a></li>
-    <li><a href="#">PLAY AREA</a></li>
+    <li><a aria-disabled="true" title="Coming soon">PLAY AREA</a></li>
     <li><a href="about.html">ABOUT ME</a></li>
   </ul>
 </nav>
 
-<main class="work">
+<main class="work" id="main">
+  <h1 class="sr-only">Work</h1>
   <div>
     <!-- tag filter chips + year groups, filled from data.js -->
     <div class="filters reveal" id="filters" role="group" aria-label="Filter by tag"></div>
     <div id="work-list"></div>
+    <p class="sr-only" id="filter-status" aria-live="polite"></p>
   </div>
 
   <!-- preview box takes the shape of the hovered work's cover image -->

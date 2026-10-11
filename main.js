@@ -25,6 +25,9 @@ const coverSrcset = (p) => {
 /* Phones and tablets have no hover: there every video plays by itself, muted,
    while it is on screen, and stops when it scrolls away */
 const TOUCH = !matchMedia('(hover: hover) and (pointer: fine)').matches;
+// "reduce motion" is on: only the background drift (the cover parallax) stops; the designed
+// animations (intro, reveals, page turn, frog) and the videos still play
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inView = new IntersectionObserver((entries) => entries.forEach((e) => {
   // a card makes its clip only once it is actually on screen
   const v = e.target.tagName === 'VIDEO' ? e.target : e.target.__video?.(e.isIntersecting);
@@ -95,14 +98,15 @@ PROJECTS.forEach((p) => {
 
 function mediaHtml(m, { hero = false, alt = '' } = {}) {
   if (m.type === 'video') {
+    const label = alt ? ` aria-label="${esc(alt)}"` : '';
     // the hero plays silently on loop; gallery videos wait for a click — except on phones,
     // where every video plays muted by itself while on screen (no controls to tap)
-    if (TOUCH) return `<video src="${m.src}" poster="${m.poster}" muted loop playsinline preload="metadata"${hero ? ' autoplay' : ''}></video>`;
+    if (TOUCH) return `<video src="${m.src}" poster="${m.poster}" muted loop playsinline preload="metadata"${hero ? ' autoplay' : ''}${label}></video>`;
     return hero
-      ? `<video src="${m.src}" poster="${m.poster}" autoplay muted loop playsinline controls></video>`
-      : `<video src="${m.src}" poster="${m.poster}" controls playsinline preload="none"></video>`;
+      ? `<video src="${m.src}" poster="${m.poster}" autoplay muted loop playsinline controls${label}></video>`
+      : `<video src="${m.src}" poster="${m.poster}" controls playsinline preload="none"${label}></video>`;
   }
-  return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(alt)}"${hero ? '' : ' loading="lazy"'} decoding="async">`;
+  return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(alt)}"${hero ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
 }
 
 /* ---------- Scroll / load reveal ---------- */
@@ -129,7 +133,7 @@ function startReveals() {
    scaled 1.1 inside its frame, so ±4% of travel never shows an edge. */
 function startParallax() {
   const items = [...document.querySelectorAll('.parallax')];
-  if (!items.length) return;
+  if (!items.length || STILL) return;
   let ticking = false;
   const update = () => {
     ticking = false;
@@ -156,7 +160,8 @@ async function playIntro(intro) {
   const hi = document.getElementById('hi');
 
   // split "Hi, I'm Zihe." into pieces (that later fly into the headline) and letters (for the stagger)
-  const pieces = [['Hi', 'hi'], [',', 'comma'], [' '], ["I'm Zihe", 'name'], ['.']];
+  const pieces = [['Hi', 'hi'], [',', 'comma'], [' '], ['I’m Zihe', 'name'], ['.']];
+  intro.querySelector('.skip').textContent = TOUCH ? 'Tap to skip' : 'Click to skip';
   let n = 0;
   const letters = (text) => [...text]
     .map((c) => `<span style="transition-delay:${0.1 + n++ * 0.025}s">${c === ' ' ? '&nbsp;' : c}</span>`)
@@ -270,7 +275,7 @@ function flyToHeadline(hi, headline) {
 function renderFeatured(root) {
   const card = (p, size, d) => `
     <a class="card ${size} work-in" style="--d:${d}s" href="${projectUrl(p)}" data-slug="${p.slug}">
-      <div class="card-media parallax"><img src="${coverOf(p)}" srcset="${coverSrcset(p)}" sizes="(max-width: 720px) 100vw, 62vw" alt="${esc(p.title)}" decoding="async"></div>
+      <div class="card-media parallax"><img src="${coverOf(p)}" srcset="${coverSrcset(p)}" sizes="(max-width: 720px) 100vw, 62vw" width="${coverItem(p)?.w || 1600}" height="${coverItem(p)?.h || 1000}" alt="" decoding="async"></div>
       <p class="card-title">${esc(p.title)}</p>
       ${tagsHtml(p.tags)}
     </a>`;
@@ -296,29 +301,39 @@ function renderFeatured(root) {
 }
 
 /* Ending: the work grid scrolls freely, but the contact screen turns like a page —
-   any scroll that would reveal part of it carries you the whole way in (or back out). */
+   any scroll that would reveal part of it carries you the whole way in (or back out).
+   The turn is a spring on the scroll position (critically damped, no overshoot), so it can
+   be turned around mid-way: scroll the other way and it heads back from where it is,
+   keeping its speed, instead of making you wait for the first turn to finish. */
 function setupContact(section) {
-  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-  let busy = false;
   const top = () => section.getBoundingClientRect().top;
   const sectionY = () => scrollY + top();
   const partlyIn = () => { const t = top(); return t > 1 && t < innerHeight - 1; };
   const atContact = () => Math.abs(top()) <= 2;
 
-  const pageTo = (y) => {
-    busy = true;
-    const from = scrollY, dist = y - from, t0 = performance.now(), dur = 900;
-    const step = (now) => {
-      const t = Math.min(1, (now - t0) / dur);
-      scrollTo(0, from + dist * ease(t));
-      if (t < 1) requestAnimationFrame(step);
-      else setTimeout(() => { busy = false; }, 150);  // swallow the wheel's trailing momentum
-    };
+  const omega = (2 * Math.PI) / 0.55;  // spring response 0.55s, damping ratio 1
+  let y = 0, v = 0, to = 0, moving = false, last = 0, settledAt = -1e9;
+  const step = (now) => {
+    const dt = Math.min(1 / 30, (now - last) / 1000 || 1 / 60);
+    last = now;
+    v += (omega * omega * (to - y) - 2 * omega * v) * dt;
+    y += v * dt;
+    if (Math.abs(to - y) < 0.5 && Math.abs(v) < 20) { y = to; moving = false; settledAt = now; }
+    scrollTo(0, y);
+    if (moving) requestAnimationFrame(step);
+  };
+  const pageTo = (target) => {
+    to = target;
+    if (moving) return;  // already on its way: it just re-aims, keeping its speed
+    y = scrollY; v = 0; moving = true; last = performance.now();
     requestAnimationFrame(step);
   };
+  // the wheel's trailing momentum after a turn lands is swallowed, not turned into a scroll
+  const busy = () => moving || performance.now() - settledAt < 150;
   // dir 1 = down, -1 = up; returns true when the page turn takes over the gesture
   const turn = (dir) => {
-    if (busy) return true;
+    if (moving) { pageTo(dir > 0 ? sectionY() : sectionY() - innerHeight); return true; }
+    if (busy()) return true;
     if (dir > 0 && partlyIn()) { pageTo(sectionY()); return true; }
     if (dir < 0 && (atContact() || partlyIn())) { pageTo(sectionY() - innerHeight); return true; }
     return false;
@@ -340,7 +355,7 @@ function setupContact(section) {
   }, { passive: false });
   // scrollbar drags and fling momentum: settle on whichever side is closer
   addEventListener('scrollend', () => {
-    if (!busy && partlyIn()) pageTo(top() < innerHeight / 2 ? sectionY() : sectionY() - innerHeight);
+    if (!busy() && partlyIn()) pageTo(top() < innerHeight / 2 ? sectionY() : sectionY() - innerHeight);
   });
 
   // the frog sets off by itself once the contact screen is in place: head first, then body
@@ -429,21 +444,35 @@ function setupWorkList(listRoot) {
     link.addEventListener('blur', leave);
   });
 
-  // one tag at a time; ALL, or pressing the active tag again, shows every work
-  filters.addEventListener('click', (e) => {
-    const chip = e.target.closest('.chip');
-    if (!chip) return;
-    const on = !chip.hasAttribute('data-all') && chip.getAttribute('aria-pressed') !== 'true';
-    filters.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', 'false'));
-    (on ? chip : filters.querySelector('[data-all]')).setAttribute('aria-pressed', 'true');
-    const tag = on ? chip.textContent : null;
+  // one tag at a time; ALL, or pressing the active tag again, shows every work.
+  // The tag is kept in the address (work.html?tag=MOTION), so a filtered list can be shared
+  // and comes back with the Back button; a screen reader hears how many works are left
+  const status = document.getElementById('filter-status');
+  const pick = (tag, announce) => {
+    filters.querySelectorAll('.chip').forEach((c) => {
+      c.setAttribute('aria-pressed', String(tag ? c.textContent === tag : c.hasAttribute('data-all')));
+    });
     listRoot.querySelectorAll('.work-items > li').forEach((li) => {
       li.hidden = !!tag && !li.dataset.tags.split(' ').includes(tag);
     });
     listRoot.querySelectorAll('.year-group').forEach((g) => {
       g.hidden = !g.querySelector('.work-items > li:not([hidden])');
     });
+    if (!announce) return;
+    const n = listRoot.querySelectorAll('.work-items > li:not([hidden])').length;
+    if (status) status.textContent = `${n} ${n === 1 ? 'work' : 'works'}${tag ? `, ${tag}` : ''}`;
+    const url = new URL(location.href);
+    if (tag) url.searchParams.set('tag', tag); else url.searchParams.delete('tag');
+    history.replaceState(null, '', url);
+  };
+  filters.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    const on = !chip.hasAttribute('data-all') && chip.getAttribute('aria-pressed') !== 'true';
+    pick(on ? chip.textContent : null, true);
   });
+  const fromUrl = new URLSearchParams(location.search).get('tag');
+  if (fromUrl && allTags.includes(fromUrl)) pick(fromUrl, false);
 }
 
 /* ---------- Project page ---------- */
@@ -451,11 +480,15 @@ function renderProject(root) {
   const slug = new URLSearchParams(location.search).get('p');
   const p = bySlug(slug) || null;
   if (!p) {
-    root.innerHTML = `<p class="p-missing">Project not found. <a href="work.html">Back to work →</a></p>`;
+    root.innerHTML = `<p class="p-missing">There is no project at this address. <a href="work.html">See all work →</a></p>`;
     return;
   }
   document.title = `${p.title} — EBADUDU`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content',
+    `${p.title}: ${(p.subtitle || p.tags.join(', ')).split('|')[0].trim()}, ${p.year}. A project by Zihe Wang (EBADUDU).`);
   const media = mediaOf(p);
+  // gallery pictures are named by their place in the work, so a screen reader can tell them apart
+  const altOf = (m) => `${p.title}, ${m.type === 'video' ? 'film' : 'image'} ${(m.idx ?? media.indexOf(m)) + 1} of ${media.length}`;
   const heroIdx = p.hero || 0;
   const hero = media[heroIdx];
   // `sequence`: images that take turns in one big frame under the intro (e.g. sketch → line → render)
@@ -482,8 +515,8 @@ function renderProject(root) {
   // the clip sits on the inner .wipe — a fully clipped element never counts as "in view"
   const fig = (m, i = 0) => m.swap
     ? `<figure class="work-in swap" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${
-      m.swap.map((s, k) => `<img src="${s.src}" alt="${esc(p.title)}"${k ? '' : ' class="is-on"'} loading="lazy" decoding="async">`).join('')}</div></figure>`
-    : `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: p.title })}</div></figure>`;
+      m.swap.map((s, k) => `<img src="${s.src}" alt="${esc(altOf(s))}"${k ? '' : ' class="is-on"'} loading="lazy" decoding="async">`).join('')}</div></figure>`
+    : `<figure class="work-in" style="--r:${(m.w / m.h).toFixed(4)};--d:${i * 0.12}s"><div class="wipe">${mediaHtml(m, { alt: altOf(m) })}</div></figure>`;
   const text = (t) => (t ? `<p class="p-text reveal" style="--d:.1s">${esc(t)}</p>` : '');
 
   // the description: first paragraph beside the lead image, last one beside the tail image,
@@ -531,7 +564,7 @@ function renderProject(root) {
   else rows += `<div class="p-row p-note">${text(firstText)}</div>`;
   if (seq.length) {
     rows += `<figure class="p-seq work-in" style="--r:${(seq[0].w / seq[0].h).toFixed(4)}"><div class="wipe">${
-      seq.map((m, i) => `<img src="${m.src}" alt="${esc(p.title)}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
+      seq.map((m, i) => `<img src="${m.src}" alt="${esc(altOf(m))}"${i ? '' : ' class="is-on"'} decoding="async">`).join('')}</div></figure>`;
   }
   // the middle paragraphs are spread evenly through the gallery, each beside one of its images
   // (only images that are neither big nor fixed in a pair can carry one)
@@ -548,7 +581,7 @@ function renderProject(root) {
     if (bigSet.has(rest[i].idx)) {
       const m = rest[i];
       rows += `<figure class="p-seq p-big work-in" style="--r:${(m.w / m.h).toFixed(4)}"><div class="wipe">${
-        m.type === 'video' ? mediaHtml(m, { alt: p.title }) : `<img src="${m.src}" alt="${esc(p.title)}" class="is-on" loading="lazy" decoding="async">`}</div></figure>`;
+        m.type === 'video' ? mediaHtml(m, { alt: altOf(m) }) : `<img src="${m.src}" alt="${esc(altOf(m))}" class="is-on" loading="lazy" decoding="async">`}</div></figure>`;
       i += 1;
       continue;
     }
@@ -636,10 +669,13 @@ function setupAbout(root) {
     hero.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') away(); });
 
     // only move while the first screen is in view
-    let shown = true;
+    let shown = true, lastT = 0;
     new IntersectionObserver(([e]) => { shown = e.isIntersecting; }).observe(hero);
     const tick = (now) => {
       requestAnimationFrame(tick);
+      // k = frames of a 60Hz screen since the last one, so a 120Hz screen moves at the same speed
+      const k = Math.min(3, lastT ? (now - lastT) / (1000 / 60) : 1);
+      lastT = now;
       if (!shown) return;
       const reach = 160 + 120 * unit;            // how close the mouse may come before they move
       items.forEach((it) => {
@@ -650,10 +686,11 @@ function setupAbout(root) {
         // a soft spring home, plus a push straight away from the mouse while it is near
         let fx = -it.ox * 0.026, fy = -it.oy * 0.026;
         if (d < reach) { const f = (1 - d / reach) * 9; fx += (dx / d) * f; fy += (dy / d) * f; }
-        it.vx = (it.vx + fx) * 0.84;
-        it.vy = (it.vy + fy) * 0.84;
-        it.ox += it.vx;
-        it.oy += it.vy;
+        const drag = Math.pow(0.84, k);
+        it.vx = (it.vx + fx * k) * drag;
+        it.vy = (it.vy + fy * k) * drag;
+        it.ox += it.vx * k;
+        it.oy += it.vy * k;
         const tilt = it.rot + Math.max(-20, Math.min(20, it.vx * 2));
         it.el.style.transform = `translate(${(hx + it.ox).toFixed(1)}px, ${(hy + it.oy + bob).toFixed(1)}px) translate(-50%, -50%) rotate(${tilt.toFixed(1)}deg)`;
       });
@@ -715,18 +752,22 @@ function setupTrinkets(selector, frameOf) {
   holder.append(img);
   document.body.append(holder);
 
-  let frame = null, mx = 0, my = 0, x = 0, y = 0, tilt = 0, running = false;
+  let frame = null, mx = 0, my = 0, x = 0, y = 0, tilt = 0, running = false, lastT = 0;
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const target = () => {
     const r = frame.getBoundingClientRect();
     return [clamp(mx, r.left, r.right), clamp(my, r.top, r.bottom)];
   };
-  const tick = () => {
-    if (!frame) { running = false; return; }
+  const tick = (now) => {
+    if (!frame) { running = false; lastT = 0; return; }
+    // the same easing on any screen: k = 60Hz frames since the last one
+    const k = Math.min(3, lastT ? (now - lastT) / (1000 / 60) : 1);
+    lastT = now;
     const [tx, ty] = target();
-    const dx = (tx - x) * 0.2, dy = (ty - y) * 0.2;
+    const a = 1 - Math.pow(0.8, k);
+    const dx = (tx - x) * a, dy = (ty - y) * a;
     x += dx; y += dy;
-    tilt += (clamp(dx * 1.6, -18, 18) - tilt) * 0.15;
+    tilt += (clamp((dx / k) * 1.6, -18, 18) - tilt) * (1 - Math.pow(0.85, k));
     holder.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${tilt.toFixed(2)}deg)`;
     requestAnimationFrame(tick);
   };
@@ -787,7 +828,7 @@ const about = document.getElementById('about');
 if (about) setupAbout(about);
 
 // the begin animation plays once per visit (click or any key skips it); coming back
-// from WORK or a project, or a direct link to #contact, goes straight to the page
+// from WORK or a project, or a link to #contact goes straight to the page
 let seenIntro = false;
 try { seenIntro = sessionStorage.getItem('ebadudu-intro') === '1'; } catch (e) {}
 const intro = document.getElementById('intro');
