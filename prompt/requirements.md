@@ -273,6 +273,10 @@
 - WORK：玩具架 / 表格两种视图 + 一句话筛选；作品页、About（Version 1）、青蛙向导、名牌光标。
 - 本地预览端口 8783。
 
+## 3D. D4 网站（D1 + D3 合并，按 Figma GRID SYSTEM 四栏网格；详细见 `website/D4/prompt/requirements.md`）
+
+2026-10-17 新建。D1 的白色页面、字体、开场动画、卡片、翻页结尾 + D3 的玩具箱（物理）、玩具架、名牌光标、青蛙向导、页面之间的盖子。**所有内容按 Figma "GRID SYSTEM"（1512 画板：边距 60、4 栏各 321、栏间距 36、内容从 130 开始、行距 32）放在栏上**；按 G 可看参考线。Logo 改为 ZIHE WANG。本地预览 d4（端口 8784）。GitHub 需要新建 ebadudu-d4。
+
 ## 4. 版本管理 / GitHub
 
 - 网站要连接 GitHub。仓库根目录是 `E:\Homework\NB web\website`，D1 / D2 / D3 是三个独立文件夹。
