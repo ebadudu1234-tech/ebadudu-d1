@@ -324,6 +324,13 @@
   - 网站自己的文字直接改：D1/D2 开场 "Click to skip"（手机上是 "Tap to skip"）；找不到作品时 "There is no project at this address. See all work →"；D3 青蛙的话、首页提示 GRAB A TOY · THROW IT、光标标签（链接上 OPEN、按钮上 PRESS）；Modular Typefaces 的描述（这段是我写的）。
   - 你的文字：见 `copy-suggestions.md`，大部分作品 37–41 分不用改；建议改的是 Switchback、Lotus、Allodox、Under the Mask、Nuclear Tide 里的几句，和 About 两个版本里的几个副词。
 
+## 4D. Under the Cyber Skin：设计页面换成样机（2026-10-18）
+
+- 原来作品页里是 42 张平面的杂志跨页（`Myth3_Spreads_Page_01–42`），现在换成 `MY WORK/Under the cyber skin/mockup` 里的 **17 张样机图**（打开的实体杂志，按 1–17 的顺序）。
+- 封面（`Myth3_Spreads_Page_heropage`，杂志放在书架上的照片）和 5 张展览图（标题墙、介绍墙、暗房、白色展厅、海报方块）不变，顺序：封面 → 展览图 → 样机 1–17。作品页一共 23 张图（原来 48 张）。
+- 样机原图 5–10MB 的 PNG，压缩后放在 `mockup/press/`（2400px 以内的 JPG，每张 170–400KB）；`tools/build-assets.ps1` 里这个作品加了 `also = mockup` 文件夹，并跳过 42 张跨页（原文件都还在 MY WORK 里，没有删）。
+- D1、D2、D3、D4 四个网站都换了（图片和 media.js 一样）。
+
 ## 5. 待办 / 待确认
 
 - [x] **GitHub**：三个网站各一个公开仓库，已上传所有版本（见第 4 节）。

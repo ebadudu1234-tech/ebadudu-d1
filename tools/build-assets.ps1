@@ -35,11 +35,13 @@ $manifest = @(
       'Image 48', 'Image 90 (1)', 'LABEL 1', 'add logo', 'magnifics_upscale-aOrg3paDc7ZnBS5o8V0g-Image 41 (1)', 'Labrador Beach Run', 'Video 1',
       # small objects
       'Image 72', 'Image 84', 'Image 31') }
-  @{ slug = 'under-the-cyber-skin'; dir = 'Under the cyber skin'; order = @(
+  # the flat spread pages (Myth3_Spreads_Page_01-42) are replaced by the printed mockups in mockup/ (2026-10-18)
+  @{ slug = 'under-the-cyber-skin'; dir = 'Under the cyber skin'; also = @('Under the cyber skin\mockup')
+     skip = @(1..42 | ForEach-Object { 'Myth3_Spreads_Page_{0:D2}.jpg' -f $_ }); order = @(
       'Myth3_Spreads_Page_heropage',
       # exhibition scenes: title wall, intro wall, dark room, white gallery, poster cube
       'Image', 'Remove Typ1es', 'Image 8', '02', 'Poster Placement (3)',
-      # the magazine spreads
+      # the magazine, as printed mockups 1-17
       '*') }
   @{ slug = 'planting-pen'; dir = 'Plant pen'; order = @(
       'Screenshot File',   # hero: the Planting Pen box
